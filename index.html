@@ -1,0 +1,4372 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фурри Карта Знакомств</title>
+    <meta name="description" content="Интерактивная карта знакомств для фурри-сообщества в России и СНГ. Более 5000 анкет, поиск по городам, новые знакомства каждый день. Найди друзей, отношения и единомышленников рядом с тобой!">
+    <meta name="keywords" content="фурри знакомства, furry dating, карта знакомств, фурри сообщество, знакомства россия, furry russia, фурри друзья, furry map">
+    <meta name="author" content="Furry.by">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://furry.by/">
+    <link rel="icon" href="https://furry.by/pets.ico" type="image/x-icon">
+	
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://furry.by/">
+    <meta property="og:title" content="Карта знакомств Furry - Найди друзей рядом">
+    <meta property="og:description" content="Интерактивная карта знакомств для фурри-сообщества. Более 5000 анкет по всей России и СНГ.">
+    <meta property="og:image" content="https://furry.by/preview.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://furry.by/">
+    <meta property="twitter:title" content="Карта знакомств Furry - Найди друзей рядом">
+    <meta property="twitter:description" content="Интерактивная карта знакомств для фурри-сообщества. Более 5000 анкет по всей России и СНГ.">
+    <meta property="twitter:image" content="https://furry.by/preview.jpg">
+    
+    <!-- Google -->
+    <meta name="google-site-verification" content="">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+	
+	<script type="text/javascript">
+		(function(m,e,t,r,i,k,a){
+			m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+			m[i].l=1*new Date();
+			for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+			k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+		})(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=107028234', 'ym');
+
+		ym(107028234, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+	</script>
+	<noscript><div><img src="https://mc.yandex.ru/watch/107028234" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <script>window.yaContextCb = window.yaContextCb || [];</script>
+    <script src="https://yandex.ru/ads/system/context.js" async></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            --page-bg: #1f1f1f;
+            --surface: rgba(47, 47, 47, 0.96);
+            --surface-2: #3a3a3a;
+            --surface-3: #474747;
+            --border: rgba(255, 136, 0, 0.24);
+            --text-main: #f5f5f5;
+            --text-muted: #d0d0d0;
+            --text-soft: #e7e7e7;
+            --accent: #f80;
+            --accent-hover: #ff9a1f;
+            --warning-bg: rgba(42, 42, 42, 0.96);
+            --panel-shadow: 0 18px 48px rgba(0,0,0,0.45);
+            background:
+                radial-gradient(circle at top right, rgba(255, 136, 0, 0.12), transparent 30%),
+                radial-gradient(circle at left center, rgba(255, 136, 0, 0.08), transparent 26%),
+                #1f1f1f;
+            color: var(--text-main);
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: pan-x pan-y;
+        }
+        body.theme-sunset {
+            --page-bg: #292929;
+            --surface: rgba(56, 56, 56, 0.96);
+            --surface-2: #434343;
+            --surface-3: #4d4d4d;
+            --border: rgba(255, 136, 0, 0.26);
+            --text-main: #fafafa;
+            --text-muted: #d8d8d8;
+            --text-soft: #efefef;
+            --accent: #f80;
+            --accent-hover: #ff9a1f;
+            --warning-bg: rgba(56, 56, 56, 0.96);
+            --panel-shadow: 0 18px 48px rgba(0,0,0,0.5);
+            background:
+                radial-gradient(circle at top left, rgba(255, 136, 0, 0.14), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(255, 136, 0, 0.1), transparent 24%),
+                #292929;
+            color: var(--text-main);
+        }
+        #map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #2a2a2a;
+        }
+        .leaflet-container {
+            background: #2a2a2a !important;
+        }
+        .leaflet-tile-container {
+            background: #2a2a2a;
+            transition: transform 0.2s ease-out;
+        }
+        .leaflet-tile {
+            background: #2a2a2a;
+        }
+        .leaflet-tile-pane {
+            position: relative;
+        }
+        .leaflet-zoom-anim .leaflet-zoom-animated {
+            transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
+        }
+        .map-tiles-dark {
+            filter: grayscale(100%) invert(100%) brightness(0.85) contrast(1.1);
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+        .map-tiles-sunset {
+            filter: sepia(0.38) saturate(1.7) hue-rotate(-12deg) brightness(0.92) contrast(1.08);
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+        .leaflet-control-attribution {
+            display: none !important;
+        }
+        .leaflet-control-zoom {
+            display: none !important;
+        }
+        .leaflet-bar {
+            border: none !important;
+        }
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: -400px;
+            width: 400px;
+            height: 100vh;
+            background: #2a2a2a;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+            transition: left 0.3s;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        #sidebar::-webkit-scrollbar {
+            width: 10px;
+        }
+        #sidebar::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        #sidebar::-webkit-scrollbar-thumb {
+            background: #f80;
+            border-radius: 5px;
+        }
+        #sidebar::-webkit-scrollbar-thumb:hover {
+            background: #ff9a1f;
+        }
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #f80 #1a1a1a;
+        }
+        #sidebar.open {
+            left: 0;
+        }
+        .sidebar-header {
+            padding: 15px;
+            background: #333;
+            border-bottom: 1px solid #444;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .profile-list {
+            padding: 10px;
+        }
+        .profile-item {
+            background: #333;
+            margin-bottom: 10px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .profile-item:hover {
+            background: #3a3a3a;
+        }
+        .profile-item.new {
+            border: 2px solid rgba(255, 100, 100, 0.4);
+            background: rgba(255, 68, 68, 0.05);
+        }
+        .profile-photo-wrap {
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            background: #222;
+            position: relative;
+        }
+        .profile-photo-loading {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(20, 20, 20, 0.9);
+            color: #d0d0d0;
+            font-size: 13px;
+            letter-spacing: 0.02em;
+            z-index: 1;
+        }
+        .profile-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            position: relative;
+            z-index: 2;
+        }
+        .profile-photo.is-loaded {
+            opacity: 1;
+        }
+        .profile-header {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .profile-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #5a5a5a, #f80);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .profile-info h3 {
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+        .profile-meta {
+            font-size: 12px;
+            color: #ccc;
+        }
+        .profile-hashtags {
+            font-size: 11px;
+            color: #aaa;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        .profile-text {
+            font-size: 13px;
+            color: #ccc;
+            line-height: 1.4;
+            margin-bottom: 8px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .profile-text.collapsed {
+            max-height: 60px;
+            overflow: hidden;
+        }
+        .profile-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .profile-likes {
+            font-size: 12px;
+            color: #ff6b6b;
+            transition: color 0.2s;
+            border: 1px solid rgba(255, 107, 107, 0.45);
+            border-radius: 999px;
+            padding: 5px 10px;
+            background: rgba(255, 107, 107, 0.06);
+        }
+        .profile-likes:hover {
+            color: #ff4444;
+            border-color: rgba(255, 68, 68, 0.7);
+            background: rgba(255, 68, 68, 0.12);
+        }
+        .profile-link {
+            background: #f80;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+        }
+        .vip {
+            color: #ffd700;
+        }
+        .marker-cluster {
+            background: transparent;
+            border-radius: 50%;
+            text-align: center;
+            color: #fff;
+            font-weight: bold;
+        }
+        .marker-cluster div {
+            background: rgba(102, 179, 255, 0.86);
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #2a2a2a;
+            padding: 30px 50px;
+            border-radius: 12px;
+            z-index: 9999;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 15px;
+            border: 4px solid #444;
+            border-top: 4px solid #f80;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .search-box {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 999;
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            width: 270px;
+            max-width: calc(100vw - 20px);
+        }
+        .search-box-header {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 8px;
+        }
+        .theme-toggle {
+            width: 34px;
+            height: 34px;
+            padding: 0;
+            margin-left: 14px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 999px;
+            color: inherit;
+            font-size: 15px;
+            font-weight: bold;
+            line-height: 1;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .add-profile-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+            background: linear-gradient(135deg, #f80, #ff9a1f);
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 12px 28px rgba(255, 136, 0, 0.2);
+            transition: all 0.3s;
+        }
+        .add-profile-btn:hover {
+            background: linear-gradient(135deg, #ff9a1f, #ffad33);
+            transform: translateY(-2px);
+            box-shadow: 0 16px 34px rgba(255, 136, 0, 0.24);
+        }
+        .site-toast {
+            position: fixed;
+            left: 50%;
+            bottom: 104px;
+            transform: translateX(-50%) translateY(16px);
+            background: rgba(20, 20, 20, 0.92);
+            color: #fff;
+            padding: 12px 18px;
+            border-radius: 14px;
+            font-size: 14px;
+            line-height: 1.4;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 10030;
+            transition: opacity 0.22s ease, transform 0.22s ease;
+            max-width: min(92vw, 460px);
+            text-align: center;
+        }
+        .site-toast.visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        .copy-bot-panel {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 10020;
+        }
+        .copy-bot-panel.open {
+            display: flex;
+        }
+        .copy-bot-card {
+            width: min(92vw, 420px);
+            background: #242424;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 20px 18px;
+            box-shadow: 0 18px 42px rgba(0, 0, 0, 0.45);
+        }
+        .copy-bot-card h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+            color: #fff;
+        }
+        .copy-bot-card p {
+            margin: 0 0 14px;
+            color: #d6d6d6;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .copy-bot-tag {
+            background: #101010;
+            border: 1px solid rgba(255, 136, 0, 0.35);
+            color: #ffd3a3;
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 0.2px;
+            text-align: center;
+            margin-bottom: 14px;
+        }
+        .copy-bot-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .copy-bot-btn {
+            flex: 1 1 160px;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+        }
+        .copy-bot-btn:hover {
+            transform: translateY(-1px);
+        }
+        .copy-bot-btn.primary {
+            background: linear-gradient(135deg, #f80, #ff9a1f);
+            color: #fff;
+        }
+        .copy-bot-btn.primary:hover {
+            background: linear-gradient(135deg, #ff9a1f, #ffad33);
+        }
+        .copy-bot-btn.secondary {
+            background: #3a3a3a;
+            color: #fff;
+        }
+        .copy-bot-btn.secondary:hover {
+            background: #484848;
+        }
+        .footer-warning {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(42, 42, 42, 0.95);
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 11px;
+            color: #aaa;
+            border-top: 1px solid #444;
+            z-index: 998;
+        }
+        .footer-warning a {
+            color: #ffb266;
+            text-decoration: none;
+        }
+        .footer-warning a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .search-box {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                width: auto;
+            }
+            .search-box-header {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                margin-bottom: 0;
+            }
+            #sidebar {
+                width: 100%;
+                left: -100%;
+            }
+            #sidebar.open {
+                left: 0;
+            }
+            .search-input {
+                font-size: 16px;
+                padding-right: 44px;
+            }
+            .profile-item {
+                padding: 10px;
+            }
+            .profile-avatar {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+            .profile-info h3 {
+                font-size: 15px;
+            }
+            .profile-meta {
+                font-size: 11px;
+            }
+            .profile-text {
+                font-size: 12px;
+            }
+            .add-profile-btn {
+                bottom: 70px;
+                right: 10px;
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+            .footer-warning {
+                font-size: 10px;
+                padding: 8px 10px;
+            }
+        }
+        .search-input {
+            width: 100%;
+            padding: 8px 12px;
+            background: #333;
+            border: 1px solid #444;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .search-input::placeholder {
+            color: #888;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #f80;
+        }
+        .filter-section {
+            margin-bottom: 10px;
+        }
+        .filter-title {
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .filter-btn {
+            padding: 5px 10px;
+            background: #333;
+            border: 1px solid #444;
+            border-radius: 4px;
+            color: #aaa;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover {
+            background: #3a3a3a;
+        }
+        .filter-btn.active {
+            background: #f80;
+            border-color: #f80;
+            color: #fff;
+        }
+        .filter-btn-orientation {
+            padding: 5px 10px;
+            background: #333;
+            border: 1px solid #444;
+            border-radius: 4px;
+            color: #aaa;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-btn-orientation:hover {
+            background: #3a3a3a;
+        }
+        .filter-btn-orientation.active {
+            background: #f80;
+            border-color: #f80;
+            color: #fff;
+        }
+        .sort-btn {
+            padding: 5px 10px;
+            background: #333;
+            border: 1px solid #444;
+            border-radius: 4px;
+            color: #aaa;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .sort-btn:hover {
+            background: #3a3a3a;
+        }
+        .sort-btn.active {
+            background: #f80;
+            border-color: #f80;
+            color: #fff;
+        }
+        .toggle-old-btn {
+            width: 100%;
+            padding: 8px 10px;
+            background: #333;
+            border: 1px solid #444;
+            border-radius: 4px;
+            color: #aaa;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .toggle-old-btn:hover {
+            background: #3a3a3a;
+        }
+        .toggle-old-btn.active {
+            background: #f80;
+            border-color: #f80;
+            color: #fff;
+        }
+        .sort-section {
+            padding: 10px 15px;
+            background: #2a2a2a;
+            border-bottom: 1px solid #333;
+            display: flex;
+            gap: 5px;
+        }
+        .sidebar-search {
+            padding: 10px 15px;
+            background: #2a2a2a;
+            border-bottom: 1px solid #333;
+        }
+        .sidebar-search-input {
+            width: 100%;
+            padding: 8px 12px;
+            background: #333;
+            border: 1px solid #444;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 13px;
+        }
+        .sidebar-search-input::placeholder {
+            color: #888;
+        }
+        .sidebar-search-input:focus {
+            outline: none;
+            border-color: #f80;
+        }
+        .search-results {
+            margin-top: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .search-result-item {
+            padding: 8px 12px;
+            background: #333;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .search-result-item:hover {
+            background: #3a3a3a;
+        }
+        .search-result-city {
+            color: #ffb266;
+            font-weight: bold;
+        }
+        .search-result-count {
+            color: #999;
+            font-size: 11px;
+        }
+        body,
+        #map,
+        .leaflet-container,
+        .leaflet-tile-container,
+        .leaflet-tile {
+            background: var(--page-bg);
+            color: var(--text-main);
+        }
+        #sidebar,
+        .search-box,
+        .loading {
+            background: var(--surface);
+            color: var(--text-main);
+            box-shadow: var(--panel-shadow);
+        }
+        .sidebar-header,
+        .sort-section,
+        .sidebar-search,
+        .footer-warning {
+            background: var(--surface-2);
+            border-color: var(--border);
+        }
+        .profile-item,
+        .search-input,
+        .sidebar-search-input,
+        .filter-btn,
+        .filter-btn-orientation,
+        .sort-btn,
+        .toggle-old-btn,
+        .search-result-item {
+            background: var(--surface-2);
+            border-color: var(--border);
+            color: var(--text-main);
+        }
+        .profile-item:hover,
+        .search-result-item:hover,
+        .filter-btn:hover,
+        .filter-btn-orientation:hover,
+        .sort-btn:hover,
+        .toggle-old-btn:hover {
+            background: var(--surface-3);
+        }
+        .profile-meta,
+        .profile-hashtags,
+        .profile-text,
+        .filter-title,
+        .search-result-count,
+        .footer-warning,
+        .search-input::placeholder,
+        .sidebar-search-input::placeholder {
+            color: var(--text-muted);
+        }
+        .profile-photo-wrap {
+            background: var(--surface-3);
+        }
+        .profile-link,
+        .add-profile-btn,
+        .filter-btn.active,
+        .filter-btn-orientation.active,
+        .sort-btn.active,
+        .toggle-old-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+        .profile-link:hover,
+        .add-profile-btn:hover {
+            background: var(--accent-hover);
+        }
+        body.theme-sunset .profile-link,
+        body.theme-sunset .add-profile-btn,
+        body.theme-sunset .filter-btn.active,
+        body.theme-sunset .filter-btn-orientation.active,
+        body.theme-sunset .sort-btn.active,
+        body.theme-sunset .toggle-old-btn.active {
+            background: linear-gradient(135deg, #f80, #ff9a1f);
+            border-color: rgba(255, 136, 0, 0.48);
+            color: #1f1f1f;
+            box-shadow: 0 10px 24px rgba(255, 136, 0, 0.18);
+        }
+        body.theme-sunset .profile-link:hover,
+        body.theme-sunset .add-profile-btn:hover {
+            background: linear-gradient(135deg, #ff9a1f, #ffad33);
+            border-color: rgba(255, 136, 0, 0.52);
+        }
+        body.theme-sunset .profile-link {
+            background: linear-gradient(135deg, #f80, #ff9a1f);
+            border-color: rgba(255, 136, 0, 0.48);
+            color: #1f1f1f;
+            box-shadow: 0 10px 24px rgba(255, 136, 0, 0.18);
+        }
+        body.theme-sunset .profile-link:hover {
+            background: linear-gradient(135deg, #ff9a1f, #ffad33);
+            border-color: rgba(255, 136, 0, 0.52);
+        }
+        .footer-warning {
+            background: var(--warning-bg);
+        }
+        .footer-warning a,
+        .search-result-city {
+            color: var(--accent);
+        }
+        body.theme-sunset .footer-warning {
+            background: rgba(56, 56, 56, 0.96);
+            color: #d8d8d8;
+            border-top-color: rgba(255, 136, 0, 0.18);
+            box-shadow: 0 -10px 24px rgba(0, 0, 0, 0.28);
+        }
+        body.theme-sunset .footer-warning a {
+            color: #ffb266;
+            font-weight: 700;
+        }
+        body.theme-sunset .footer-warning a:hover {
+            color: #ffd6a6;
+        }
+        body.theme-sunset #map,
+        body.theme-sunset .leaflet-container {
+            background: #292929 !important;
+        }
+        body.theme-sunset .search-box {
+            background: rgba(56, 56, 56, 0.95);
+            border: 1px solid rgba(255, 136, 0, 0.18);
+        }
+        body.theme-sunset #sidebar {
+            background: #2f2f2f;
+            color: #fafafa;
+        }
+        body.theme-sunset .sort-section,
+        body.theme-sunset .sidebar-search,
+        body.theme-sunset .sidebar-header {
+            background: #3a3a3a;
+            border-color: rgba(255, 136, 0, 0.16);
+            color: #fafafa;
+        }
+        body.theme-sunset .profile-item {
+            background: #3b3b3b;
+            border-color: transparent;
+            color: #fafafa;
+        }
+        body.theme-sunset .profile-item:hover {
+            background: #474747;
+        }
+        body.theme-sunset .sidebar-search-input,
+        body.theme-sunset .sort-btn,
+        body.theme-sunset .toggle-old-btn {
+            background: #333;
+            border-color: rgba(255, 136, 0, 0.18);
+            color: #efefef;
+        }
+        body.theme-sunset .sort-btn:hover,
+        body.theme-sunset .toggle-old-btn:hover {
+            background: #3f3f3f;
+        }
+        body.theme-sunset .sort-btn.active,
+        body.theme-sunset .toggle-old-btn.active {
+            background: linear-gradient(135deg, #f80, #ff9a1f);
+            border-color: rgba(255, 136, 0, 0.48);
+            color: #1f1f1f;
+            box-shadow: none;
+        }
+        body.theme-sunset .sidebar-search-input:focus {
+            background: #2d2d2d;
+            border-color: #f80;
+            color: #fafafa;
+        }
+        body.theme-sunset .sidebar-search-input::placeholder {
+            color: #bfbfbf;
+        }
+        body.theme-sunset .profile-meta,
+        body.theme-sunset .profile-hashtags,
+        body.theme-sunset .profile-text {
+            color: #e8e8e8;
+        }
+        body.theme-sunset .close-btn {
+            color: #fafafa;
+        }
+        body.theme-sunset .search-input {
+            background: #333;
+            border-color: rgba(255, 136, 0, 0.22);
+            color: #fafafa;
+        }
+        body.theme-sunset .filter-btn-orientation {
+            background: #3a3a3a;
+            border-color: rgba(255, 136, 0, 0.18);
+            color: #efefef;
+        }
+        body.theme-sunset .filter-btn-orientation:hover {
+            background: #474747;
+            border-color: rgba(255, 136, 0, 0.24);
+        }
+        body.theme-sunset .filter-btn-orientation.active {
+            background: linear-gradient(135deg, #f80, #ff9a1f);
+            border-color: rgba(255, 136, 0, 0.48);
+            color: #1f1f1f;
+        }
+        body.theme-sunset .theme-toggle {
+            background: #3a3a3a;
+            border-color: rgba(255, 136, 0, 0.22);
+            color: #ffb266;
+        }
+        body.theme-sunset .theme-toggle:hover {
+            background: #474747;
+            border-color: rgba(255, 136, 0, 0.3);
+            color: #ffd6a6;
+        }
+        body.theme-sunset .profile-item.new {
+            border-color: rgba(255, 136, 0, 0.42);
+            background: rgba(255, 136, 0, 0.08);
+        }
+        /* Professional UI override */
+        :root {
+            color-scheme: dark;
+        }
+        body {
+            font-family: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            --page-bg: #181a1d;
+            --surface: rgba(34, 37, 41, 0.88);
+            --surface-2: rgba(255, 255, 255, 0.065);
+            --surface-3: rgba(255, 255, 255, 0.11);
+            --border: rgba(255, 138, 0, 0.18);
+            --text-main: #f7f3ee;
+            --text-muted: #b8b1a8;
+            --text-soft: #e8ddd1;
+            --accent: #ff8a00;
+            --accent-hover: #ffad47;
+            --warning-bg: rgba(28, 31, 35, 0.9);
+            --panel-shadow: 0 26px 70px rgba(0, 0, 0, 0.44);
+            background:
+                radial-gradient(circle at 8% 12%, rgba(255, 138, 0, 0.16), transparent 22%),
+                radial-gradient(circle at 92% 0%, rgba(255, 138, 0, 0.10), transparent 20%),
+                linear-gradient(180deg, #181a1d 0%, #24201d 100%);
+        }
+        body.theme-sunset {
+            --page-bg: #26211d;
+            --surface: rgba(58, 50, 44, 0.88);
+            --surface-2: rgba(255, 255, 255, 0.075);
+            --surface-3: rgba(255, 255, 255, 0.12);
+            --border: rgba(255, 152, 24, 0.22);
+            --text-main: #fbf7f1;
+            --text-muted: #d1c6b9;
+            --text-soft: #f0e4d6;
+            --accent: #ff9b22;
+            --accent-hover: #ffbc5a;
+            --warning-bg: rgba(42, 36, 31, 0.9);
+            --panel-shadow: 0 26px 70px rgba(0, 0, 0, 0.48);
+            background:
+                radial-gradient(circle at 14% 10%, rgba(255, 155, 34, 0.14), transparent 24%),
+                radial-gradient(circle at 88% 0%, rgba(255, 155, 34, 0.08), transparent 18%),
+                linear-gradient(180deg, #26211d 0%, #342b24 100%);
+        }
+        .search-box,
+        #sidebar,
+        .copy-bot-card,
+        .loading {
+            backdrop-filter: blur(24px) saturate(135%);
+            -webkit-backdrop-filter: blur(24px) saturate(135%);
+        }
+        #sidebar {
+            left: -436px;
+            width: 432px;
+            background: linear-gradient(180deg, rgba(33, 36, 40, 0.96), rgba(26, 28, 31, 0.92));
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 28px 0 72px rgba(0, 0, 0, 0.48);
+        }
+        .search-box {
+            top: 20px;
+            right: 20px;
+            width: min(392px, calc(100vw - 24px));
+            max-width: min(392px, calc(100vw - 24px));
+            padding: 18px;
+            border-radius: 28px;
+            border: 1px solid var(--border);
+            background: linear-gradient(180deg, rgba(36, 39, 43, 0.94), rgba(28, 31, 35, 0.84));
+            box-shadow: 0 26px 74px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            overflow: hidden;
+        }
+        .search-box::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 138, 0, 0.55), transparent);
+        }
+        .search-box-header {
+            display: block;
+            margin-bottom: 16px;
+        }
+        .search-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .search-chip {
+            display: inline-flex;
+            align-self: flex-start;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: rgba(255, 138, 0, 0.12);
+            border: 1px solid rgba(255, 138, 0, 0.18);
+            color: #ffd6ae;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+        .search-title {
+            font-family: "Space Grotesk", "Manrope", sans-serif;
+            font-size: 29px;
+            line-height: 0.98;
+            letter-spacing: -0.05em;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        .search-subtitle {
+            max-width: 286px;
+            color: var(--text-muted);
+            font-size: 13px;
+            line-height: 1.55;
+        }
+        .search-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .search-metric {
+            padding: 12px 14px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.035);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .search-metric-value {
+            display: block;
+            font-family: "Space Grotesk", "Manrope", sans-serif;
+            font-size: 22px;
+            line-height: 1;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            color: var(--text-main);
+        }
+        .search-metric-label {
+            display: block;
+            margin-top: 6px;
+            color: var(--text-muted);
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        .search-input-wrap {
+            position: relative;
+            margin-bottom: 14px;
+        }
+        .search-input-icon {
+            position: absolute;
+            top: 50%;
+            left: 16px;
+            transform: translateY(-50%);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%238c8780' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 18px 18px;
+            pointer-events: none;
+        }
+        .search-input {
+            min-height: 52px;
+            padding: 14px 16px 14px 46px;
+            background: rgba(7, 8, 9, 0.28);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 18px;
+            font-size: 15px;
+            color: var(--text-main);
+        }
+        .search-input::placeholder,
+        .sidebar-search-input::placeholder {
+            color: #8c8780;
+        }
+        .search-input:focus,
+        .sidebar-search-input:focus {
+            outline: none;
+            border-color: rgba(255, 138, 0, 0.34);
+            box-shadow: 0 0 0 4px rgba(255, 138, 0, 0.12);
+        }
+        .filter-section {
+            margin-bottom: 0;
+        }
+        .filter-title {
+            margin-bottom: 8px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+        .filter-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr)) 44px;
+            gap: 8px;
+            align-items: stretch;
+        }
+        .filter-btn-orientation,
+        .sort-btn,
+        .toggle-old-btn {
+            min-height: 44px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.04);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+        .filter-btn-orientation.active,
+        .sort-btn.active,
+        .toggle-old-btn.active,
+        .profile-link,
+        .add-profile-btn {
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            border-color: rgba(255, 138, 0, 0.45);
+            color: #140e09;
+            box-shadow: 0 14px 30px rgba(255, 138, 0, 0.22);
+        }
+        .theme-toggle {
+            width: 44px;
+            height: 44px;
+            margin-left: 0;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .theme-toggle:hover {
+            background: rgba(255, 138, 0, 0.10);
+        }
+        .search-results {
+            margin-top: 14px;
+            padding: 8px;
+            max-height: 320px;
+            border-radius: 20px;
+            background: rgba(7, 8, 9, 0.34);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            overflow: auto;
+        }
+        .search-results:empty {
+            display: none;
+        }
+        .search-result-item {
+            margin-bottom: 6px;
+            padding: 11px 12px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.035);
+            border: 1px solid transparent;
+        }
+        .search-result-item:hover {
+            border-color: rgba(255, 138, 0, 0.16);
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .search-result-city {
+            color: #ffbf78;
+            font-weight: 700;
+        }
+        .sidebar-header {
+            position: sticky;
+            top: 0;
+            z-index: 4;
+            padding: 22px 20px 16px;
+            background: linear-gradient(180deg, rgba(31, 34, 38, 0.98), rgba(31, 34, 38, 0.88));
+            backdrop-filter: blur(18px);
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+        }
+        #sidebar-title {
+            display: block;
+            position: relative;
+            font-family: "Space Grotesk", "Manrope", sans-serif;
+            font-size: 30px;
+            line-height: 0.98;
+            letter-spacing: -0.05em;
+            padding-top: 18px;
+            color: var(--text-main);
+        }
+        #sidebar-title span {
+            display: inline-block;
+            margin-left: 8px;
+            font-family: "Manrope", sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0;
+        }
+        #sidebar-title::before {
+            content: attr(data-kicker);
+            position: absolute;
+            top: 0;
+            left: 0;
+            font-family: "Manrope", sans-serif;
+            font-size: 10px;
+            line-height: 1;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: var(--accent);
+        }
+        #sidebar-title::after {
+            content: attr(data-subtitle);
+            display: block;
+            margin-top: 10px;
+            font-family: "Manrope", sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+            letter-spacing: 0;
+            color: var(--text-muted);
+            max-width: 280px;
+        }
+        .close-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.04);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+        .sort-section,
+        .sidebar-search {
+            padding-left: 20px;
+            padding-right: 20px;
+            background: transparent;
+            border-bottom: none;
+        }
+        .sort-section {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            padding-top: 14px;
+            padding-bottom: 10px;
+        }
+        .sidebar-search {
+            padding-top: 0;
+            padding-bottom: 16px;
+        }
+        .sidebar-search::before {
+            content: "Фильтр внутри списка";
+            display: block;
+            margin-bottom: 8px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+        .sidebar-search-input {
+            min-height: 48px;
+            padding: 0 16px;
+            border-radius: 16px;
+            background: rgba(7, 8, 9, 0.28);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .profile-list {
+            padding: 0 18px 18px;
+        }
+        .profile-item {
+            margin-bottom: 12px;
+            padding: 16px;
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.015));
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.18);
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+        }
+        .profile-item:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 138, 0, 0.24);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02));
+            box-shadow: 0 20px 42px rgba(0, 0, 0, 0.24);
+        }
+        .profile-item.new {
+            border-color: rgba(255, 76, 76, 0.36);
+            background: linear-gradient(180deg, rgba(255, 76, 76, 0.08), rgba(255, 255, 255, 0.02));
+        }
+        .profile-photo-wrap {
+            margin-bottom: 14px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            background: #131517;
+        }
+        .profile-header {
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .profile-avatar {
+            width: 56px;
+            height: 56px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+        .profile-info h3 {
+            font-family: "Space Grotesk", "Manrope", sans-serif;
+            font-size: 18px;
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+            margin-bottom: 5px;
+        }
+        .profile-meta {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+        .profile-hashtags {
+            margin-bottom: 10px;
+            color: #ffc47d;
+            line-height: 1.45;
+        }
+        .profile-text {
+            margin-bottom: 14px;
+            font-size: 13px;
+            line-height: 1.56;
+            color: var(--text-soft);
+        }
+        .profile-footer {
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .profile-likes {
+            padding: 7px 12px;
+            font-weight: 700;
+            border-radius: 999px;
+        }
+        .profile-link {
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+        .loading {
+            min-width: min(92vw, 420px);
+            padding: 28px 30px;
+            border-radius: 28px;
+            border: 1px solid var(--border);
+            background: linear-gradient(180deg, rgba(36, 39, 43, 0.95), rgba(28, 31, 35, 0.9));
+            box-shadow: 0 28px 60px rgba(0, 0, 0, 0.4);
+        }
+        .loading::before {
+            content: "Furry.by";
+            display: block;
+            margin-bottom: 14px;
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+        .loading > div:nth-child(4) {
+            display: none;
+        }
+        .loading-title {
+            font-family: "Space Grotesk", "Manrope", sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.04em;
+            margin-bottom: 8px;
+        }
+        .loading-text {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .add-profile-btn {
+            bottom: 24px;
+            right: 24px;
+            padding: 16px 22px;
+            border-radius: 22px;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+        .footer-warning {
+            left: 50%;
+            right: auto;
+            bottom: 18px;
+            transform: translateX(-50%);
+            width: min(calc(100vw - 24px), 720px);
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 12px 18px;
+            background: rgba(11, 12, 14, 0.82);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 18px 46px rgba(0, 0, 0, 0.28);
+            font-size: 12px;
+            line-height: 1.45;
+        }
+        .copy-bot-card {
+            background: linear-gradient(180deg, rgba(22, 24, 26, 0.97), rgba(16, 17, 19, 0.93));
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 24px;
+            box-shadow: 0 22px 56px rgba(0, 0, 0, 0.44);
+        }
+        .copy-bot-tag {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+        }
+        body.theme-sunset .search-box {
+            background: linear-gradient(180deg, rgba(41, 35, 30, 0.94), rgba(29, 25, 21, 0.86));
+            border-color: rgba(255, 155, 34, 0.22);
+        }
+        body.theme-sunset #sidebar {
+            background: linear-gradient(180deg, rgba(36, 31, 27, 0.97), rgba(29, 25, 21, 0.94));
+        }
+        body.theme-sunset .sidebar-header {
+            background: linear-gradient(180deg, rgba(37, 32, 28, 0.98), rgba(37, 32, 28, 0.88));
+        }
+        body.theme-sunset .sort-section,
+        body.theme-sunset .sidebar-search {
+            background: transparent;
+            border-color: transparent;
+        }
+        body.theme-sunset .search-input,
+        body.theme-sunset .sidebar-search-input,
+        body.theme-sunset .sort-btn,
+        body.theme-sunset .toggle-old-btn,
+        body.theme-sunset .filter-btn-orientation,
+        body.theme-sunset .theme-toggle {
+            background: rgba(255, 255, 255, 0.045);
+            border-color: rgba(255, 255, 255, 0.06);
+            color: #f6ede4;
+        }
+        body.theme-sunset .filter-btn-orientation.active,
+        body.theme-sunset .sort-btn.active,
+        body.theme-sunset .toggle-old-btn.active,
+        body.theme-sunset .profile-link,
+        body.theme-sunset .add-profile-btn {
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            border-color: rgba(255, 155, 34, 0.48);
+            color: #1c140d;
+            box-shadow: 0 14px 30px rgba(255, 155, 34, 0.2);
+        }
+        body.theme-sunset .profile-item {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+            border-color: rgba(255, 255, 255, 0.06);
+            color: var(--text-main);
+        }
+        body.theme-sunset .profile-item:hover {
+            border-color: rgba(255, 155, 34, 0.24);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.025));
+        }
+        body.theme-sunset .profile-item.new {
+            border-color: rgba(255, 88, 88, 0.36);
+            background: linear-gradient(180deg, rgba(255, 88, 88, 0.08), rgba(255, 255, 255, 0.02));
+        }
+        body.theme-sunset .footer-warning {
+            background: rgba(26, 22, 19, 0.88);
+            border-color: rgba(255, 255, 255, 0.05);
+            color: #d7c9bb;
+        }
+        body.theme-sunset .footer-warning a,
+        body.theme-sunset .search-result-city {
+            color: #ffd19c;
+        }
+        @media (max-width: 768px) {
+            .search-box {
+                top: 12px;
+                right: 12px;
+                left: 12px;
+                width: auto;
+                max-width: none;
+                padding: 14px;
+                border-radius: 22px;
+            }
+            .search-title {
+                display: none;
+            }
+            .search-subtitle {
+                display: none;
+            }
+            .search-metrics {
+                display: none;
+            }
+            .search-box-header {
+                margin-bottom: 10px;
+            }
+            .search-brand {
+                gap: 6px;
+                min-width: 0;
+            }
+            .search-chip {
+                display: none;
+            }
+            .search-input-wrap {
+                margin-bottom: 10px;
+            }
+            .filter-buttons {
+                grid-template-columns: repeat(3, minmax(0, 1fr)) 40px;
+                gap: 6px;
+            }
+            .filter-btn-orientation {
+                min-height: 38px;
+                padding: 0 8px;
+                font-size: 12px;
+            }
+            .theme-toggle {
+                width: 40px;
+                height: 40px;
+                border-radius: 14px;
+            }
+            #sidebar {
+                width: 100%;
+                left: -100%;
+            }
+            .sidebar-header {
+                padding: 20px 16px 14px;
+            }
+            #sidebar-title {
+                font-size: 24px;
+                max-width: calc(100vw - 96px);
+            }
+            #sidebar-title span {
+                display: block;
+                margin-left: 0;
+                margin-top: 6px;
+                font-size: 11px;
+                line-height: 1.25;
+            }
+            #sidebar-title::after {
+                display: none;
+            }
+            .sort-section,
+            .sidebar-search {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+            .profile-list {
+                padding: 0 14px 16px;
+            }
+            .add-profile-btn {
+                right: 12px;
+                bottom: 74px;
+                padding: 14px 18px;
+                border-radius: 18px;
+            }
+            .footer-warning {
+                bottom: 12px;
+                width: min(calc(100vw - 20px), 680px);
+                padding: 10px 14px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading" class="loading">
+        <div class="loading-spinner"></div>
+        <div class="loading-title">Загрузка карты</div>
+        <div class="loading-text">Подготавливаем данные...</div>
+        <div>Загрузка карты...</div>
+    </div>
+    
+    <!-- Глобальный поиск (слева) -->
+    <!-- Поиск по городу (справа) -->
+        <div class="search-box">
+        <div class="search-box-header">
+            <div class="search-brand">
+                <div class="search-chip">Furry.by</div>
+                <div class="search-title">Найди людей рядом</div>
+                <div class="search-subtitle">Ищи по городу, нику и описанию. Открывай точки и быстро доходи до нужной анкеты.</div>
+            </div>
+        </div>
+        <div class="search-metrics">
+            <div class="search-metric">
+                <span class="search-metric-value" id="hero-total-count">0</span>
+                <span class="search-metric-label">анкет</span>
+            </div>
+            <div class="search-metric">
+                <span class="search-metric-value" id="hero-city-count">0</span>
+                <span class="search-metric-label">городов</span>
+            </div>
+        </div>
+        <div class="search-input-wrap">
+            <span class="search-input-icon" aria-hidden="true"></span>
+        <input type="text" class="search-input" id="search-input" placeholder="Поиск по городу, нику, описанию...">
+        </div>
+        <div class="filter-section">
+            <div class="filter-title">Ищу:</div>
+            <div class="filter-buttons">
+                <button class="filter-btn-orientation active" onclick="setLookingFor('all', this)">Всех</button>
+                <button class="filter-btn-orientation" onclick="setLookingFor('М', this)">Парней</button>
+                <button class="filter-btn-orientation" onclick="setLookingFor('Ж', this)">Девушек</button>
+                <button id="theme-toggle" class="theme-toggle" onclick="toggleTheme()" title="Сменить тему" aria-label="Сменить тему">&#9680;</button>
+            </div>
+        </div>
+        <div id="search-results" class="search-results"></div>
+    </div>
+    <div id="map"></div>
+    
+
+    
+    <div id="sidebar">
+        <div class="sidebar-header">
+            <h2 id="sidebar-title">Анкеты</h2>
+            <button class="close-btn" onclick="closeSidebar()">×</button>
+        </div>
+        <div class="sort-section">
+            <button class="sort-btn active" onclick="sortProfiles('new', this)">Новые</button>
+            <button class="sort-btn" onclick="sortProfiles('old', this)">Старые</button>
+            <button class="sort-btn" onclick="sortProfiles('popular', this)">Популярные</button>
+        </div>
+        <div class="sidebar-search">
+            <input
+                type="text"
+                id="sidebar-search-input"
+                class="sidebar-search-input"
+                placeholder="Поиск по анкетам в списке..."
+                oninput="filterSidebarProfiles()"
+            >
+        </div>
+        <div id="profile-list" class="profile-list"></div>
+        <div style="padding: 0 10px 16px;">
+            <button id="load-more-btn" class="toggle-old-btn" style="width: 100%; display: none;" onclick="showMoreProfiles()">Показать больше</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+    
+    <!-- SEO контент для поисковиков -->
+    <div style="position: absolute; left: -9999px; top: -9999px;">
+        <h1>Карта знакомств Furry - найди друзей и партнёров рядом с тобой</h1>
+        <p>Furry.by - крупнейшая интерактивная карта знакомств для фурри-сообщества в России, Украине, Беларуси, Казахстане и других странах СНГ. 
+        Более 4700 проверенных анкет из всех городов: Москва, Санкт-Петербург, Новосибирск, Екатеринбург, Казань, Нижний Новгород, Челябинск, Самара, Омск, Ростов-на-Дону, Уфа, Красноярск, Воронеж, Пермь, Волгоград и многих других.</p>
+        
+        <h2>Как найти друзей в фурри-сообществе?</h2>
+        <p>Используйте нашу интерактивную карту для поиска единомышленников, друзей и партнёров рядом с вами. 
+        Фильтруйте анкеты по полу, возрасту, городу и интересам. Каждый день появляются новые профили! 
+        Все анкеты модерируются, возраст участников от 16 лет.</p>
+        
+        <h2>Популярные города для фурри знакомств:</h2>
+        <ul>
+            <li>Москва - более 800 активных анкет фурри</li>
+            <li>Санкт-Петербург - более 500 участников сообщества</li>
+            <li>Новосибирск - более 200 анкет для знакомств</li>
+            <li>Екатеринбург - более 150 активных пользователей</li>
+            <li>Казань - более 100 анкет</li>
+            <li>Нижний Новгород - более 80 участников</li>
+        </ul>
+        
+        <h2>Что такое Furry сообщество?</h2>
+        <p>Furry (фурри) - это сообщество людей, интересующихся антропоморфными животными персонажами. 
+        На нашей карте вы можете найти друзей по интересам, партнёров для отношений, компанию для посещения 
+        фурри-конвентов и мероприятий. Присоединяйтесь к крупнейшему русскоязычному фурри-сообществу!</p>
+        
+        <h2>Преимущества Furry.by:</h2>
+        <ul>
+            <li>✅ Более 4700 проверенных анкет</li>
+            <li>✅ Удобный поиск по карте и городам</li>
+            <li>✅ Фильтры по полу и интересам</li>
+            <li>✅ Новые анкеты каждый день</li>
+            <li>✅ Прямая связь через Telegram</li>
+            <li>✅ Бесплатное использование</li>
+            <li>✅ Безопасность и модерация</li>
+        </ul>
+        
+        <p>Начните знакомиться прямо сейчас! Выберите город на карте или воспользуйтесь поиском. 
+        Найдите друзей, любовь и единомышленников в фурри-сообществе рядом с вами.</p>
+        
+        <p><strong>Ключевые слова:</strong> фурри знакомства, furry dating, карта знакомств, фурри сообщество, 
+        знакомства россия, furry russia, фурри друзья, furry map, антропоморфные персонажи, фурсьют, 
+        фурри конвент, furry convention, фурри арт, furry art, фурри фэндом, furry fandom</p>
+    </div>
+    
+    <script>
+        const map = L.map('map', {
+            preferCanvas: true,
+            renderer: L.canvas({ tolerance: 5 }),
+            zoomAnimation: true,
+            fadeAnimation: true,
+            markerZoomAnimation: false,
+            zoomAnimationThreshold: 4,
+            zoomSnap: 0.5,
+            zoomDelta: 0.5,
+            wheelPxPerZoomLevel: 90,
+            minZoom: 3,
+            inertia: true,
+            inertiaDeceleration: 3000,
+            inertiaMaxSpeed: 1500,
+            tap: true,
+            tapTolerance: 15,
+            touchZoom: true,
+            bounceAtZoomLimits: false
+        }).setView([55.7558, 37.6173], 5);
+
+        let baseTileLayer = null;
+
+        function buildDarkTileLayer() {
+            return L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18,
+                updateWhenIdle: false,
+                updateWhenZooming: true,
+                keepBuffer: 2,
+                className: 'map-tiles-dark'
+            });
+        }
+
+        function buildSunsetTileLayer() {
+            return L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18,
+                updateWhenIdle: false,
+                updateWhenZooming: true,
+                keepBuffer: 2,
+                className: 'map-tiles-sunset'
+            });
+        }
+
+        function setBaseTileTheme(theme) {
+            if (baseTileLayer) {
+                map.removeLayer(baseTileLayer);
+                baseTileLayer = null;
+            }
+
+            if (theme === 'sunset') {
+                baseTileLayer = buildSunsetTileLayer();
+                baseTileLayer.addTo(map);
+                return;
+            }
+
+            baseTileLayer = buildDarkTileLayer();
+            baseTileLayer.addTo(map);
+        }
+
+        async function tryCenterMapToUserLocation() {
+            return await new Promise(resolve => {
+                const callbackName = '__furryIpGeoCallback';
+                const script = document.createElement('script');
+                let settled = false;
+
+                const finish = result => {
+                    if (settled) {
+                        return;
+                    }
+                    settled = true;
+                    try {
+                        delete window[callbackName];
+                    } catch (error) {
+                        window[callbackName] = undefined;
+                    }
+                    if (script.parentNode) {
+                        script.parentNode.removeChild(script);
+                    }
+                    resolve(result);
+                };
+
+                const timer = setTimeout(() => finish(false), 3500);
+
+                window[callbackName] = data => {
+                    clearTimeout(timer);
+
+                    const country = data && data.country ? data.country : null;
+                    visitorCountryCode = String(
+                        (country && (country.iso || country.iso2 || country.name_en || country.name_ru)) || ''
+                    ).toUpperCase();
+
+                    const city = data && data.city ? data.city : null;
+                    const lat = city ? Number(city.lat) : NaN;
+                    const lon = city ? Number(city.lon) : NaN;
+
+                    if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+                        finish(false);
+                        return;
+                    }
+
+                    map.setView([lat, lon], 10, { animate: false });
+                    finish(true);
+                };
+
+                script.src = 'https://api.sypexgeo.net/jsonp/?callback=' + callbackName;
+                script.async = true;
+                script.onerror = () => {
+                    clearTimeout(timer);
+                    finish(false);
+                };
+                document.head.appendChild(script);
+            });
+        }
+
+        const markers = L.markerClusterGroup({
+            maxClusterRadius: 100,
+            spiderfyOnMaxZoom: false,
+            showCoverageOnHover: false,
+            zoomToBoundsOnClick: false,
+            removeOutsideVisibleBounds: true,
+            disableClusteringAtZoom: 15,
+            chunkedLoading: true,
+            chunkDelay: 50,
+            animate: true,
+            animateAddingMarkers: false,
+            iconCreateFunction: function(cluster) {
+                const count = cluster.getChildCount();
+                const childMarkers = cluster.getAllChildMarkers();
+                let newCount = 0;
+
+                childMarkers.forEach(marker => {
+                    const form = allData[marker.formIndex];
+                    if (form && isHighlightedNew(form)) {
+                        newCount += 1;
+                    }
+                });
+
+                const newRatio = count > 0 ? (newCount / count) : 0;
+                const background = newRatio >= 0.3
+                    ? 'rgba(255, 68, 68, 0.85)'
+                    : 'rgba(102, 179, 255, 0.8)';
+                
+                let size = 40;
+                if (count > 100) size = 60;
+                else if (count > 50) size = 50;
+                
+                return L.divIcon({
+                    html: '<div style="background: ' + background + '; border-radius: 50%; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: bold;">' + count + '</div>',
+                    className: 'marker-cluster',
+                    iconSize: L.point(size, size)
+                });
+            }
+        });
+
+        let allData = [];
+        let currentProfiles = [];
+        let sidebarProfilesSource = [];
+        let sidebarVisibleProfiles = [];
+        let sidebarSearchQuery = '';
+        let expandedStates = {};
+        let citiesData = {};
+        let lookingFor = 'all';
+        let showOldProfiles = false;
+        let currentSortBy = 'new';
+        let cityTagsSet = new Set();
+        let hashtagCache = new Map();
+        let renderTimeout = null;
+        let sidebarBatchSize = 100;
+        let sidebarVisibleCount = 100;
+        let recentUndatedFormIdThreshold = null;
+        let markerRenderToken = 0;
+        let currentMarkerFilterFn = null;
+        let markerRefreshTimer = null;
+        let lastRenderedMarkerBounds = null;
+        let lastRenderedMarkerZoomBucket = null;
+        let visitorCountryCode = '';
+        let toastTimer = null;
+        let sidebarHydrationToken = 0;
+        let searchRequestToken = 0;
+        const profileDetailsCache = new Map();
+        const BOT_TAG = '@Furrybybot';
+        const pendingLikes = new Set();
+        const THEME_STORAGE_KEY = 'furry-theme';
+
+        function getApiBaseUrl() {
+            const override = String(window.FURRY_API_BASE_URL || '').trim();
+            if (override) {
+                return override.replace(/\/+$/, '');
+            }
+
+            return 'http://api.furry.by:10101';
+        }
+
+        const API_BASE_URL = getApiBaseUrl();
+
+        async function fetchJsonWithTimeout(url, options = {}, timeoutMs = 12000) {
+            const controller = typeof AbortController === 'function' ? new AbortController() : null;
+            const timer = controller ? setTimeout(() => controller.abort(), timeoutMs) : null;
+            try {
+                const response = await fetch(url, {
+                    ...options,
+                    signal: controller ? controller.signal : undefined
+                });
+                if (!response.ok) {
+                    throw new Error('bad_status_' + response.status);
+                }
+                return await response.json();
+            } finally {
+                if (timer) {
+                    clearTimeout(timer);
+                }
+            }
+        }
+
+        function isHydratedProfile(form) {
+            return Boolean(
+                form
+                && (typeof form.form_text === 'string'
+                    || typeof form.user_link === 'string'
+                    || typeof form.photo === 'string')
+            );
+        }
+
+        function setSidebarLoading(message = 'Загружаем анкеты...') {
+            const profileList = document.getElementById('profile-list');
+            currentProfiles = [];
+            if (profileList) {
+                profileList.innerHTML = '<div style="padding: 20px; color: #888; text-align: center;">' + escapeHtml(message) + '</div>';
+            }
+        }
+
+        async function fetchProfilesBatch(ids) {
+            const normalizedIds = [...new Set(
+                (ids || [])
+                    .map(value => Number(value))
+                    .filter(Number.isFinite)
+                    .filter(value => value > 0)
+            )];
+
+            if (normalizedIds.length === 0) {
+                return [];
+            }
+
+            const missingIds = normalizedIds.filter(id => !profileDetailsCache.has(id));
+            if (missingIds.length > 0) {
+                const payload = await fetchJsonWithTimeout(
+                    API_BASE_URL + '/api/profiles',
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
+                        body: JSON.stringify({ ids: missingIds })
+                    },
+                    20000
+                );
+
+                if (!payload || !payload.ok || !Array.isArray(payload.items)) {
+                    throw new Error('bad_profiles_payload');
+                }
+
+                payload.items.forEach(item => {
+                    if (item && Number.isFinite(Number(item.form_id))) {
+                        profileDetailsCache.set(Number(item.form_id), item);
+                    }
+                });
+            }
+
+            return normalizedIds
+                .map(id => profileDetailsCache.get(id))
+                .filter(Boolean);
+        }
+
+        function applyTheme(theme) {
+            const body = document.body;
+            const isSunset = theme === 'sunset';
+            body.classList.toggle('theme-sunset', isSunset);
+            void setBaseTileTheme(theme);
+            const button = document.getElementById('theme-toggle');
+            if (button) {
+                button.textContent = '◐';
+                button.title = isSunset ? 'Тёмная тема' : 'Оранжево-белая тема';
+                button.setAttribute('aria-label', button.title);
+            }
+        }
+
+        function toggleTheme() {
+            const nextTheme = document.body.classList.contains('theme-sunset') ? 'dark' : 'sunset';
+            localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+            applyTheme(nextTheme);
+        }
+
+        function formatCompactCount(value) {
+            const safeValue = Number(value) || 0;
+            if (safeValue >= 10000) {
+                return Math.round(safeValue / 1000) + 'k+';
+            }
+            if (safeValue >= 1000) {
+                return (safeValue / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+            }
+            return String(safeValue);
+        }
+
+        function updateHeroMetrics() {
+            const totalElement = document.getElementById('hero-total-count');
+            const cityElement = document.getElementById('hero-city-count');
+
+            if (totalElement) {
+                totalElement.textContent = formatCompactCount(allData.length);
+            }
+
+            if (cityElement) {
+                cityElement.textContent = formatCompactCount(Object.keys(citiesData).length);
+            }
+        }
+
+        function applyUiCopy() {
+            const searchTitle = document.querySelector('.search-title');
+            const searchSubtitle = document.querySelector('.search-subtitle');
+            const totalLabel = document.querySelector('#hero-total-count + .search-metric-label');
+            const cityLabel = document.querySelector('#hero-city-count + .search-metric-label');
+            const filterTitle = document.querySelector('.filter-title');
+            const loadingTitle = document.querySelector('.loading-title');
+            const loadingText = document.querySelector('.loading-text');
+            const sidebarTitle = document.getElementById('sidebar-title');
+
+            if (searchTitle) {
+                searchTitle.textContent = '\u041d\u0430\u0439\u0434\u0438 \u043b\u044e\u0434\u0435\u0439 \u0440\u044f\u0434\u043e\u043c';
+            }
+
+            if (searchSubtitle) {
+                searchSubtitle.textContent = '\u0418\u0449\u0438 \u043f\u043e \u0433\u043e\u0440\u043e\u0434\u0443, \u043d\u0438\u043a\u0443 \u0438 \u043e\u043f\u0438\u0441\u0430\u043d\u0438\u044e. \u041e\u0442\u043a\u0440\u044b\u0432\u0430\u0439 \u0442\u043e\u0447\u043a\u0438 \u0438 \u0431\u044b\u0441\u0442\u0440\u043e \u0434\u043e\u0445\u043e\u0434\u0438 \u0434\u043e \u043d\u0443\u0436\u043d\u043e\u0439 \u0430\u043d\u043a\u0435\u0442\u044b.';
+            }
+
+            if (totalLabel) {
+                totalLabel.textContent = '\u0430\u043d\u043a\u0435\u0442';
+            }
+
+            if (cityLabel) {
+                cityLabel.textContent = '\u0433\u043e\u0440\u043e\u0434\u043e\u0432';
+            }
+
+            if (filterTitle) {
+                filterTitle.textContent = '\u041a\u043e\u0433\u043e \u043f\u043e\u043a\u0430\u0437\u0430\u0442\u044c';
+            }
+
+            if (loadingTitle) {
+                loadingTitle.textContent = 'Furry.by map';
+            }
+
+            if (loadingText) {
+                loadingText.textContent = '\u0413\u043e\u0442\u043e\u0432\u0438\u043c \u043a\u0430\u0440\u0442\u0443 \u0438 \u0430\u043d\u043a\u0435\u0442\u044b...';
+            }
+
+            if (sidebarTitle) {
+                sidebarTitle.dataset.kicker = '\u0422\u043e\u0447\u043a\u0430 \u043d\u0430 \u043a\u0430\u0440\u0442\u0435';
+                if (!sidebarTitle.dataset.subtitle) {
+                    sidebarTitle.dataset.subtitle = '\u0421\u043f\u0438\u0441\u043e\u043a \u0430\u043d\u043a\u0435\u0442 \u043f\u043e \u0432\u044b\u0431\u0440\u0430\u043d\u043d\u043e\u0439 \u0442\u043e\u0447\u043a\u0435 \u043d\u0430 \u043a\u0430\u0440\u0442\u0435';
+                }
+            }
+        }
+
+        applyTheme(localStorage.getItem(THEME_STORAGE_KEY) || 'dark');
+
+        // Функция расшифровки чанков
+        async function inflateDecryptedBuffer(buffer, compression) {
+            if (!compression) {
+                return buffer;
+            }
+
+            if (compression !== 'gzip') {
+                throw new Error('Неподдерживаемый тип сжатия: ' + compression);
+            }
+
+            if (typeof DecompressionStream !== 'function') {
+                throw new Error('Браузер не поддерживает распаковку gzip-пакета');
+            }
+
+            const stream = new Blob([buffer]).stream().pipeThrough(new DecompressionStream('gzip'));
+            return await new Response(stream).arrayBuffer();
+        }
+
+        async function decryptChunks(chunks, keyHex, ivHex, compression, onProgress) {
+            try {
+                const keyBuffer = hexToUint8Array(keyHex);
+                const ivBuffer = hexToUint8Array(ivHex);
+                const decoder = new TextDecoder();
+                
+                // Импортируем ключ
+                const key = await crypto.subtle.importKey(
+                    'raw',
+                    keyBuffer,
+                    { name: 'AES-CBC', length: 256 },
+                    false,
+                    ['decrypt']
+                );
+                
+                const allDecrypted = [];
+                
+                // Расшифровываем каждый чанк
+                for (let index = 0; index < chunks.length; index++) {
+                    const chunk = chunks[index];
+                    if (typeof onProgress === 'function') {
+                        onProgress(index + 1, chunks.length);
+                    }
+
+                    const encryptedBuffer = base64ToArrayBuffer(chunk);
+                    
+                    const decryptedBuffer = await crypto.subtle.decrypt(
+                        { name: 'AES-CBC', iv: ivBuffer },
+                        key,
+                        encryptedBuffer
+                    );
+                    
+                    const normalizedBuffer = await inflateDecryptedBuffer(decryptedBuffer, compression);
+                    const jsonString = decoder.decode(normalizedBuffer);
+                    const chunkData = JSON.parse(jsonString);
+                    
+                    allDecrypted.push(...chunkData);
+
+                    if ((index + 1) % 2 === 0) {
+                        await new Promise(resolve => setTimeout(resolve, 0));
+                    }
+                }
+                
+                return allDecrypted;
+                
+            } catch (error) {
+                console.error('❌ Ошибка расшифровки:', error);
+                return null;
+            }
+        }
+        
+        function hexToUint8Array(hex) {
+            const bytes = new Uint8Array(hex.length / 2);
+            for (let i = 0; i < hex.length; i += 2) {
+                bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+            }
+            return bytes;
+        }
+        
+        function base64ToArrayBuffer(base64) {
+            const binary = atob(base64);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            // Отменяем фоновую загрузку профилей
+            if (renderTimeout) {
+                clearTimeout(renderTimeout);
+                renderTimeout = null;
+            }
+
+            if (currentProfiles.length === 0) {
+                profileList.innerHTML = '<div style="padding: 20px; color: #888; text-align: center;">Старые анкеты скрыты</div>';
+                return;
+            }
+        }
+
+        // Глобальный поиск
+        function toggleGlobalSearch() {
+            const panel = document.getElementById('global-search-panel');
+            if (!panel) {
+                return;
+            }
+            panel.classList.toggle('active');
+            if (panel.classList.contains('active')) {
+                const input = document.getElementById('global-search-input');
+                if (input) input.focus();
+            }
+        }
+
+        function globalSearch() {
+            const resultsDiv = document.getElementById('global-search-results');
+            const input = document.getElementById('global-search-input');
+            if (!resultsDiv || !input) {
+                return;
+            }
+            const query = input.value.toLowerCase().trim();
+            
+            if (query.length < 2) {
+                resultsDiv.innerHTML = '';
+                return;
+            }
+
+            const maxId = Math.max(...allData.map(f => f.form_id));
+            const minId = Math.min(...allData.map(f => f.form_id));
+            const threshold = maxId - (maxId - minId) * 0.2;
+
+            sidebarProfilesSource = profiles.slice();
+            currentProfiles = filterVisibleProfiles(profiles, threshold);
+            
+            // Поиск по имени и описанию
+            const matches = allData.filter(form => {
+                const name = form.name.toLowerCase();
+                const text = form.form_text.toLowerCase();
+                return name.includes(query) || text.includes(query);
+            }).slice(0, 20);
+            
+            if (matches.length === 0) {
+                resultsDiv.innerHTML = '<div style="padding: 10px; color: #888;">Ничего не найдено</div>';
+                return;
+            }
+            
+            let html = '';
+            matches.forEach(form => {
+                const cleanText = stripHtml(form.form_text);
+                const shortText = cleanText.substring(0, 80);
+                html += `<div class="global-search-item" onclick="showProfile(${form.form_id})">`;
+                html += `<div class="global-search-item-name">${form.name}, ${form.age} • ${form.settlement}</div>`;
+                html += `<div class="global-search-item-text">${shortText}...</div>`;
+                html += `</div>`;
+            });
+            
+            resultsDiv.innerHTML = html;
+        }
+
+        function showProfile(formId) {
+            const form = allData.find(f => f.form_id === formId);
+            const maxId = Math.max(...allData.map(f => f.form_id));
+            const minId = Math.min(...allData.map(f => f.form_id));
+            const threshold = maxId - (maxId - minId) * 0.2;
+
+            if (form && form.lat && form.lon && shouldDisplayForm(form, threshold)) {
+                map.setView([form.lat, form.lon], 12);
+                openSidebar([form]);
+                // Закрываем панель поиска
+                const panel = document.getElementById('global-search-panel');
+                if (panel) panel.classList.remove('active');
+            }
+        }
+
+        function likeProfile(formId) {
+            // Открываем бота с командой лайка
+            window.open('https://t.me/Furrybybot?start=like_' + formId, '_blank');
+        }
+
+        function sortProfiles(sortBy, btn) {
+            currentSortBy = sortBy;
+            
+            document.querySelectorAll('.sort-btn').forEach(b => {
+                b.classList.remove('active');
+            });
+            btn.classList.add('active');
+            
+            // Пересортировать текущие профили
+            if (currentSortBy === 'new') {
+                currentProfiles.sort((a, b) => b.form_id - a.form_id);
+            } else if (currentSortBy === 'old') {
+                currentProfiles.sort((a, b) => a.form_id - b.form_id);
+            } else if (currentSortBy === 'popular') {
+                currentProfiles.sort((a, b) => b.likes - a.likes);
+            }
+            
+            renderProfiles();
+        }
+
+        function renderProfiles() {
+            const profileList = document.getElementById('profile-list');
+            
+            // Отменяем предыдущую загрузку если была
+            if (renderTimeout) {
+                clearTimeout(renderTimeout);
+                renderTimeout = null;
+            }
+            
+            // Определяем порог для новых анкет один раз
+            const maxId = Math.max(...allData.map(f => f.form_id));
+            const minId = Math.min(...allData.map(f => f.form_id));
+            const threshold = maxId - (maxId - minId) * 0.2;
+            
+            // Если анкет мало (меньше 50), рендерим всё сразу
+            if (currentProfiles.length <= 50) {
+                let html = '';
+                currentProfiles.forEach((form, index) => {
+                    html += createProfileHTML(form, index, threshold);
+                });
+                profileList.innerHTML = html;
+                return;
+            }
+            
+            // Если анкет много - приоритетная загрузка
+            const newProfiles = [];
+            const oldProfiles = [];
+            
+            currentProfiles.forEach((form, index) => {
+                if (isHighlightedNew(form, threshold)) {
+                    newProfiles.push({ form, index });
+                } else {
+                    oldProfiles.push({ form, index });
+                }
+            });
+            
+            // Сначала рендерим новые профили
+            let html = '';
+            newProfiles.forEach(({ form, index }) => {
+                html += createProfileHTML(form, index, threshold);
+            });
+            profileList.innerHTML = html;
+            
+            // Потом добавляем старые профили порциями
+            let currentBatch = 0;
+            const batchSize = 30;
+            
+            function addOldBatch() {
+                const start = currentBatch * batchSize;
+                const end = Math.min(start + batchSize, oldProfiles.length);
+                
+                let batchHTML = '';
+                for (let i = start; i < end; i++) {
+                    const { form, index } = oldProfiles[i];
+                    batchHTML += createProfileHTML(form, index, threshold);
+                }
+                
+                profileList.innerHTML += batchHTML;
+                
+                currentBatch++;
+                if (end < oldProfiles.length) {
+                    renderTimeout = setTimeout(addOldBatch, 150);
+                }
+            }
+            
+            if (oldProfiles.length > 0) {
+                renderTimeout = setTimeout(addOldBatch, 100);
+            }
+        }
+        
+        function createProfileHTML(form, index, threshold) {
+            const initial = form.name.charAt(0);
+            const vipBadge = form.is_vip ? ' <span class="vip">★</span>' : '';
+            const cleanText = stripHtml(form.form_text);
+            const shortText = cleanText.substring(0, 100);
+            const needsExpand = cleanText.length > 100;
+            const isNew = isHighlightedNew(form, threshold);
+            
+            let html = '<div class="profile-item' + (isNew ? ' new' : '') + '" onclick="toggleProfile(' + index + ')">';
+            html += '<div class="profile-header">';
+            html += '<div class="profile-avatar">' + initial + '</div>';
+            html += '<div class="profile-info">';
+            html += '<h3>' + form.name + vipBadge + '</h3>';
+            html += '<div class="profile-meta">' + form.age + ' лет • ' + form.settlement + '</div>';
+            html += '</div></div>';
+            html += '<div class="profile-hashtags">' + filterHashtags(form.hashtag || '') + '</div>';
+            html += '<div class="profile-text collapsed" id="text-' + index + '">' + shortText + (needsExpand ? '...' : '') + '</div>';
+            html += '<div class="profile-footer">';
+            html += '<div class="profile-likes" data-like-form-id="' + form.form_id + '" onclick="likeProfile(' + form.form_id + '); event.stopPropagation();" style="cursor: pointer;">❤️ ' + form.likes + '</div>';
+            html += '<a href="' + form.user_link + '" target="_blank" class="profile-link" onclick="event.stopPropagation()">Написать</a>';
+            html += '</div></div>';
+            
+            expandedStates[index] = false;
+            return html;
+        }
+
+        function setLookingFor(gender, btn) {
+            lookingFor = gender;
+            
+            document.querySelectorAll('.filter-btn-orientation').forEach(b => {
+                b.classList.remove('active');
+            });
+            btn.classList.add('active');
+            
+            applyFilters();
+        }
+
+        function showAllMarkers() {
+            markers.clearLayers();
+            
+            const maxId = Math.max(...allData.map(f => f.form_id));
+            const minId = Math.min(...allData.map(f => f.form_id));
+            const threshold = maxId - (maxId - minId) * 0.2;
+            
+            allData.forEach((form, index) => {
+                if (form.lat && form.lon && form.age >= 16 && shouldDisplayForm(form, threshold)) {
+                    const isNew = isHighlightedNew(form, threshold);
+                    const marker = L.circleMarker([form.lat, form.lon], {
+                        radius: 8,
+                        fillColor: isNew ? '#ff4444' : '#66b3ff',
+                        color: '#fff',
+                        weight: 2,
+                        opacity: 1,
+                        fillOpacity: 0.8
+                    });
+                    marker.formIndex = index;
+                    markers.addLayer(marker);
+                }
+            });
+        }
+
+        function applyFilters() {
+            markers.clearLayers();
+            
+            // Определяем новые анкеты (топ 20% по form_id)
+            const maxId = Math.max(...allData.map(f => f.form_id));
+            const minId = Math.min(...allData.map(f => f.form_id));
+            const threshold = maxId - (maxId - minId) * 0.2;
+            
+            allData.forEach((form, index) => {
+                if (form.lat && form.lon && form.age >= 16 && shouldDisplayForm(form, threshold)) {
+                    const hashtag = (form.hashtag || '').toLowerCase();
+                    
+                    let profileGender = null;
+                    if (hashtag.includes('#м')) profileGender = 'М';
+                    else if (hashtag.includes('#ж')) profileGender = 'Ж';
+                    else if (hashtag.includes('#ftm')) profileGender = 'М';
+                    else if (hashtag.includes('#mtf')) profileGender = 'Ж';
+                    
+                    if (!profileGender) return;
+                    
+                    let show = false;
+                    if (lookingFor === 'all') {
+                        show = true;
+                    } else {
+                        show = profileGender === lookingFor;
+                    }
+                    
+                    if (show) {
+                        const isNew = isHighlightedNew(form, threshold);
+                        const marker = L.circleMarker([form.lat, form.lon], {
+                            radius: 8,
+                            fillColor: isNew ? '#ff4444' : '#66b3ff',
+                            color: '#fff',
+                            weight: 2,
+                            opacity: 1,
+                            fillOpacity: 0.8
+                        });
+                        marker.formIndex = index;
+                        markers.addLayer(marker);
+                    }
+                }
+            });
+        }
+
+        function searchCity() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            const resultsDiv = document.getElementById('search-results');
+            
+            if (query.length < 2) {
+                resultsDiv.innerHTML = '';
+                return;
+            }
+
+            const maxId = Math.max(...allData.map(f => f.form_id));
+            const minId = Math.min(...allData.map(f => f.form_id));
+            const threshold = maxId - (maxId - minId) * 0.2;
+            
+            const matches = Object.keys(citiesData)
+                .filter(city => city.toLowerCase().includes(query))
+                .map(city => ({
+                    city,
+                    count: getVisibleCityProfiles(city, threshold).length
+                }))
+                .filter(match => match.count > 0)
+                .slice(0, 10);
+            
+            if (matches.length === 0) {
+                resultsDiv.innerHTML = '<div class="search-result-item">Ничего не найдено</div>';
+                return;
+            }
+            
+            let html = '';
+            matches.forEach(({ city, count }) => {
+                html += '<div class="search-result-item" onclick="showCity(\'' + city.replace(/'/g, "\\'") + '\')">';
+                html += '<div class="search-result-city">' + escapeHtml(city) + '</div>';
+                html += '<div class="search-result-count">' + count + ' анкет</div>';
+                html += '</div>';
+            });
+            
+            resultsDiv.innerHTML = html;
+        }
+
+        function showCity(city) {
+            const maxId = Math.max(...allData.map(f => f.form_id));
+            const minId = Math.min(...allData.map(f => f.form_id));
+            const threshold = maxId - (maxId - minId) * 0.2;
+            const profiles = getVisibleCityProfiles(city, threshold);
+
+            if (profiles.length === 0) {
+                return;
+            }
+
+            openSidebar(profiles);
+            
+            const firstProfile = profiles[0];
+            map.setView([firstProfile.lat, firstProfile.lon], 10);
+            
+            document.getElementById('search-input').value = '';
+            document.getElementById('search-results').innerHTML = '';
+        }
+
+        function toggleProfile(index) {
+            const textDiv = document.getElementById('text-' + index);
+            const form = currentProfiles[index];
+            const cleanText = stripHtml(form.form_text);
+            
+            if (expandedStates[index]) {
+                expandedStates[index] = false;
+                textDiv.className = 'profile-text collapsed';
+                textDiv.textContent = cleanText.substring(0, 100) + (cleanText.length > 100 ? '...' : '');
+            } else {
+                expandedStates[index] = true;
+                textDiv.className = 'profile-text';
+                textDiv.textContent = cleanText;
+            }
+        }
+
+        function stripHtml(html) {
+            const tmp = document.createElement('div');
+            tmp.innerHTML = html;
+            return tmp.textContent || tmp.innerText || '';
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function safeTelegramUrl(value) {
+            const raw = String(value ?? '').trim();
+            return /^https:\/\/t\.me\/[A-Za-z0-9_]{3,}$/.test(raw)
+                ? raw
+                : 'https://t.me/Furrybybot';
+        }
+
+        function normalizePhotoPath(value) {
+            const raw = String(value ?? '').trim();
+            if (!raw) {
+                return '';
+            }
+            if (/file exceeds maximum size/i.test(raw)) {
+                return '';
+            }
+            if (/^https?:\/\//i.test(raw)) {
+                return raw;
+            }
+            return raw.replace(/^\.?\//, '').replace(/^\/+/, '');
+        }
+
+        function getPhotoCandidates(value) {
+            const raw = normalizePhotoPath(value);
+            if (!raw) {
+                return [];
+            }
+
+            if (/^https?:\/\//i.test(raw)) {
+                return [raw];
+            }
+
+            const fileName = raw.split('/').pop();
+            const candidates = [raw];
+
+            if (fileName) {
+                candidates.push('photos/' + fileName);
+                candidates.push('photo/' + fileName);
+            }
+
+            return [...new Set(candidates.filter(Boolean))];
+        }
+
+        function buildPhotoOnError(candidates) {
+            if (candidates.length <= 1) {
+                return "this.onerror=null;this.parentNode.style.display='none';";
+            }
+
+            const parts = [];
+            for (let i = 1; i < candidates.length; i++) {
+                parts.push(`if(this.dataset.fallback!=='${i}') { this.dataset.fallback='${i}'; this.src='${candidates[i]}'; return; }`);
+            }
+            parts.push("this.onerror=null;this.parentNode.style.display='none';");
+            return parts.join(' ');
+        }
+
+        function handleProfilePhotoLoad(img) {
+            if (!img) {
+                return;
+            }
+            img.classList.add('is-loaded');
+            const wrap = img.closest('.profile-photo-wrap');
+            if (wrap) {
+                const loading = wrap.querySelector('.profile-photo-loading');
+                if (loading) {
+                    loading.remove();
+                }
+            }
+        }
+
+        function createProfilePhotoMarkup(form) {
+            const candidates = getPhotoCandidates(form && form.photo);
+            if (candidates.length === 0) {
+                return '';
+            }
+
+            const safeSrc = escapeHtml(candidates[0]);
+            const safeAlt = escapeHtml(form && form.name ? form.name : 'Фото анкеты');
+            const safeOnError = escapeHtml(buildPhotoOnError(candidates));
+            const safeOnLoad = "handleProfilePhotoLoad(this)";
+
+            return '<div class="profile-photo-wrap"><div class="profile-photo-loading">Загрузка фото...</div><img class="profile-photo" src="' + safeSrc + '" alt="' + safeAlt + '" loading="lazy" onload="' + safeOnLoad + '" onerror="' + safeOnError + '"></div>';
+        }
+
+        function formatProfileDate(value) {
+            if (!value) return '';
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) return '';
+            return date.toLocaleDateString('ru-RU');
+        }
+
+        function isHighlightedNew(form, threshold) {
+            return form.form_id >= threshold || !form.source_date;
+        }
+
+        function shouldDisplayForm(form, threshold) {
+            return showOldProfiles || isHighlightedNew(form, threshold);
+        }
+
+        function filterVisibleProfiles(profiles, threshold) {
+            return profiles.filter(profile => shouldDisplayForm(profile, threshold));
+        }
+
+        function getVisibleCityProfiles(city, threshold) {
+            const indexes = citiesData[city] || [];
+            return indexes
+                .map(index => allData[index])
+                .filter(profile => shouldDisplayForm(profile, threshold));
+        }
+
+        function toggleOldProfiles() {
+            showOldProfiles = !showOldProfiles;
+
+            const button = document.getElementById('toggle-old-btn');
+            if (button) {
+                button.textContent = showOldProfiles ? 'Скрыть старые' : 'Показать старые';
+                button.classList.toggle('active', showOldProfiles);
+            }
+
+            applyFilters();
+
+            if (document.getElementById('sidebar').classList.contains('open') && sidebarProfilesSource.length > 0) {
+                openSidebar(sidebarProfilesSource);
+            }
+
+            if (document.getElementById('search-input').value.trim().length >= 2) {
+                searchCity();
+            }
+
+            const globalSearchInput = document.getElementById('global-search-input');
+            if (globalSearchInput && globalSearchInput.value.trim().length >= 2) {
+                globalSearch();
+            }
+        }
+
+        function filterHashtags(hashtags) {
+            if (!hashtags) return '';
+            
+            // Проверяем кеш
+            if (hashtagCache.has(hashtags)) {
+                return hashtagCache.get(hashtags);
+            }
+            
+            let filtered = hashtags;
+            
+            // Удаляем теги пола (с учетом пробелов и границ)
+            filtered = filtered.replace(/#М(\s|$)/gi, '');
+            filtered = filtered.replace(/#Ж(\s|$)/gi, '');
+            filtered = filtered.replace(/#FtM(\s|$)/gi, '');
+            filtered = filtered.replace(/#MtF(\s|$)/gi, '');
+            
+            // Удаляем ориентации (с учетом пробелов и границ)
+            filtered = filtered.replace(/#Гей(\s|$)/gi, '');
+            filtered = filtered.replace(/#Лесби(\s|$)/gi, '');
+            filtered = filtered.replace(/#Би(\s|$)/gi, '');
+            filtered = filtered.replace(/#Пан(\s|$)/gi, '');
+            filtered = filtered.replace(/#Гетеро(\s|$)/gi, '');
+            filtered = filtered.replace(/#Асексуал(\s|$)/gi, '');
+            filtered = filtered.replace(/#Деми(\s|$)/gi, '');
+            filtered = filtered.replace(/#Неважно(\s|$)/gi, '');
+            
+            // Удаляем все теги с "область", "край", "уезд", "район"
+            filtered = filtered.replace(/#[^\s]*область(\s|$)/gi, '');
+            filtered = filtered.replace(/#[^\s]*край(\s|$)/gi, '');
+            filtered = filtered.replace(/#[^\s]*уезд(\s|$)/gi, '');
+            filtered = filtered.replace(/#[^\s]*район(\s|$)/gi, '');
+            
+            // Удаляем все теги городов
+            if (cityTagsSet && cityTagsSet.size > 0) {
+                cityTagsSet.forEach(cityTag => {
+                    // Экранируем спецсимволы для регулярки
+                    const escapedCity = cityTag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    // Убираем \b чтобы удалялись слитные теги типа #Красноярскийкрай
+                    const regex = new RegExp('#' + escapedCity, 'gi');
+                    filtered = filtered.replace(regex, '');
+                });
+            }
+            
+            // Убираем лишние пробелы
+            filtered = filtered.replace(/\s+/g, ' ').trim();
+            
+            // Сохраняем в кеш
+            hashtagCache.set(hashtags, filtered);
+            
+            return filtered;
+        }
+
+        function openSidebar(profiles) {
+            const sidebar = document.getElementById('sidebar');
+            const title = document.getElementById('sidebar-title');
+            
+            
+            // Определяем новые анкеты
+            const maxId = Math.max(...allData.map(f => f.form_id));
+            const minId = Math.min(...allData.map(f => f.form_id));
+            const threshold = maxId - (maxId - minId) * 0.2;
+            
+            const newCount = profiles.filter(p => isHighlightedNew(p, threshold)).length;
+            
+            let titleText = profiles.length === 1 ? 'Анкета' : 'Анкеты (' + profiles.length + ')';
+            if (newCount > 0) {
+                titleText += ' • <span style="color: #ff4444;">' + newCount + ' новых</span>';
+            }
+            title.innerHTML = titleText;
+            
+            // Применить текущую сортировку
+            if (currentSortBy === 'new') {
+                currentProfiles.sort((a, b) => b.form_id - a.form_id);
+            } else if (currentSortBy === 'old') {
+                currentProfiles.sort((a, b) => a.form_id - b.form_id);
+            } else if (currentSortBy === 'popular') {
+                currentProfiles.sort((a, b) => b.likes - a.likes);
+            }
+            
+            renderProfiles();
+            sidebar.classList.add('open');
+        }
+
+        // Переопределяем рендеринг пользовательских данных через экранирование,
+        // чтобы анкеты не могли вставить HTML/JS в выдачу или карточки.
+        globalSearch = function() {
+            const resultsDiv = document.getElementById('global-search-results');
+            const input = document.getElementById('global-search-input');
+            if (!resultsDiv || !input) {
+                return;
+            }
+            const query = input.value.toLowerCase().trim();
+            
+            if (query.length < 2) {
+                resultsDiv.innerHTML = '';
+                return;
+            }
+
+            const maxId = Math.max(...allData.map(f => f.form_id));
+            const minId = Math.min(...allData.map(f => f.form_id));
+            const threshold = maxId - (maxId - minId) * 0.2;
+            
+            const matches = allData.filter(form => {
+                if (!shouldDisplayForm(form, threshold)) {
+                    return false;
+                }
+                const name = form.name.toLowerCase();
+                const text = form.form_text.toLowerCase();
+                return name.includes(query) || text.includes(query);
+            }).slice(0, 20);
+            
+            if (matches.length === 0) {
+                resultsDiv.innerHTML = '<div style="padding: 10px; color: #888;">Ничего не найдено</div>';
+                return;
+            }
+            
+            let html = '';
+            matches.forEach(form => {
+                const cleanText = stripHtml(form.form_text);
+                const shortText = cleanText.substring(0, 80);
+                html += `<div class="global-search-item" onclick="showProfile(${form.form_id})">`;
+                html += `<div class="global-search-item-name">${escapeHtml(form.name)}, ${form.age} • ${escapeHtml(form.settlement)}</div>`;
+                html += `<div class="global-search-item-text">${escapeHtml(shortText)}...</div>`;
+                html += `</div>`;
+            });
+            
+            resultsDiv.innerHTML = html;
+        };
+
+        createProfileHTML = function(form, index, threshold) {
+            const initial = form.name.charAt(0);
+            const vipBadge = form.is_vip ? ' <span class="vip">★</span>' : '';
+            const cleanText = stripHtml(form.form_text);
+            const shortText = cleanText.substring(0, 100);
+            const needsExpand = cleanText.length > 100;
+            const isNew = isHighlightedNew(form, threshold);
+            const profileDate = formatProfileDate(form.source_date);
+            const metaParts = [form.age + ' лет', escapeHtml(form.settlement)];
+            const photoMarkup = createProfilePhotoMarkup(form);
+            if (profileDate) metaParts.push(profileDate);
+            
+            let html = '<div class="profile-item' + (isNew ? ' new' : '') + '" onclick="toggleProfile(' + index + ')">';
+            html += photoMarkup;
+            html += '<div class="profile-header">';
+            html += '<div class="profile-avatar">' + escapeHtml(initial) + '</div>';
+            html += '<div class="profile-info">';
+            html += '<h3>' + escapeHtml(form.name) + vipBadge + '</h3>';
+            html += '<div class="profile-meta">' + metaParts.join(' • ') + '</div>';
+            html += '</div></div>';
+            html += '<div class="profile-hashtags">' + escapeHtml(filterHashtags(form.hashtag || '')) + '</div>';
+            html += '<div class="profile-text collapsed" id="text-' + index + '">' + escapeHtml(shortText) + (needsExpand ? '...' : '') + '</div>';
+            html += '<div class="profile-footer">';
+            html += '<div class="profile-likes" data-like-form-id="' + form.form_id + '" onclick="likeProfile(' + form.form_id + '); event.stopPropagation();" style="cursor: pointer;">❤️ ' + form.likes + '</div>';
+            html += '<a href="' + safeTelegramUrl(form.user_link) + '" target="_blank" rel="noopener noreferrer" class="profile-link" onclick="event.stopPropagation()">Написать</a>';
+            html += '</div></div>';
+            
+            expandedStates[index] = false;
+            return html;
+        };
+
+        openSidebar = function(profiles) {
+            const sidebar = document.getElementById('sidebar');
+            const title = document.getElementById('sidebar-title');
+            
+            currentProfiles = profiles;
+            
+            const maxId = Math.max(...allData.map(f => f.form_id));
+            const minId = Math.min(...allData.map(f => f.form_id));
+            const threshold = maxId - (maxId - minId) * 0.2;
+            const newCount = profiles.filter(p => isHighlightedNew(p, threshold)).length;
+            
+            const titleText = profiles.length === 1 ? 'Анкета' : 'Анкеты (' + profiles.length + ')';
+            title.textContent = titleText;
+            title.dataset.subtitle = newCount > 0
+                ? newCount + ' РЅРѕРІС‹С… РІРЅСѓС‚СЂРё СЌС‚РѕР№ С‚РѕС‡РєРё'
+                : 'РЎРїРёСЃРѕРє Р°РЅРєРµС‚ РїРѕ РІС‹Р±СЂР°РЅРЅРѕР№ С‚РѕС‡РєРµ РЅР° РєР°СЂС‚Рµ';
+            if (newCount > 0) {
+                const badge = document.createElement('span');
+                badge.style.color = '#ff4444';
+                badge.textContent = ' • ' + newCount + ' новых';
+                title.appendChild(badge);
+            }
+            
+            if (currentSortBy === 'new') {
+                currentProfiles.sort((a, b) => b.form_id - a.form_id);
+            } else if (currentSortBy === 'old') {
+                currentProfiles.sort((a, b) => a.form_id - b.form_id);
+            } else if (currentSortBy === 'popular') {
+                currentProfiles.sort((a, b) => b.likes - a.likes);
+            }
+            
+            renderProfiles();
+            sidebar.classList.add('open');
+        };
+
+        renderProfiles = function() {
+            const profileList = document.getElementById('profile-list');
+
+            if (renderTimeout) {
+                clearTimeout(renderTimeout);
+                renderTimeout = null;
+            }
+
+            if (currentProfiles.length === 0) {
+                profileList.innerHTML = '<div style="padding: 20px; color: #888; text-align: center;">Старые анкеты скрыты</div>';
+                return;
+            }
+
+            const maxId = Math.max(...allData.map(f => f.form_id));
+            const minId = Math.min(...allData.map(f => f.form_id));
+            const threshold = maxId - (maxId - minId) * 0.2;
+
+            if (currentProfiles.length <= 50) {
+                let html = '';
+                currentProfiles.forEach((form, index) => {
+                    html += createProfileHTML(form, index, threshold);
+                });
+                profileList.innerHTML = html;
+                return;
+            }
+
+            const newProfiles = [];
+            const oldProfiles = [];
+
+            currentProfiles.forEach((form, index) => {
+                if (isHighlightedNew(form, threshold)) {
+                    newProfiles.push({ form, index });
+                } else {
+                    oldProfiles.push({ form, index });
+                }
+            });
+
+            let html = '';
+            newProfiles.forEach(({ form, index }) => {
+                html += createProfileHTML(form, index, threshold);
+            });
+            profileList.innerHTML = html;
+
+            let currentBatch = 0;
+            const batchSize = 30;
+
+            function addOldBatch() {
+                const start = currentBatch * batchSize;
+                const end = Math.min(start + batchSize, oldProfiles.length);
+
+                let batchHTML = '';
+                for (let i = start; i < end; i++) {
+                    const { form, index } = oldProfiles[i];
+                    batchHTML += createProfileHTML(form, index, threshold);
+                }
+
+                profileList.innerHTML += batchHTML;
+
+                currentBatch++;
+                if (end < oldProfiles.length) {
+                    renderTimeout = setTimeout(addOldBatch, 150);
+                }
+            }
+
+            if (oldProfiles.length > 0) {
+                renderTimeout = setTimeout(addOldBatch, 100);
+            }
+        };
+
+        applyFilters = function() {
+            markers.clearLayers();
+
+            const maxId = Math.max(...allData.map(f => f.form_id));
+            const minId = Math.min(...allData.map(f => f.form_id));
+            const threshold = maxId - (maxId - minId) * 0.2;
+
+            allData.forEach((form, index) => {
+                if (!(form.lat && form.lon && form.age >= 16 && shouldDisplayForm(form, threshold))) {
+                    return;
+                }
+
+                const hashtag = (form.hashtag || '').toLowerCase();
+
+                let profileGender = null;
+                if (hashtag.includes('#Рј')) profileGender = 'Рњ';
+                else if (hashtag.includes('#Р¶')) profileGender = 'Р–';
+                else if (hashtag.includes('#ftm')) profileGender = 'Рњ';
+                else if (hashtag.includes('#mtf')) profileGender = 'Р–';
+
+                if (!profileGender) return;
+
+                let show = false;
+                if (lookingFor === 'all') {
+                    show = true;
+                } else {
+                    show = profileGender === lookingFor;
+                }
+
+                if (!show) return;
+
+                const isNew = isHighlightedNew(form, threshold);
+                const marker = L.circleMarker([form.lat, form.lon], {
+                    radius: 8,
+                    fillColor: isNew ? '#ff4444' : '#66b3ff',
+                    color: '#fff',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                });
+                marker.formIndex = index;
+                markers.addLayer(marker);
+            });
+        };
+
+        searchCity = function() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            const resultsDiv = document.getElementById('search-results');
+
+            if (query.length < 2) {
+                resultsDiv.innerHTML = '';
+                return;
+            }
+
+            const maxId = Math.max(...allData.map(f => f.form_id));
+            const minId = Math.min(...allData.map(f => f.form_id));
+            const threshold = maxId - (maxId - minId) * 0.2;
+
+            const matches = Object.keys(citiesData)
+                .filter(city => city.toLowerCase().includes(query))
+                .map(city => ({
+                    city,
+                    count: getVisibleCityProfiles(city, threshold).length
+                }))
+                .filter(match => match.count > 0)
+                .slice(0, 10);
+
+            if (matches.length === 0) {
+                resultsDiv.innerHTML = '<div class="search-result-item">Ничего не найдено</div>';
+                return;
+            }
+
+            let html = '';
+            matches.forEach(({ city, count }) => {
+                html += '<div class="search-result-item" onclick="showCity(\'' + city.replace(/'/g, "\\'") + '\')">';
+                html += '<div class="search-result-city">' + escapeHtml(city) + '</div>';
+                html += '<div class="search-result-count">' + count + ' анкет</div>';
+                html += '</div>';
+            });
+
+            resultsDiv.innerHTML = html;
+        };
+
+        showCity = function(city) {
+            const maxId = Math.max(...allData.map(f => f.form_id));
+            const minId = Math.min(...allData.map(f => f.form_id));
+            const threshold = maxId - (maxId - minId) * 0.2;
+            const profiles = getVisibleCityProfiles(city, threshold);
+
+            if (profiles.length === 0) {
+                return;
+            }
+
+            openSidebar(profiles);
+
+            const firstProfile = profiles[0];
+            map.setView([firstProfile.lat, firstProfile.lon], 10);
+
+            document.getElementById('search-input').value = '';
+            document.getElementById('search-results').innerHTML = '';
+        };
+
+        globalSearch = function() {
+            const resultsDiv = document.getElementById('global-search-results');
+            const input = document.getElementById('global-search-input');
+            if (!resultsDiv || !input) {
+                return;
+            }
+            const query = input.value.toLowerCase().trim();
+
+            if (query.length < 2) {
+                resultsDiv.innerHTML = '';
+                return;
+            }
+
+            const maxId = Math.max(...allData.map(f => f.form_id));
+            const minId = Math.min(...allData.map(f => f.form_id));
+            const threshold = maxId - (maxId - minId) * 0.2;
+
+            const matches = allData.filter(form => {
+                if (!shouldDisplayForm(form, threshold)) {
+                    return false;
+                }
+
+                const name = form.name.toLowerCase();
+                const text = form.form_text.toLowerCase();
+                return name.includes(query) || text.includes(query);
+            }).slice(0, 20);
+
+            if (matches.length === 0) {
+                resultsDiv.innerHTML = '<div style="padding: 10px; color: #888;">Ничего не найдено</div>';
+                return;
+            }
+
+            let html = '';
+            matches.forEach(form => {
+                const cleanText = stripHtml(form.form_text);
+                const shortText = cleanText.substring(0, 80);
+                html += `<div class="global-search-item" onclick="showProfile(${form.form_id})">`;
+                html += `<div class="global-search-item-name">${escapeHtml(form.name)}, ${form.age} • ${escapeHtml(form.settlement)}</div>`;
+                html += `<div class="global-search-item-text">${escapeHtml(shortText)}...</div>`;
+                html += `</div>`;
+            });
+
+            resultsDiv.innerHTML = html;
+        };
+
+        openSidebar = function(profiles) {
+            const sidebar = document.getElementById('sidebar');
+            const title = document.getElementById('sidebar-title');
+
+            const maxId = Math.max(...allData.map(f => f.form_id));
+            const minId = Math.min(...allData.map(f => f.form_id));
+            const threshold = maxId - (maxId - minId) * 0.2;
+
+            sidebarProfilesSource = profiles.slice();
+            currentProfiles = filterVisibleProfiles(profiles, threshold);
+            const newCount = currentProfiles.filter(p => isHighlightedNew(p, threshold)).length;
+
+            const titleText = currentProfiles.length === 1 ? 'Анкета' : 'Анкеты (' + currentProfiles.length + ')';
+            title.textContent = titleText;
+            if (newCount > 0) {
+                const badge = document.createElement('span');
+                badge.style.color = '#ff4444';
+                badge.textContent = ' • ' + newCount + ' новых';
+                title.appendChild(badge);
+            }
+
+            if (currentSortBy === 'new') {
+                currentProfiles.sort((a, b) => b.form_id - a.form_id);
+            } else if (currentSortBy === 'old') {
+                currentProfiles.sort((a, b) => a.form_id - b.form_id);
+            } else if (currentSortBy === 'popular') {
+                currentProfiles.sort((a, b) => b.likes - a.likes);
+            }
+
+            renderProfiles();
+            sidebar.classList.add('open');
+        };
+
+        closeSidebar = function() {
+            document.getElementById('sidebar').classList.remove('open');
+            if (renderTimeout) {
+                clearTimeout(renderTimeout);
+                renderTimeout = null;
+            }
+            currentProfiles = [];
+            sidebarProfilesSource = [];
+            sidebarVisibleProfiles = [];
+            sidebarVisibleCount = sidebarBatchSize;
+            expandedStates = {};
+            const loadMoreButton = document.getElementById('load-more-btn');
+            if (loadMoreButton) {
+                loadMoreButton.style.display = 'none';
+            }
+        };
+
+        function getRecentThresholdDate() {
+            const date = new Date();
+            date.setMonth(date.getMonth() - 3);
+            return date;
+        }
+
+        function getSidebarThresholdDate() {
+            const date = new Date();
+            date.setMonth(date.getMonth() - 12);
+            return date;
+        }
+
+        function getRecentUndatedFormIdThreshold() {
+            if (recentUndatedFormIdThreshold !== null) {
+                return recentUndatedFormIdThreshold;
+            }
+
+            const ids = allData
+                .filter(form => form && !form.source_date)
+                .map(form => Number(form.form_id))
+                .filter(Number.isFinite);
+
+            if (ids.length === 0) {
+                recentUndatedFormIdThreshold = Infinity;
+                return recentUndatedFormIdThreshold;
+            }
+
+            ids.sort((a, b) => a - b);
+            const thresholdIndex = Math.max(0, Math.floor(ids.length * 0.8) - 1);
+            recentUndatedFormIdThreshold = ids[thresholdIndex];
+            return recentUndatedFormIdThreshold;
+        }
+
+        isHighlightedNew = function(form) {
+            if (!form) {
+                return false;
+            }
+
+            if (!form.source_date) {
+                return Number(form.form_id) >= getRecentUndatedFormIdThreshold();
+            }
+
+            const date = new Date(form.source_date);
+            if (Number.isNaN(date.getTime())) {
+                return Number(form.form_id) >= getRecentUndatedFormIdThreshold();
+            }
+
+            return date >= getRecentThresholdDate();
+        };
+
+        function buildSidebarProfiles(profiles) {
+            if (profiles.length === 1) {
+                return profiles.slice();
+            }
+
+            const recentProfiles = profiles.filter(profile => {
+                if (!profile || !profile.source_date) {
+                    return false;
+                }
+
+                const date = new Date(profile.source_date);
+                if (Number.isNaN(date.getTime())) {
+                    return false;
+                }
+
+                return date >= getSidebarThresholdDate();
+            });
+            if (showOldProfiles) {
+                const recentIds = new Set(recentProfiles.map(profile => profile.form_id));
+                const oldProfiles = profiles.filter(profile => !recentIds.has(profile.form_id));
+                return recentProfiles.concat(oldProfiles);
+            }
+            return recentProfiles;
+        }
+
+        function sortSidebarProfiles() {
+            if (currentSortBy === 'new') {
+                sidebarVisibleProfiles.sort((a, b) => {
+                    const aIsNew = isHighlightedNew(a) ? 1 : 0;
+                    const bIsNew = isHighlightedNew(b) ? 1 : 0;
+                    if (aIsNew !== bIsNew) {
+                        return bIsNew - aIsNew;
+                    }
+
+                    const dateA = a.source_date ? new Date(a.source_date).getTime() : 0;
+                    const dateB = b.source_date ? new Date(b.source_date).getTime() : 0;
+                    return dateB - dateA || b.form_id - a.form_id;
+                });
+            } else if (currentSortBy === 'old') {
+                sidebarVisibleProfiles.sort((a, b) => {
+                    const dateA = a.source_date ? new Date(a.source_date).getTime() : 0;
+                    const dateB = b.source_date ? new Date(b.source_date).getTime() : 0;
+                    return dateA - dateB || a.form_id - b.form_id;
+                });
+            } else if (currentSortBy === 'popular') {
+                sidebarVisibleProfiles.sort((a, b) => b.likes - a.likes);
+            }
+        }
+
+        function updateSidebarTitle() {
+            const title = document.getElementById('sidebar-title');
+            const totalVisible = sidebarVisibleProfiles.length;
+            const totalSource = sidebarProfilesSource.length;
+            const hiddenOldCount = Math.max(totalSource - totalVisible, 0);
+            const titleText = totalVisible === 1 ? 'Анкета' : 'Анкеты (' + totalVisible + ')';
+            title.textContent = titleText;
+
+            if (hiddenOldCount > 0 && !showOldProfiles) {
+                const badge = document.createElement('span');
+                badge.style.color = '#888';
+                badge.textContent = ' • скрыто старых: ' + hiddenOldCount;
+                title.appendChild(badge);
+            }
+        }
+
+        function updateLoadMoreButton() {
+            const loadMoreButton = document.getElementById('load-more-btn');
+            if (!loadMoreButton) {
+                return;
+            }
+
+            if (sidebarVisibleCount >= sidebarVisibleProfiles.length) {
+                loadMoreButton.style.display = 'none';
+                return;
+            }
+
+            const remaining = sidebarVisibleProfiles.length - sidebarVisibleCount;
+            loadMoreButton.textContent = 'Показать больше (' + remaining + ')';
+            loadMoreButton.style.display = 'block';
+        }
+
+        function refreshSidebarProfiles() {
+            sidebarVisibleProfiles = buildSidebarProfiles(sidebarProfilesSource);
+            sortSidebarProfiles();
+            updateSidebarTitle();
+            renderProfiles();
+        }
+
+        showMoreProfiles = function() {
+            sidebarVisibleCount += sidebarBatchSize;
+            renderProfiles();
+        };
+
+        sortProfiles = function(sortBy, btn) {
+            currentSortBy = sortBy;
+
+            document.querySelectorAll('.sort-btn').forEach(button => {
+                button.classList.remove('active');
+            });
+            btn.classList.add('active');
+
+            sortSidebarProfiles();
+            renderProfiles();
+        };
+
+        toggleOldProfiles = function() {
+            showOldProfiles = !showOldProfiles;
+
+            const button = document.getElementById('toggle-old-btn');
+            if (button) {
+                button.textContent = showOldProfiles ? 'Скрыть старые' : 'Показать старые';
+                button.classList.toggle('active', showOldProfiles);
+            }
+
+            if (sidebarProfilesSource.length > 0) {
+                sidebarVisibleCount = sidebarBatchSize;
+                refreshSidebarProfiles();
+            }
+        };
+
+        async function rebuildMarkers(filterFn, statusLabel) {
+            const renderToken = ++markerRenderToken;
+            currentMarkerFilterFn = filterFn;
+            markers.clearLayers();
+            let processed = 0;
+            let added = 0;
+            const batchSize = 220;
+            let batch = [];
+            const bounds = getExpandedMarkerBounds();
+            lastRenderedMarkerBounds = bounds;
+            lastRenderedMarkerZoomBucket = getMarkerZoomBucket();
+
+            for (let index = 0; index < allData.length; index++) {
+                if (renderToken !== markerRenderToken) {
+                    return;
+                }
+
+                processed++;
+                const form = allData[index];
+                if (!filterFn(form, index)) {
+                    continue;
+                }
+
+                if (!isFormInMarkerBounds(form, bounds)) {
+                    continue;
+                }
+
+                const marker = L.circleMarker([form.lat, form.lon], {
+                    radius: 8,
+                    fillColor: isHighlightedNew(form) ? '#ff4444' : '#66b3ff',
+                    color: '#fff',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                });
+                marker.formIndex = index;
+                batch.push(marker);
+
+                if (batch.length >= batchSize) {
+                    markers.addLayers(batch);
+                    added += batch.length;
+                    batch = [];
+
+                    const loading = document.getElementById('loading');
+                    if (loading && loading.style.display !== 'none') {
+                        setLoadingStatus(statusLabel + ' ' + added + ' меток');
+                    }
+                    await new Promise(resolve => setTimeout(resolve, 0));
+                }
+            }
+
+            if (batch.length > 0) {
+                markers.addLayers(batch);
+                added += batch.length;
+            }
+        }
+
+        function getExpandedMarkerBounds() {
+            if (!map || typeof map.getBounds !== 'function') {
+                return null;
+            }
+
+            const bounds = map.getBounds();
+            const padRatio = map.getZoom() >= 11 ? 0.15 : 0.45;
+            return bounds.pad(padRatio);
+        }
+
+        function getMarkerZoomBucket() {
+            const zoom = map && typeof map.getZoom === 'function' ? map.getZoom() : 0;
+            return zoom >= 13 ? 'near' : 'far';
+        }
+
+        function isFormInMarkerBounds(form, bounds) {
+            if (!form || typeof form.lat !== 'number' || typeof form.lon !== 'number') {
+                return false;
+            }
+            if (!bounds) {
+                return true;
+            }
+            return bounds.contains([form.lat, form.lon]);
+        }
+
+        function scheduleMarkerRefresh(delay = 120) {
+            if (!currentMarkerFilterFn) {
+                return;
+            }
+
+            const currentBounds = map && typeof map.getBounds === 'function' ? map.getBounds() : null;
+            const zoomBucket = getMarkerZoomBucket();
+            const canReuseBounds = Boolean(
+                currentBounds
+                && lastRenderedMarkerBounds
+                && typeof lastRenderedMarkerBounds.contains === 'function'
+                && lastRenderedMarkerBounds.contains(currentBounds)
+            );
+
+            if (canReuseBounds && zoomBucket === lastRenderedMarkerZoomBucket) {
+                return;
+            }
+
+            if (markerRefreshTimer) {
+                clearTimeout(markerRefreshTimer);
+            }
+
+            markerRefreshTimer = setTimeout(() => {
+                markerRefreshTimer = null;
+                rebuildMarkers(currentMarkerFilterFn, 'Обновляем метки...');
+            }, delay);
+        }
+
+        showAllMarkers = function() {
+            return rebuildMarkers(
+                form => Boolean(form && form.lat && form.lon && form.age >= 16),
+                'Рисуем метки...'
+            );
+        };
+
+        applyFilters = function() {
+            return rebuildMarkers(form => {
+                if (!(form && form.lat && form.lon && form.age >= 16)) {
+                    return false;
+                }
+
+                const hashtag = (form.hashtag || '').toLowerCase();
+                let profileGender = null;
+                if (hashtag.includes('#м')) profileGender = 'М';
+                else if (hashtag.includes('#ж')) profileGender = 'Ж';
+                else if (hashtag.includes('#ftm')) profileGender = 'М';
+                else if (hashtag.includes('#mtf')) profileGender = 'Ж';
+
+                if (!profileGender) return false;
+                return lookingFor === 'all' ? true : profileGender === lookingFor;
+            }, 'Фильтруем анкеты...');
+        };
+
+        searchCity = function() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            const resultsDiv = document.getElementById('search-results');
+
+            if (query.length < 2) {
+                resultsDiv.innerHTML = '';
+                return;
+            }
+
+            const matches = Object.keys(citiesData)
+                .filter(city => city.toLowerCase().includes(query))
+                .map(city => ({
+                    city,
+                    count: citiesData[city].length
+                }))
+                .slice(0, 10);
+
+            if (matches.length === 0) {
+                resultsDiv.innerHTML = '<div class="search-result-item">Ничего не найдено</div>';
+                return;
+            }
+
+            let html = '';
+            matches.forEach(({ city, count }) => {
+                html += '<div class="search-result-item" onclick="showCity(\'' + city.replace(/'/g, "\\'") + '\')">';
+                html += '<div class="search-result-city">' + escapeHtml(city) + '</div>';
+                html += '<div class="search-result-count">' + count + ' анкет</div>';
+                html += '</div>';
+            });
+
+            resultsDiv.innerHTML = html;
+        };
+
+        showCity = function(city) {
+            const profiles = (citiesData[city] || []).map(index => allData[index]);
+            if (profiles.length === 0) {
+                return;
+            }
+
+            openSidebar(profiles);
+
+            const firstProfile = profiles[0];
+            map.setView([firstProfile.lat, firstProfile.lon], 10);
+
+            document.getElementById('search-input').value = '';
+            document.getElementById('search-results').innerHTML = '';
+        };
+
+        globalSearch = function() {
+            const resultsDiv = document.getElementById('global-search-results');
+            const input = document.getElementById('global-search-input');
+            if (!resultsDiv || !input) {
+                return;
+            }
+            const query = input.value.toLowerCase().trim();
+
+            if (query.length < 2) {
+                resultsDiv.innerHTML = '';
+                return;
+            }
+
+            const matches = allData.filter(form => {
+                if (!isHighlightedNew(form)) {
+                    return false;
+                }
+                const name = form.name.toLowerCase();
+                const text = form.form_text.toLowerCase();
+                return name.includes(query) || text.includes(query);
+            }).slice(0, 20);
+
+            if (matches.length === 0) {
+                resultsDiv.innerHTML = '<div style="padding: 10px; color: #888;">Ничего не найдено</div>';
+                return;
+            }
+
+            let html = '';
+            matches.forEach(form => {
+                const cleanText = stripHtml(form.form_text);
+                const shortText = cleanText.substring(0, 80);
+                html += `<div class="global-search-item" onclick="showProfile(${form.form_id})">`;
+                html += `<div class="global-search-item-name">${escapeHtml(form.name)}, ${form.age} • ${escapeHtml(form.settlement)}</div>`;
+                html += `<div class="global-search-item-text">${escapeHtml(shortText)}...</div>`;
+                html += `</div>`;
+            });
+
+            resultsDiv.innerHTML = html;
+        };
+
+        showProfile = function(formId) {
+            const form = allData.find(profile => profile.form_id === formId);
+            if (!form || !form.lat || !form.lon) {
+                return;
+            }
+
+            map.setView([form.lat, form.lon], 12);
+            openSidebar([form]);
+            const panel = document.getElementById('global-search-panel');
+            if (panel) panel.classList.remove('active');
+        };
+
+        renderProfiles = function() {
+            const profileList = document.getElementById('profile-list');
+
+            if (renderTimeout) {
+                clearTimeout(renderTimeout);
+                renderTimeout = null;
+            }
+
+            if (sidebarVisibleProfiles.length === 0) {
+                currentProfiles = [];
+                profileList.innerHTML = '<div style="padding: 20px; color: #888; text-align: center;">Нет анкет за последние 6 месяцев</div>';
+                updateLoadMoreButton();
+                return;
+            }
+
+            const threshold = 0;
+            currentProfiles = sidebarVisibleProfiles.slice(0, sidebarVisibleCount);
+            expandedStates = {};
+
+            let html = '';
+            currentProfiles.forEach((form, index) => {
+                html += createProfileHTML(form, index, threshold);
+            });
+            profileList.innerHTML = html;
+            updateLoadMoreButton();
+        };
+
+        openSidebar = function(profiles) {
+            const sidebar = document.getElementById('sidebar');
+
+            sidebarProfilesSource = profiles.slice();
+            sidebarVisibleCount = sidebarBatchSize;
+            sidebarVisibleProfiles = buildSidebarProfiles(sidebarProfilesSource);
+            sortSidebarProfiles();
+            updateSidebarTitle();
+            renderProfiles();
+            sidebar.classList.add('open');
+        };
+
+        toggleOldProfiles = function() {
+            showOldProfiles = !showOldProfiles;
+
+            const button = document.getElementById('toggle-old-btn');
+            if (button) {
+                button.textContent = showOldProfiles ? 'Скрыть старые' : 'Показать старые';
+                button.classList.toggle('active', showOldProfiles);
+            }
+
+            if (sidebarProfilesSource.length > 0) {
+                sidebarVisibleCount = sidebarBatchSize;
+                sidebarVisibleProfiles = buildSidebarProfiles(sidebarProfilesSource);
+                sortSidebarProfiles();
+                updateSidebarTitle();
+                renderProfiles();
+            }
+        };
+
+        renderProfiles = function() {
+            const profileList = document.getElementById('profile-list');
+
+            if (renderTimeout) {
+                clearTimeout(renderTimeout);
+                renderTimeout = null;
+            }
+
+            if (sidebarVisibleProfiles.length === 0) {
+                currentProfiles = [];
+                profileList.innerHTML = '<div style="padding: 20px; color: #888; text-align: center;">' + (showOldProfiles ? 'Анкеты не найдены' : 'Нет анкет за последние 12 месяцев') + '</div>';
+                updateLoadMoreButton();
+                return;
+            }
+
+            currentProfiles = sidebarVisibleProfiles.slice(0, sidebarVisibleCount);
+            expandedStates = {};
+
+            let html = '';
+            currentProfiles.forEach((form, index) => {
+                html += createProfileHTML(form, index, 0);
+            });
+            profileList.innerHTML = html;
+            updateLoadMoreButton();
+        };
+
+        openSidebar = function(profiles) {
+            const sidebar = document.getElementById('sidebar');
+
+            sidebarProfilesSource = profiles.slice();
+            sidebarVisibleCount = sidebarBatchSize;
+            sidebarVisibleProfiles = buildSidebarProfiles(sidebarProfilesSource);
+            sortSidebarProfiles();
+            updateSidebarTitle();
+            renderProfiles();
+            sidebar.classList.add('open');
+        };
+
+        updateSidebarTitle = function() {
+            const title = document.getElementById('sidebar-title');
+            const totalCount = sidebarProfilesSource.length;
+            const newCount = sidebarProfilesSource.filter(profile => isHighlightedNew(profile)).length;
+            const titleText = totalCount === 1
+                ? '\u0410\u043d\u043a\u0435\u0442\u0430'
+                : '\u0410\u043d\u043a\u0435\u0442\u044b (' + totalCount + ')';
+            title.textContent = titleText;
+            if (newCount > 0) {
+                const badge = document.createElement('span');
+                badge.style.color = '#ff6b6b';
+                badge.textContent = ' • ' + newCount + ' новые';
+                title.appendChild(badge);
+            }
+            title.dataset.kicker = '\u0422\u043e\u0447\u043a\u0430 \u043d\u0430 \u043a\u0430\u0440\u0442\u0435';
+            title.dataset.subtitle = newCount > 0
+                ? newCount + ' \u043d\u043e\u0432\u044b\u0445 \u0432\u043d\u0443\u0442\u0440\u0438 \u044d\u0442\u043e\u0439 \u0442\u043e\u0447\u043a\u0438'
+                : '\u0421\u043f\u0438\u0441\u043e\u043a \u0430\u043d\u043a\u0435\u0442 \u043f\u043e \u0432\u044b\u0431\u0440\u0430\u043d\u043d\u043e\u0439 \u0442\u043e\u0447\u043a\u0435 \u043d\u0430 \u043a\u0430\u0440\u0442\u0435';
+        };
+
+        function isSidebarRecentProfile(profile) {
+            if (!profile || !profile.source_date) {
+                return false;
+            }
+
+            const date = new Date(profile.source_date);
+            if (Number.isNaN(date.getTime())) {
+                return false;
+            }
+
+            return date >= getSidebarThresholdDate();
+        }
+
+        function matchesSidebarSearch(profile, query) {
+            const normalizedQuery = String(query || '').trim().toLowerCase();
+            if (!normalizedQuery) {
+                return true;
+            }
+
+            const haystack = [
+                profile && profile.name,
+                profile && profile.settlement,
+                profile && profile.hashtag,
+                profile && profile.form_text
+            ]
+                .map(value => String(value || '').toLowerCase())
+                .join('\n');
+
+            return haystack.includes(normalizedQuery);
+        }
+
+        buildSidebarProfiles = function(profiles) {
+            if (profiles.length <= 1) {
+                return profiles.filter(profile => matchesSidebarSearch(profile, sidebarSearchQuery));
+            }
+
+            const recentProfiles = [];
+            const oldProfiles = [];
+
+            profiles.forEach(profile => {
+                if (isSidebarRecentProfile(profile)) {
+                    recentProfiles.push(profile);
+                } else {
+                    oldProfiles.push(profile);
+                }
+            });
+
+            return recentProfiles.concat(oldProfiles).filter(profile => matchesSidebarSearch(profile, sidebarSearchQuery));
+        };
+
+        updateSidebarTitle = function() {
+            const title = document.getElementById('sidebar-title');
+            const totalCount = sidebarProfilesSource.length;
+            const shownProfiles = sidebarVisibleProfiles.slice(0, Math.min(sidebarVisibleCount, sidebarVisibleProfiles.length));
+            const newCount = shownProfiles.filter(profile => isHighlightedNew(profile)).length;
+            const titleText = totalCount === 1
+                ? '\u0410\u043d\u043a\u0435\u0442\u0430'
+                : '\u0410\u043d\u043a\u0435\u0442\u044b (' + totalCount + ')';
+            title.textContent = titleText;
+            if (newCount > 0) {
+                const badge = document.createElement('span');
+                badge.style.color = '#ff6b6b';
+                badge.textContent = ' • ' + newCount + ' новые';
+                title.appendChild(badge);
+            }
+            title.dataset.kicker = '\u0422\u043e\u0447\u043a\u0430 \u043d\u0430 \u043a\u0430\u0440\u0442\u0435';
+            title.dataset.subtitle = newCount > 0
+                ? newCount + ' \u043d\u043e\u0432\u044b\u0445 \u0441\u0435\u0439\u0447\u0430\u0441 \u0432 \u0441\u043f\u0438\u0441\u043a\u0435'
+                : '\u0421\u043f\u0438\u0441\u043e\u043a \u0430\u043d\u043a\u0435\u0442 \u043f\u043e \u0432\u044b\u0431\u0440\u0430\u043d\u043d\u043e\u0439 \u0442\u043e\u0447\u043a\u0435 \u043d\u0430 \u043a\u0430\u0440\u0442\u0435';
+        };
+
+        showMoreProfiles = function() {
+            sidebarVisibleCount = Math.min(sidebarVisibleCount + sidebarBatchSize, sidebarVisibleProfiles.length);
+            renderProfiles();
+        };
+
+        filterSidebarProfiles = function() {
+            const input = document.getElementById('sidebar-search-input');
+            sidebarSearchQuery = input ? input.value.trim() : '';
+            sidebarVisibleCount = sidebarBatchSize;
+            sidebarVisibleProfiles = buildSidebarProfiles(sidebarProfilesSource);
+            sortSidebarProfiles();
+            updateSidebarTitle();
+            renderProfiles();
+        };
+
+        toggleOldProfiles = function() {
+            showOldProfiles = !showOldProfiles;
+
+            const button = document.getElementById('toggle-old-btn');
+            if (button) {
+                button.textContent = showOldProfiles ? 'Свернуть список' : 'Показать старые';
+                button.classList.toggle('active', showOldProfiles);
+            }
+
+            if (sidebarProfilesSource.length > 0) {
+                sidebarVisibleCount = showOldProfiles ? sidebarVisibleProfiles.length : sidebarBatchSize;
+                renderProfiles();
+            }
+        };
+
+        renderProfiles = function() {
+            const profileList = document.getElementById('profile-list');
+
+            if (renderTimeout) {
+                clearTimeout(renderTimeout);
+                renderTimeout = null;
+            }
+
+            if (sidebarVisibleProfiles.length === 0) {
+                currentProfiles = [];
+                updateSidebarTitle();
+                profileList.innerHTML = '<div style="padding: 20px; color: #888; text-align: center;">Анкеты не найдены</div>';
+                updateLoadMoreButton();
+                return;
+            }
+
+            currentProfiles = sidebarVisibleProfiles.slice(0, sidebarVisibleCount);
+            updateSidebarTitle();
+            expandedStates = {};
+
+            let html = '';
+            currentProfiles.forEach((form, index) => {
+                html += createProfileHTML(form, index, 0);
+            });
+            profileList.innerHTML = html;
+            updateLoadMoreButton();
+        };
+
+        openSidebar = function(profiles) {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarSearchInput = document.getElementById('sidebar-search-input');
+
+            sidebarProfilesSource = profiles.slice();
+            sidebarSearchQuery = '';
+            if (sidebarSearchInput) {
+                sidebarSearchInput.value = '';
+            }
+            sidebarVisibleProfiles = buildSidebarProfiles(sidebarProfilesSource);
+            sortSidebarProfiles();
+            sidebarVisibleCount = showOldProfiles ? sidebarVisibleProfiles.length : sidebarBatchSize;
+            updateSidebarTitle();
+            renderProfiles();
+            sidebar.scrollTop = 0;
+            sidebar.classList.add('open');
+        };
+
+        const sidebarElement = document.getElementById('sidebar');
+        if (sidebarElement && !sidebarElement.dataset.infiniteReady) {
+            sidebarElement.dataset.infiniteReady = '1';
+            sidebarElement.addEventListener('scroll', function() {
+                if (showOldProfiles) {
+                    return;
+                }
+
+                const nearBottom = sidebarElement.scrollTop + sidebarElement.clientHeight >= sidebarElement.scrollHeight - 160;
+                if (nearBottom && sidebarVisibleCount < sidebarVisibleProfiles.length) {
+                    showMoreProfiles();
+                }
+            });
+        }
+
+        function setLoadingStatus(text) {
+            const loading = document.getElementById('loading');
+            const textNode = loading.querySelector('.loading-text') || loading.querySelector('div:last-child');
+            if (textNode) {
+                textNode.textContent = text;
+            }
+        }
+
+async function loadPublicFormsData() {
+    setLoadingStatus('Загрузка меток...');
+    const response = await fetch('markers-lite.json');
+    if (!response.ok) {
+        throw new Error('Не удалось загрузить лёгкую базу меток');
+    }
+    return await response.json();
+}
+
+async function loadEncryptedFormsData() {
+    if (!window.crypto || !window.crypto.subtle) {
+        throw new Error('Браузер не поддерживает зашифрованный формат загрузки');
+    }
+
+    setLoadingStatus('Загрузка зашифрованных данных...');
+    const response = await fetch('forms.encrypted.json');
+    if (!response.ok) {
+        throw new Error('Не удалось загрузить зашифрованные данные сайта');
+    }
+
+    const encryptedData = await response.json();
+    const _0x1a2b = 'a4b55def825713e8ff3b8442b4f3a084';
+    const _0x3c4d = 'f1ef8a23b2586d8fc823b2b9699e3764';
+    const _key = _0x1a2b + _0x3c4d;
+
+    setLoadingStatus('Расшифровка данных...');
+    const decryptedData = await decryptChunks(
+        encryptedData.c,
+        _key,
+        encryptedData.i,
+        encryptedData.z || null,
+        (current, total) => setLoadingStatus('Расшифровка данных... ' + current + ' / ' + total)
+    );
+
+    if (!decryptedData) {
+        throw new Error('Ошибка расшифровки');
+    }
+
+    return decryptedData;
+}
+
+function shouldUsePublicFormsData() {
+    return true;
+}
+
+async function loadFormsData() {
+    if (shouldUsePublicFormsData()) {
+        try {
+            return await loadPublicFormsData();
+        } catch (error) {
+            console.warn('Public data fallback to encrypted:', error);
+        }
+    }
+    return await loadEncryptedFormsData();
+}
+
+        async function prepareDerivedData() {
+            setLoadingStatus('Подготовка карты...');
+
+            for (let index = 0; index < allData.length; index++) {
+                const form = allData[index];
+                if (form.age < 16) continue;
+
+                if (form.settlement) {
+                    const city = form.settlement.trim();
+                    cityTagsSet.add(city.toLowerCase());
+                    cityTagsSet.add(city.replace(/\s+/g, '').toLowerCase());
+                    cityTagsSet.add(city.replace(/-/g, '').toLowerCase());
+                    cityTagsSet.add(city.replace(/\s+/g, '').replace(/-/g, '').toLowerCase());
+                }
+
+                if (form.lat && form.lon) {
+                    if (!citiesData[form.settlement]) {
+                        citiesData[form.settlement] = [];
+                    }
+                    citiesData[form.settlement].push(index);
+                }
+
+                if (index > 0 && index % 150 === 0) {
+                    setLoadingStatus('Подготовка карты... ' + index + ' / ' + allData.length);
+                    await new Promise(resolve => setTimeout(resolve, 0));
+                }
+            }
+        }
+
+        function deferInitialMarkerRender() {
+            const render = () => {
+                Promise.resolve(showAllMarkers()).catch(error => {
+                    console.error('Ошибка первичной отрисовки меток:', error);
+                });
+            };
+
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(render, { timeout: 1200 });
+                return;
+            }
+
+            requestAnimationFrame(() => {
+                setTimeout(render, 0);
+            });
+        }
+
+        async function initApp() {
+            try {
+                Promise.resolve(tryCenterMapToUserLocation()).catch(error => {
+                    console.warn('IP-центрирование пропущено:', error);
+                });
+                allData = await loadFormsData();
+                recentUndatedFormIdThreshold = null;
+                document.getElementById('loading').style.display = 'none';
+                await prepareDerivedData();
+                updateHeroMetrics();
+
+                map.addLayer(markers);
+
+                document.getElementById('search-input').addEventListener('input', searchCity);
+
+                markers.on('clusterclick', function(e) {
+                    const cluster = e.layer;
+                    const childMarkers = cluster.getAllChildMarkers();
+                    const profiles = childMarkers.map(m => allData[m.formIndex]);
+                    openSidebar(profiles);
+                });
+
+                markers.on('click', function(e) {
+                    if (e.layer.formIndex !== undefined) {
+                        const form = allData[e.layer.formIndex];
+                        const profiles = getProfilesAtSamePoint(form);
+                        openSidebar(profiles.length > 0 ? profiles : [form]);
+                    }
+                });
+
+                map.on('moveend zoomend', function() {
+                    scheduleMarkerRefresh();
+                });
+
+                deferInitialMarkerRender();
+            } catch (error) {
+                console.error('Ошибка:', error);
+                const loading = document.getElementById('loading');
+                loading.innerHTML = '<div style="font-size: 14px; line-height: 1.5;">Ошибка загрузки.<br>Попробуйте обновить страницу или открыть сайт в современном браузере.</div>';
+            }
+        }
+
+        applyUiCopy();
+        initApp();
+
+        async function runUnifiedSearch(query) {
+            const normalizedQuery = String(query || '').toLowerCase().trim();
+            const resultsDiv = document.getElementById('search-results');
+            const requestToken = ++searchRequestToken;
+
+            if (normalizedQuery.length < 2) {
+                resultsDiv.innerHTML = '';
+                return;
+            }
+
+            const cityMatches = Object.keys(citiesData)
+                .filter(city => city.toLowerCase().includes(normalizedQuery))
+                .sort((a, b) => {
+                    const aStarts = a.toLowerCase().startsWith(normalizedQuery) ? 0 : 1;
+                    const bStarts = b.toLowerCase().startsWith(normalizedQuery) ? 0 : 1;
+                    if (aStarts !== bStarts) return aStarts - bStarts;
+                    return a.localeCompare(b, 'ru');
+                })
+                .slice(0, 8);
+
+            let profileMatches = [];
+            try {
+                const payload = await fetchJsonWithTimeout(
+                    API_BASE_URL + '/api/search?q=' + encodeURIComponent(normalizedQuery) + '&limit=12',
+                    { credentials: 'include' },
+                    12000
+                );
+                if (requestToken !== searchRequestToken) {
+                    return;
+                }
+                if (payload && payload.ok && Array.isArray(payload.profiles)) {
+                    profileMatches = payload.profiles;
+                    profileMatches.forEach(form => {
+                        if (form && Number.isFinite(Number(form.form_id))) {
+                            profileDetailsCache.set(Number(form.form_id), form);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.warn('Поиск через API недоступен:', error);
+            }
+
+            if (cityMatches.length === 0 && profileMatches.length === 0) {
+                resultsDiv.innerHTML = '<div class="search-result-item">Ничего не найдено</div>';
+                return;
+            }
+
+            let html = '';
+
+            if (cityMatches.length > 0) {
+                html += '<div class="search-result-item" style="cursor: default; background: #262626;">';
+                html += '<div class="search-result-city">Города</div>';
+                html += '</div>';
+
+                cityMatches.forEach(city => {
+                    const count = (citiesData[city] || []).length;
+                    html += '<div class="search-result-item" onclick="showCity(\'' + city.replace(/'/g, "\\'") + '\')">';
+                    html += '<div class="search-result-city">' + escapeHtml(city) + '</div>';
+                    html += '<div class="search-result-count">' + count + ' анкет</div>';
+                    html += '</div>';
+                });
+            }
+
+            if (profileMatches.length > 0) {
+                html += '<div class="search-result-item" style="cursor: default; background: #262626;">';
+                html += '<div class="search-result-city">Анкеты</div>';
+                html += '</div>';
+
+                profileMatches.forEach(form => {
+                    const cleanText = stripHtml(form.form_text || '');
+                    const shortText = cleanText.substring(0, 80);
+                    html += '<div class="search-result-item" onclick="showProfile(' + form.form_id + ')">';
+                    html += '<div class="search-result-city">' + escapeHtml(form.name) + ', ' + escapeHtml(form.settlement) + '</div>';
+                    html += '<div class="search-result-count">' + escapeHtml(shortText) + (cleanText.length > 80 ? '...' : '') + '</div>';
+                    html += '</div>';
+                });
+            }
+
+            resultsDiv.innerHTML = html;
+        }
+
+        toggleGlobalSearch = function() {
+            const input = document.getElementById('search-input');
+            if (input) {
+                input.focus();
+                input.select();
+            }
+        };
+
+        searchCity = function() {
+            const input = document.getElementById('search-input');
+            runUnifiedSearch(input ? input.value : '');
+        };
+
+        globalSearch = function() {
+            const rightInput = document.getElementById('search-input');
+            runUnifiedSearch(rightInput ? rightInput.value : '');
+        };
+
+        showCity = function(city) {
+            const profiles = (citiesData[city] || []).map(index => allData[index]);
+            if (profiles.length === 0) {
+                return;
+            }
+
+            openSidebar(profiles);
+
+            const firstProfile = profiles[0];
+            map.setView([firstProfile.lat, firstProfile.lon], 10);
+
+            const rightInput = document.getElementById('search-input');
+            const resultsDiv = document.getElementById('search-results');
+            if (rightInput) rightInput.value = '';
+            if (resultsDiv) resultsDiv.innerHTML = '';
+        };
+
+        showProfile = function(formId) {
+            const form = allData.find(profile => profile.form_id === formId);
+            if (!form || !form.lat || !form.lon) {
+                return;
+            }
+
+            map.setView([form.lat, form.lon], 12);
+            openSidebar([form]);
+
+            const rightInput = document.getElementById('search-input');
+            const resultsDiv = document.getElementById('search-results');
+            if (rightInput) rightInput.value = '';
+            if (resultsDiv) resultsDiv.innerHTML = '';
+        };
+
+        openSidebar = async function(profiles) {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarSearchInput = document.getElementById('sidebar-search-input');
+            const sourceProfiles = Array.isArray(profiles) ? profiles.slice() : [];
+
+            sidebarProfilesSource = sourceProfiles;
+            sidebarSearchQuery = '';
+            if (sidebarSearchInput) {
+                sidebarSearchInput.value = '';
+            }
+            sidebarVisibleProfiles = buildSidebarProfiles(sidebarProfilesSource);
+            sortSidebarProfiles();
+            sidebarVisibleCount = showOldProfiles ? sidebarVisibleProfiles.length : sidebarBatchSize;
+            updateSidebarTitle();
+            setSidebarLoading('Загружаем анкеты...');
+            sidebar.scrollTop = 0;
+            sidebar.classList.add('open');
+
+            const hydrationToken = ++sidebarHydrationToken;
+
+            try {
+                const hydratedProfiles = sourceProfiles.every(isHydratedProfile)
+                    ? sourceProfiles
+                    : await fetchProfilesBatch(sourceProfiles.map(profile => profile && profile.form_id));
+
+                if (hydrationToken !== sidebarHydrationToken) {
+                    return;
+                }
+
+                sidebarProfilesSource = hydratedProfiles;
+                sidebarVisibleProfiles = buildSidebarProfiles(sidebarProfilesSource);
+                sortSidebarProfiles();
+                sidebarVisibleCount = showOldProfiles ? sidebarVisibleProfiles.length : sidebarBatchSize;
+                updateSidebarTitle();
+                renderProfiles();
+            } catch (error) {
+                if (hydrationToken !== sidebarHydrationToken) {
+                    return;
+                }
+                console.error('Ошибка загрузки анкет через API:', error);
+                setSidebarLoading('Не удалось загрузить анкеты');
+            }
+        };
+
+        function getDistanceMeters(lat1, lon1, lat2, lon2) {
+            const toRad = value => value * Math.PI / 180;
+            const earthRadius = 6371000;
+            const dLat = toRad(lat2 - lat1);
+            const dLon = toRad(lon2 - lon1);
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return earthRadius * c;
+        }
+
+        function getPointGroupingRadiusMeters() {
+            const zoom = map && typeof map.getZoom === 'function' ? map.getZoom() : 0;
+            return zoom >= 13 ? 5 : 100;
+        }
+
+        function getProfilesAtSamePoint(form) {
+            if (!form || typeof form.lat !== 'number' || typeof form.lon !== 'number') {
+                return [];
+            }
+
+            const radiusMeters = getPointGroupingRadiusMeters();
+
+            return allData.filter(candidate =>
+                candidate
+                && typeof candidate.lat === 'number'
+                && typeof candidate.lon === 'number'
+                && getDistanceMeters(candidate.lat, candidate.lon, form.lat, form.lon) <= radiusMeters
+            );
+        }
+
+        function showToast(text) {
+            const toast = document.getElementById('site-toast');
+            if (!toast) {
+                return;
+            }
+            toast.textContent = text;
+            toast.classList.add('visible');
+            if (toastTimer) {
+                clearTimeout(toastTimer);
+            }
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('visible');
+            }, 2600);
+        }
+
+        function isRussiaVisitor() {
+            const code = String(visitorCountryCode || '').toUpperCase();
+            return code === 'RU' || code === 'RUSSIA' || code === 'РОССИЯ';
+        }
+
+        async function copyBotTag() {
+            try {
+                if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                    await navigator.clipboard.writeText(BOT_TAG);
+                } else {
+                    const input = document.createElement('input');
+                    input.value = BOT_TAG;
+                    document.body.appendChild(input);
+                    input.select();
+                    document.execCommand('copy');
+                    input.remove();
+                }
+                showToast('Тег бота скопирован');
+                return true;
+            } catch (error) {
+                showToast('Не удалось скопировать тег автоматически');
+                return false;
+            }
+        }
+
+        function closeCopyBotPanel() {
+            const panel = document.getElementById('copy-bot-panel');
+            if (panel) {
+                panel.classList.remove('open');
+            }
+        }
+
+        async function openCopyBotPanel() {
+            await copyBotTag();
+            const panel = document.getElementById('copy-bot-panel');
+            if (panel) {
+                panel.classList.add('open');
+            }
+        }
+
+        function handleAddProfileClick(event) {
+            if (!isRussiaVisitor()) {
+                return true;
+            }
+            if (event) {
+                event.preventDefault();
+            }
+            openCopyBotPanel();
+            return false;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const addProfileButton = document.querySelector('.add-profile-btn');
+            if (addProfileButton) {
+                addProfileButton.addEventListener('click', handleAddProfileClick);
+            }
+        });
+
+        function updateLikeCount(formId, likes) {
+            const nextLikes = Number.isFinite(Number(likes)) ? Number(likes) : 0;
+
+            [allData, currentProfiles, sidebarProfilesSource, sidebarVisibleProfiles].forEach(collection => {
+                if (!Array.isArray(collection)) {
+                    return;
+                }
+                collection.forEach(form => {
+                    if (form && Number(form.form_id) === Number(formId)) {
+                        form.likes = nextLikes;
+                    }
+                });
+            });
+
+            document.querySelectorAll('[data-like-form-id="' + formId + '"]').forEach(node => {
+                node.textContent = '❤️ ' + nextLikes;
+            });
+        }
+
+        likeProfile = async function(formId) {
+            if (!formId || pendingLikes.has(formId)) {
+                return;
+            }
+
+            pendingLikes.add(formId);
+            try {
+                const response = await fetch(
+                    API_BASE_URL + '/api/like?form_id=' + encodeURIComponent(formId),
+                    {
+                        method: 'POST',
+                        credentials: 'include'
+                    }
+                );
+                if (response.status === 429) {
+                    const limited = await response.json().catch(() => null);
+                    const retryAfter = limited && limited.retry_after ? limited.retry_after : 60;
+                    throw new Error('rate_limited:' + retryAfter);
+                }
+                if (!response.ok) {
+                    throw new Error('bad_status_' + response.status);
+                }
+
+                const data = await response.json();
+                if (!data || !data.ok) {
+                    throw new Error('bad_payload');
+                }
+
+                updateLikeCount(formId, data.likes);
+                if (data.duplicate) {
+                    showToast('Вы уже ставили лайк');
+                } else if (data.ignored && data.reason === 'cooldown') {
+                    showToast('Лайки временно ограничены. Попробуйте позже');
+                } else {
+                    showToast('Лайк поставлен');
+                }
+            } catch (error) {
+                console.error('Ошибка лайка через API:', error);
+                if (String(error && error.message || '').startsWith('rate_limited:')) {
+                    showToast('Слишком много запросов. Подождите немного');
+                } else {
+                    showToast('Не удалось поставить лайк');
+                }
+            } finally {
+                pendingLikes.delete(formId);
+            }
+        };
+    </script>
+    
+    <!-- Кнопка добавления анкеты -->
+    <a href="https://t.me/Furrybybot?start=new" target="_blank" class="add-profile-btn">+ Добавить анкету</a>
+    
+    <!-- Предупреждение о нарушениях -->
+    <div id="site-toast" class="site-toast"></div>
+    <div id="copy-bot-panel" class="copy-bot-panel" onclick="if (event.target === this) closeCopyBotPanel()">
+        <div class="copy-bot-card">
+            <h3>Telegram в России работает нестабильно</h3>
+            <p>К сожалению телеграмм замедлен в россии и не работают телеграмм ссылки. По этому вам в буфер обмена скопирован тег бота. Введите в телеграмме:</p>
+            <div class="copy-bot-tag">@Furrybybot</div>
+            <div class="copy-bot-actions">
+                <button class="copy-bot-btn primary" onclick="copyBotTag()">Скопировать тег бота</button>
+                <button class="copy-bot-btn secondary" onclick="closeCopyBotPanel()">Закрыть</button>
+            </div>
+        </div>
+    </div>
+    <!-- Yandex.RTB R-A-19095816-12 -->
+    <script>
+    window.yaContextCb.push(() => {
+        Ya.Context.AdvManager.render({
+            "blockId": "R-A-19095816-12",
+            "type": "fullscreen",
+            "platform": "touch"
+        })
+    })
+    </script>
+    <!-- Yandex.RTB R-A-19095816-13 -->
+    <script>
+    window.yaContextCb.push(() => {
+        Ya.Context.AdvManager.render({
+            "blockId": "R-A-19095816-13",
+            "type": "fullscreen",
+            "platform": "desktop"
+        })
+    })
+    </script>
+    <div class="footer-warning">
+        ⚠️ Если анкета нарушает законодательство РФ/РБ, сообщите: <a href="https://t.me/nullsday?direct" target="_blank">@nullsday</a> или <a href="mailto:vladislavrazin1@gmail.com">vladislavrazin1@gmail.com</a>
+    </div>
+</body>
+</html>
+
+
