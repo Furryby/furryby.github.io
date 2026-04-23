@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Sitemap: https://furry.by/sitemap.xml
+
+User-agent: Yandex
+Allow: /
+
+User-agent: Googlebot
+Allow: /
