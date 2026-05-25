@@ -1471,12 +1471,6 @@ window.__startFurryApp = function() {
         const profileDetailsCache = new Map();
         const BOT_TAG = '@Furrybybot';
         const pendingLikes = new Set();
-        const MARKERS_DATA_VERSION = 'admin-1779442718326';
-        const MARKERS_CACHE_NAME = 'furry-markers-cache-v1';
-        const MARKERS_CACHE_URL = '/api/markers';
-        const MARKERS_CACHE_FALLBACK_URL = '/api/markers';
-        const ENCRYPTED_FORMS_URLS = ['./forms.encrypted.json', './github/forms.encrypted.json'];
-
         function getApiBaseUrl() {
             const override = String(window.FURRY_API_BASE_URL || '').trim();
             if (override) {
@@ -1670,93 +1664,6 @@ window.__startFurryApp = function() {
         }
 
         applyTheme(initialBaseTileTheme);
-
-        // Функция расшифровки чанков
-        async function inflateDecryptedBuffer(buffer, compression) {
-            if (!compression) {
-                return buffer;
-            }
-
-            if (compression !== 'gzip') {
-                throw new Error('Неподдерживаемый тип сжатия: ' + compression);
-            }
-
-            if (typeof DecompressionStream !== 'function') {
-                throw new Error('Браузер не поддерживает распаковку gzip-пакета');
-            }
-
-            const stream = new Blob([buffer]).stream().pipeThrough(new DecompressionStream('gzip'));
-            return await new Response(stream).arrayBuffer();
-        }
-
-        async function decryptChunks(chunks, keyHex, ivHex, compression, onProgress) {
-            try {
-                const keyBuffer = hexToUint8Array(keyHex);
-                const ivBuffer = hexToUint8Array(ivHex);
-                const decoder = new TextDecoder();
-                
-                // Импортируем ключ
-                const key = await crypto.subtle.importKey(
-                    'raw',
-                    keyBuffer,
-                    { name: 'AES-CBC', length: 256 },
-                    false,
-                    ['decrypt']
-                );
-                
-                const allDecrypted = [];
-                
-                // Расшифровываем каждый чанк
-                for (let index = 0; index < chunks.length; index++) {
-                    const chunk = chunks[index];
-                    if (typeof onProgress === 'function') {
-                        onProgress(index + 1, chunks.length);
-                    }
-
-                    const encryptedBuffer = base64ToArrayBuffer(chunk);
-                    
-                    const decryptedBuffer = await crypto.subtle.decrypt(
-                        { name: 'AES-CBC', iv: ivBuffer },
-                        key,
-                        encryptedBuffer
-                    );
-                    
-                    const normalizedBuffer = await inflateDecryptedBuffer(decryptedBuffer, compression);
-                    const jsonString = decoder.decode(normalizedBuffer);
-                    const chunkData = JSON.parse(jsonString);
-                    
-                    allDecrypted.push(...chunkData);
-
-                    if ((index + 1) % 2 === 0) {
-                        await new Promise(resolve => setTimeout(resolve, 0));
-                    }
-                }
-                
-                return allDecrypted;
-                
-            } catch (error) {
-                console.error('❌ Ошибка расшифровки:', error);
-                return null;
-            }
-        }
-        
-        function hexToUint8Array(hex) {
-            const bytes = new Uint8Array(hex.length / 2);
-            for (let i = 0; i < hex.length; i += 2) {
-                bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
-            }
-            return bytes;
-        }
-        
-        function base64ToArrayBuffer(base64) {
-            const binary = atob(base64);
-            const bytes = new Uint8Array(binary.length);
-            for (let i = 0; i < binary.length; i++) {
-                bytes[i] = binary.charCodeAt(i);
-            }
-            return bytes.buffer;
-        }
-
         function closeSidebar() {
             document.getElementById('sidebar').classList.remove('open');
             // Отменяем фоновую загрузку профилей
@@ -1945,16 +1852,21 @@ window.__startFurryApp = function() {
             const shortText = cleanText.substring(0, 100);
             const needsExpand = cleanText.length > 100;
             const isNew = isHighlightedNew(form, threshold);
+            const profileDate = formatProfileDate(form.source_date);
+            const metaParts = [form.age + ' лет', escapeHtml(form.settlement)];
+            const photoMarkup = createProfilePhotoMarkup(form);
+            if (profileDate) metaParts.push(profileDate);
             
             let html = '<div class="profile-item' + (isNew ? ' new' : '') + (form.is_vip ? ' vip' : '') + '" onclick="toggleProfile(' + index + ')">';
+            html += photoMarkup;
             html += '<div class="profile-header">';
             html += createProfileAvatarMarkup(form);
             html += '<div class="profile-info">';
-            html += '<h3>' + form.name + vipBadge + '</h3>';
-            html += '<div class="profile-meta">' + form.age + ' лет • ' + form.settlement + '</div>';
+            html += '<h3>' + escapeHtml(form.name) + vipBadge + '</h3>';
+            html += '<div class="profile-meta">' + metaParts.join(' • ') + '</div>';
             html += '</div></div>';
-            html += '<div class="profile-hashtags">' + filterHashtags(form.hashtag || '') + '</div>';
-            html += '<div class="profile-text collapsed" id="text-' + index + '">' + shortText + (needsExpand ? '...' : '') + '</div>';
+            html += '<div class="profile-hashtags">' + escapeHtml(filterHashtags(form.hashtag || '')) + '</div>';
+            html += '<div class="profile-text collapsed" id="text-' + index + '">' + escapeHtml(shortText) + (needsExpand ? '...' : '') + '</div>';
             html += '<div class="profile-footer">';
             html += '<div class="profile-likes" data-like-form-id="' + form.form_id + '" onclick="likeProfile(' + form.form_id + '); event.stopPropagation();" style="cursor: pointer;">❤️ ' + form.likes + '</div>';
             html += createTelegramWriteLink(form);
@@ -2161,8 +2073,8 @@ window.__startFurryApp = function() {
             const link = form && (form.user_link || form.telegram || '');
             const isVk = /^https?:\/\/vk\.com\//i.test(link);
             const iconSvg = isVk
-                ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.8 17.6c-6.2 0-9.8-4.2-10-11.2h3.1c.2 5.1 2.3 7.2 4 7.6V6.4h2.9v4.4c1.7-.2 3.4-2.2 4-4.4h2.9c-.5 2.7-2.5 4.7-3.9 5.5 1.4.7 3.7 2.6 4.5 5.7H17c-.7-2.1-2.3-3.7-4.1-3.9v3.9z"/></svg>'
-                : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 4.5c-.3-.2-.7-.3-1.1-.1L2.8 11.2c-.7.3-.7 1.3.1 1.5l4.5 1.4 1.7 5.1c.2.6 1 .8 1.4.3l2.5-3 4.3 3.1c.7.5 1.7.1 1.9-.8L22 5.7c.1-.5-.1-1-.5-1.2zM9.3 13.7l8.2-5.7-6.8 6.6-.3 3.2-1.1-4.1zm2.2 1.7 5.9-5.7-4.6 6.4-1.3-.7z"/></svg>';
+                ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M12.8 17.6c-6.2 0-9.8-4.2-10-11.2h3.1c.2 5.1 2.3 7.2 4 7.6V6.4h2.9v4.4c1.7-.2 3.4-2.2 4-4.4h2.9c-.5 2.7-2.5 4.7-3.9 5.5 1.4.7 3.7 2.6 4.5 5.7H17c-.7-2.1-2.3-3.7-4.1-3.9v3.9z"/></svg>'
+                : '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M21.5 4.5c-.3-.2-.7-.3-1.1-.1L2.8 11.2c-.7.3-.7 1.3.1 1.5l4.5 1.4 1.7 5.1c.2.6 1 .8 1.4.3l2.5-3 4.3 3.1c.7.5 1.7.1 1.9-.8L22 5.7c.1-.5-.1-1-.5-1.2zM9.3 13.7l8.2-5.7-6.8 6.6-.3 3.2-1.1-4.1zm2.2 1.7 5.9-5.7-4.6 6.4-1.3-.7z"/></svg>';
             return '<div class="profile-avatar' + (isVk ? ' profile-avatar--vk' : ' profile-avatar--tg') + '">' + iconSvg + '</div>';
         }
 
@@ -2454,36 +2366,6 @@ window.__startFurryApp = function() {
             });
             
             resultsDiv.innerHTML = html;
-        };
-
-        createProfileHTML = function(form, index, threshold) {
-            const vipBadge = form.is_vip ? ' <span class="vip-badge-sidebar" onclick="event.stopPropagation();alert(\'👑 VIP подписку можно купить в @Furrybybot\')" title="Нажми чтобы узнать о VIP">👑</span>' : '';
-            const cleanText = stripHtml(form.form_text);
-            const shortText = cleanText.substring(0, 100);
-            const needsExpand = cleanText.length > 100;
-            const isNew = isHighlightedNew(form, threshold);
-            const profileDate = formatProfileDate(form.source_date);
-            const metaParts = [form.age + ' лет', escapeHtml(form.settlement)];
-            const photoMarkup = createProfilePhotoMarkup(form);
-            if (profileDate) metaParts.push(profileDate);
-            
-            let html = '<div class="profile-item' + (isNew ? ' new' : '') + (form.is_vip ? ' vip' : '') + '" onclick="toggleProfile(' + index + ')">';
-            html += photoMarkup;
-            html += '<div class="profile-header">';
-            html += createProfileAvatarMarkup(form);
-            html += '<div class="profile-info">';
-            html += '<h3>' + escapeHtml(form.name) + vipBadge + '</h3>';
-            html += '<div class="profile-meta">' + metaParts.join(' • ') + '</div>';
-            html += '</div></div>';
-            html += '<div class="profile-hashtags">' + escapeHtml(filterHashtags(form.hashtag || '')) + '</div>';
-            html += '<div class="profile-text collapsed" id="text-' + index + '">' + escapeHtml(shortText) + (needsExpand ? '...' : '') + '</div>';
-            html += '<div class="profile-footer">';
-            html += '<div class="profile-likes" data-like-form-id="' + form.form_id + '" onclick="likeProfile(' + form.form_id + '); event.stopPropagation();" style="cursor: pointer;">❤️ ' + form.likes + '</div>';
-            html += createTelegramWriteLink(form);
-            html += '</div></div>';
-            
-            expandedStates[index] = false;
-            return html;
         };
 
         openSidebar = function(profiles) {
@@ -3860,119 +3742,17 @@ window.__startFurryApp = function() {
             }
         }
 
-        function validateMarkersPayload(payload) {
-            if (!Array.isArray(payload)) {
-                throw new Error('Некорректный формат базы меток');
-            }
-            return payload;
-        }
-
-async function loadPublicFormsData() {
-    setLoadingStatus('Загрузка меток...');
-    const ts = Date.now();
-    const markerUrls = [MARKERS_CACHE_URL + '?_t=' + ts, MARKERS_CACHE_FALLBACK_URL + '?_t=' + ts];
-
-    async function unwrapApiResponse(response) {
-        const data = await response.json();
-        if (data && data.ok && Array.isArray(data.markers)) return data.markers;
-        if (Array.isArray(data)) return data;
-        throw new Error('Некорректный формат базы меток');
-    }
-
-    if ('caches' in window) {
-        const cache = await caches.open(MARKERS_CACHE_NAME);
-        const response = await fetchFirstAvailable(markerUrls, { cache: 'no-store' }, 'Не удалось загрузить базу меток');
-        const responseForCache = response.clone();
-        const payload = validateMarkersPayload(await unwrapApiResponse(response));
-        cache.put(markerUrls[0], responseForCache).catch(() => {});
-        return payload;
-    }
-
-    const response = await fetchFirstAvailable(markerUrls, { cache: 'no-store' }, 'Не удалось загрузить базу меток');
-    return validateMarkersPayload(await unwrapApiResponse(response));
-}
-
-async function matchFirstCached(cache, urls) {
-    for (const url of urls) {
-        const cached = await cache.match(url);
-        if (cached) {
-            return cached;
-        }
-    }
-    return null;
-}
-
-async function fetchFirstAvailable(urls, options, errorMessage) {
-    let lastError = null;
-    for (const url of urls) {
-        try {
-            const response = await fetch(url, options);
-            if (response.ok) {
-                return response;
-            }
-            lastError = new Error('bad_status_' + response.status + ':' + url);
-        } catch (error) {
-            lastError = error;
-        }
-    }
-    throw lastError || new Error(errorMessage);
-}
-
-function refreshMarkersCache(cache, url) {
-    fetch(url, { cache: 'no-cache' })
-        .then(response => {
-            if (response.ok) {
-                return cache.put(url, response);
-            }
-            return null;
-        })
-        .catch(error => {
-            console.warn('Фоновое обновление кеша меток пропущено:', error);
-        });
-}
-
-async function loadEncryptedFormsData() {
-    if (!window.crypto || !window.crypto.subtle) {
-        throw new Error('Браузер не поддерживает зашифрованный формат загрузки');
-    }
-
-    setLoadingStatus('Загрузка зашифрованных данных...');
-    const response = await fetchFirstAvailable(ENCRYPTED_FORMS_URLS, { cache: 'default' }, 'Не удалось загрузить зашифрованные данные сайта');
-
-    const encryptedData = await response.json();
-    const _0x1a2b = 'a4b55def825713e8ff3b8442b4f3a084';
-    const _0x3c4d = 'f1ef8a23b2586d8fc823b2b9699e3764';
-    const _key = _0x1a2b + _0x3c4d;
-
-    setLoadingStatus('Расшифровка данных...');
-    const decryptedData = await decryptChunks(
-        encryptedData.c,
-        _key,
-        encryptedData.i,
-        encryptedData.z || null,
-        (current, total) => setLoadingStatus('Расшифровка данных... ' + current + ' / ' + total)
-    );
-
-    if (!decryptedData) {
-        throw new Error('Ошибка расшифровки');
-    }
-
-    return decryptedData;
-}
-
-function shouldUsePublicFormsData() {
-    return true;
-}
-
 async function loadFormsData() {
-    if (shouldUsePublicFormsData()) {
-        try {
-            return await loadPublicFormsData();
-        } catch (error) {
-            console.warn('Public data fallback to encrypted:', error);
-        }
+    setLoadingStatus('Загрузка анкет...');
+    const payload = await fetchJsonWithTimeout(
+        API_BASE_URL + '/api/map-data',
+        { credentials: 'include', cache: 'no-store' },
+        30000
+    );
+    if (!payload || !payload.ok || !Array.isArray(payload.profiles)) {
+        throw new Error('bad_map_data_payload');
     }
-    return await loadEncryptedFormsData();
+    return payload.profiles;
 }
 
         async function prepareDerivedData() {
