@@ -1477,14 +1477,14 @@ window.__startFurryApp = function() {
                 return override.replace(/\/+$/, '');
             }
 
-                return 'https://api.furry.by:10101';
+                return 'https://api.furry.by';
         }
 
         const API_BASE_URL = getApiBaseUrl();
 
         function shouldUseSearchApi() {
             const host = location.hostname;
-            const isLocalHost = host === 'localhost' || host === 'api.furry.by' || host === '::1';
+            const isLocalHost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
             return !isLocalHost || Boolean(window.FURRY_API_BASE_URL);
         }
 
