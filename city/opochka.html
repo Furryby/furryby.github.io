@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Опочка — furry знакомства и анкеты | Furry.by</title>
-    <meta name="description" content="Фурри знакомства в Опочка. 1 анкет из города Опочка, отсортированных по VIP, лайкам и новизне.">
+    <meta name="description" content="Фурри знакомства в Опочка. 2 анкет из города Опочка, отсортированных по VIP, лайкам и новизне.">
     <meta name="keywords" content="фурри Опочка, furry Опочка, знакомства Опочка, анкеты Опочка, furry dating Опочка, Опочка фурри">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://furry.by/city/opochka.html">
@@ -30,7 +30,7 @@
         },
         "mainEntity": {
             "@type": "ItemList",
-            "numberOfItems": 1,
+            "numberOfItems": 2,
             "itemListElement": []
         }
     }
@@ -183,7 +183,7 @@
 <body>
     <div class="container">
         <h1>Опочка</h1>
-        <p class="lead">1 анкет из Опочка, отсортированных по VIP, лайкам и новизне.</p>
+        <p class="lead">2 анкет из Опочка, отсортированных по VIP, лайкам и новизне.</p>
         <div class="side-ad">
   <div class="side-ad-title">
     <span class="side-ad-badge">AD</span>
@@ -242,6 +242,41 @@
             "platform": "desktop"
         })
     })
+    </script>
+
+    <script>
+    (function () {
+        var city = "Опочка";
+        var grid = document.querySelector('.city-grid');
+        if (!grid) return;
+        function esc(value) {
+            return String(value || '').replace(/[&<>"']/g, function (char) {
+                return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char];
+            });
+        }
+        fetch('https://api.furry.by/api/map-data', { cache: 'no-store' })
+            .then(function (response) { if (!response.ok) throw new Error('api'); return response.json(); })
+            .then(function (data) {
+                var profiles = (data.profiles || []).filter(function (profile) { return profile.settlement === city; });
+                profiles.sort(function (a, b) {
+                    var vip = Number(Boolean(b.is_vip)) - Number(Boolean(a.is_vip));
+                    if (vip) return vip;
+                    var likes = Number(b.likes || 0) - Number(a.likes || 0);
+                    if (likes) return likes;
+                    return String(b.source_date || '').localeCompare(String(a.source_date || ''));
+                });
+                grid.innerHTML = profiles.map(function (profile) {
+                    var ref = encodeURIComponent(profile.profile_ref || profile.form_id);
+                    var href = '/profiles/' + ref + '.html';
+                    var photo = profile.photo ? '<a href="' + href + '" class="city-photo-wrap"><img class="city-photo" src="' + esc(profile.photo) + '" alt="" loading="lazy"></a>' : '';
+                    var write = /^https?:///i.test(String(profile.user_link || '')) ? '<a href="' + esc(profile.user_link) + '" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">Написать</a>' : '';
+                    return '<article class="city-card' + (profile.is_vip ? ' vip' : '') + '">' + photo + '<div class="city-card-body"><h2><a href="' + href + '">' + esc(profile.name) + '</a>' + (profile.is_vip ? '<span class="vip-badge">✨</span>' : '') + '</h2><div class="city-meta">' + esc(profile.age) + ' лет • ' + esc(profile.settlement) + ' • ❤️ ' + Number(profile.likes || 0) + '</div><div class="city-tags">' + esc(profile.hashtag) + '</div><p class="city-text">' + esc(String(profile.form_text || '').slice(0, 240)) + '</p><div class="city-actions"><a href="' + href + '" class="btn">Открыть анкету</a>' + write + '</div></div></article>';
+                }).join('');
+                var lead = document.querySelector('.lead');
+                if (lead) lead.textContent = profiles.length + ' анкет из ' + city + ', отсортированных по VIP, лайкам и новизне.';
+            })
+            .catch(function () {});
+    })();
     </script>
 
 </body>
