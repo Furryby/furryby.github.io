@@ -118,7 +118,7 @@
         <div class="tags">#М #Акула #Симферополь #Ялта #Крым #Отношения</div>
         
         <div class="stats">
-            <div class="stat"><span>❤️</span><span>10 лайков</span></div>
+            <div class="stat"><span>❤️</span><span>11 лайков</span></div>
             <div class="stat"><span>📍</span><span>Симферополь</span></div>
         </div>
         <div class="about">⁣ Приветствую всех. Как говорится, первый блин всегда комом. Вот и у меня получилось именно так, поэтому вот моя вторая попытка найти кого-то тут. Для начала, хочу сказать, если вы уже мне писали, а я по какой-то причине не отвечал/кинул в игнор, простите меня пожалуйста, слишком много непонятного происходило в тот момент моей жизни. Если осталось желание, можно попробовать снова. Сразу хочу попросить писать мне только если вы из Крыма, отношения на расстоянии я не рассматриваю. Вкратце о себе: вот вот стукнет 20 лет, полная комплектация, добрый, ласковый, хорни идиот, немного замкнут в себе и не всегда с охотой завожу новые знакомства. Молчалив, стеснителен в начале общения. В беседах я больше внимательный слушатель. Но иногда меня самого сложно заткнуть, зависит от настроения. Люблю природу и животных. Я прямолинеен, со специфическим чувством юмора. Если вы мне понравитесь, будьте готовы к нескончаемому потоку отборных говномемов) Я всегда готов прийти на помощь если понадобится. Не курю, иногда выпиваю. Рост 181, вес 74. Про внешность мало что могу сказать, но меня она более менее устраивает. Как таковых увлечений у меня сейчас немного. Иногда играю на плойке. Из игр могу выделить dead by daylight, smite, minecraft, for honor, gta5. Есть много других игр, а так же подписка Extra, так что думаю мы найдём чем заняться) Так же есть средненький ноут, там тоже можно поиграть. Хочу начать писать музыку, рисовать. Музыку люблю самую разную, в основном иностранных исполнителей. В приоритете devilish trio, suicideboys, Eminem, ghostemane, ice cube, snoop dogg и тд Люблю позалипать в сериалы, фильмы, видосы на ютубе. Кого я ищу? Тут все просто. Человека от 18 до 24 лет, кто полюбит меня таким, какой я есть. (Я готов меняться, если понадобится). Я ищу человека, который будет поддерживать меня, будет помогать стать лучше. Человека, который способен выслушать меня, с которым мне будет приятно проводить время. Того, кто не бросит спустя пару месяцев общения, очень меня расстроив. Ну и просто фуррика с общими интересами. Мне не важен ваш пол, вера, мировоззрение, я готов принимать людей такими, какие они есть. Внешность конечно тоже играет немалую роль, но определенно не главную. Просто если вы пудж 150кг, не умеете ухаживать за собой, извините, нам не по пути. Я есть в вк, но общение лучше начать в телеграмме. Пишите, не стесняйтесь)</div>
@@ -160,6 +160,23 @@ function showToast(m){var t=document.getElementById("fb-toast");if(!t){t=documen
 function copyText(t){if(navigator.clipboard&&typeof navigator.clipboard.writeText==="function")return navigator.clipboard.writeText(t);var e=document.createElement("input");e.value=t;e.setAttribute("readonly","readonly");e.style.position="fixed";e.style.left="-9999px";document.body.appendChild(e);e.select();document.execCommand("copy");e.remove()}
 function copyFBL(e){if(e){e.preventDefault();e.stopPropagation()}copyText("https://t.me/furbaza");showToast("Telegram скопирован. Вставьте в браузере, откроется в Telegram");return false}
 </script>
+    <script>
+    (function () {
+        var profileId = 9281;
+        if (!profileId) return;
+        fetch('https://api.furry.by/api/map-data', { cache: 'no-store' })
+            .then(function (response) { if (!response.ok) throw new Error('api'); return response.json(); })
+            .then(function (data) {
+                var exists = (data.profiles || []).some(function (profile) { return Number(profile.form_id) === profileId; });
+                if (exists) return;
+                document.title = 'Анкета удалена | Furry.by';
+                var robots = document.querySelector('meta[name="robots"]');
+                if (robots) robots.setAttribute('content', 'noindex, nofollow');
+                document.body.innerHTML = '<main style="max-width:720px;margin:12vh auto;padding:24px;font:18px system-ui;color:#fff;background:#202020;border-radius:16px"><h1>Анкета удалена</h1><p>Эта анкета больше не доступна.</p><a style="color:#ff9a1f" href="/">Вернуться на карту</a></main>';
+            })
+            .catch(function () {});
+    })();
+    </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/107028234" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 
     <script>window.yaContextCb = window.yaContextCb || [];</script>

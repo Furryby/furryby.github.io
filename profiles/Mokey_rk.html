@@ -119,7 +119,7 @@
         <div class="tags">#М #Ослик #Пан #Курскаяобласть #Отношения #Рисую #фурри #Обожаю #осликов #Экстраверт</div>
         <div class="photo-wrap"><img class="profile-photo" src="/photos/photo_8384@24-02-2026_06-04-32.jpg" alt="Mokey_rk, 30 лет, Курская область" loading="lazy" onerror="this.onerror=null;this.parentElement.style.display=&#39;none&#39;"></div>
         <div class="stats">
-            <div class="stat"><span>❤️</span><span>2 лайков</span></div>
+            <div class="stat"><span>❤️</span><span>3 лайков</span></div>
             <div class="stat"><span>📍</span><span>Курская область</span></div>
         </div>
         <div class="about">MrBUGСасун, 30. Привет, я Никита. Ассоциирую себя с Осликом — не потому что упрямый, а потому что в этом образе есть что-то жгучее, уязвимое и по-своему тёплое. Иногда люблю называть себя Дерданом — как второе Имя. У меня несколько личностей, примерно 5–6. Они разные. Ищу пару — не ограничиваю себя рамками. Женщина или мужчина. Я меломан. Могу слушать почти любую музыку — от шума до лирики, но особенно откликается &quot;cry for me in&quot;. Рост 181, вес 69. Люблю играть на ПК и PlayStation. Из игр особенно заходят Call of Duty, S.T.A.L.K.E.R., Resident Evil — нравится атмосфера Знаю очень много фандомов и реально могу про них рассказывать часами: MLP, Poppy Playtime, FNF, Mandela Catalogue и ещё куча всего Люблю разбирать лор. Обожаю фильмы, особенно те, после которых остаётся осадок и мысли. И да — я косплею ОСЛИКА11!1</div>
@@ -161,6 +161,23 @@ function showToast(m){var t=document.getElementById("fb-toast");if(!t){t=documen
 function copyText(t){if(navigator.clipboard&&typeof navigator.clipboard.writeText==="function")return navigator.clipboard.writeText(t);var e=document.createElement("input");e.value=t;e.setAttribute("readonly","readonly");e.style.position="fixed";e.style.left="-9999px";document.body.appendChild(e);e.select();document.execCommand("copy");e.remove()}
 function copyFBL(e){if(e){e.preventDefault();e.stopPropagation()}copyText("https://t.me/furbaza");showToast("Telegram скопирован. Вставьте в браузере, откроется в Telegram");return false}
 </script>
+    <script>
+    (function () {
+        var profileId = 2053;
+        if (!profileId) return;
+        fetch('https://api.furry.by/api/map-data', { cache: 'no-store' })
+            .then(function (response) { if (!response.ok) throw new Error('api'); return response.json(); })
+            .then(function (data) {
+                var exists = (data.profiles || []).some(function (profile) { return Number(profile.form_id) === profileId; });
+                if (exists) return;
+                document.title = 'Анкета удалена | Furry.by';
+                var robots = document.querySelector('meta[name="robots"]');
+                if (robots) robots.setAttribute('content', 'noindex, nofollow');
+                document.body.innerHTML = '<main style="max-width:720px;margin:12vh auto;padding:24px;font:18px system-ui;color:#fff;background:#202020;border-radius:16px"><h1>Анкета удалена</h1><p>Эта анкета больше не доступна.</p><a style="color:#ff9a1f" href="/">Вернуться на карту</a></main>';
+            })
+            .catch(function () {});
+    })();
+    </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/107028234" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 
     <script>window.yaContextCb = window.yaContextCb || [];</script>

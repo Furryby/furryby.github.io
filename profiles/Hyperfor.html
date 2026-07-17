@@ -119,7 +119,7 @@
         <div class="tags">#М #Курск #Игры #Архитектура #музыка #Интроверт</div>
         <div class="photo-wrap"><img class="profile-photo" src="/photos/photo_7128@12-11-2025_16-02-08.jpg" alt="Hyperfor, 16 лет, Курск" loading="lazy" onerror="this.onerror=null;this.parentElement.style.display=&#39;none&#39;"></div>
         <div class="stats">
-            <div class="stat"><span>❤️</span><span>2 лайков</span></div>
+            <div class="stat"><span>❤️</span><span>3 лайков</span></div>
             <div class="stat"><span>📍</span><span>Курск</span></div>
         </div>
         <div class="about">Umbrella, 16. Здравствуй читатель.Даже незнаю с чего начать.Прежде всего я гитарист, но сейчас музыка постепенно уходит на 2 план,в хобби. Сейчас я питаю интерес к зодчеству и хочу стать архитектором.Я считаю что данная профессия станет востребована.К данному выводу я пришёл исходя из своих способностей и любви к черчению. По мимо музыки у меня есть ещё хобби такие как кулинария,садоводство и самое главное путешествия.Я просто горю желанием ходить в походы,посещать музеи и.т.п Я не умею говорить о себе. Как по мне,человеку лучше провести со мной время и лучше узнать друг друга чтобы сложить обо мне своë мнение,нежели полагаться на мои слова. В жизни я не сильно разговорчивый человек,по натуре я слушатель. В принципе,всë. Чего бы я хотел найти благодоря этой анкете? Хорошего,доброго человека с которым можно общаться. P.S анкета была сильно сокращена</div>
@@ -161,6 +161,23 @@ function showToast(m){var t=document.getElementById("fb-toast");if(!t){t=documen
 function copyText(t){if(navigator.clipboard&&typeof navigator.clipboard.writeText==="function")return navigator.clipboard.writeText(t);var e=document.createElement("input");e.value=t;e.setAttribute("readonly","readonly");e.style.position="fixed";e.style.left="-9999px";document.body.appendChild(e);e.select();document.execCommand("copy");e.remove()}
 function copyFBL(e){if(e){e.preventDefault();e.stopPropagation()}copyText("https://t.me/furbaza");showToast("Telegram скопирован. Вставьте в браузере, откроется в Telegram");return false}
 </script>
+    <script>
+    (function () {
+        var profileId = 1905;
+        if (!profileId) return;
+        fetch('https://api.furry.by/api/map-data', { cache: 'no-store' })
+            .then(function (response) { if (!response.ok) throw new Error('api'); return response.json(); })
+            .then(function (data) {
+                var exists = (data.profiles || []).some(function (profile) { return Number(profile.form_id) === profileId; });
+                if (exists) return;
+                document.title = 'Анкета удалена | Furry.by';
+                var robots = document.querySelector('meta[name="robots"]');
+                if (robots) robots.setAttribute('content', 'noindex, nofollow');
+                document.body.innerHTML = '<main style="max-width:720px;margin:12vh auto;padding:24px;font:18px system-ui;color:#fff;background:#202020;border-radius:16px"><h1>Анкета удалена</h1><p>Эта анкета больше не доступна.</p><a style="color:#ff9a1f" href="/">Вернуться на карту</a></main>';
+            })
+            .catch(function () {});
+    })();
+    </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/107028234" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 
     <script>window.yaContextCb = window.yaContextCb || [];</script>

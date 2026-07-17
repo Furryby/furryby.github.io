@@ -161,6 +161,23 @@ function showToast(m){var t=document.getElementById("fb-toast");if(!t){t=documen
 function copyText(t){if(navigator.clipboard&&typeof navigator.clipboard.writeText==="function")return navigator.clipboard.writeText(t);var e=document.createElement("input");e.value=t;e.setAttribute("readonly","readonly");e.style.position="fixed";e.style.left="-9999px";document.body.appendChild(e);e.select();document.execCommand("copy");e.remove()}
 function copyFBL(e){if(e){e.preventDefault();e.stopPropagation()}copyText("https://t.me/furbaza");showToast("Telegram скопирован. Вставьте в браузере, откроется в Telegram");return false}
 </script>
+    <script>
+    (function () {
+        var profileId = 15610;
+        if (!profileId) return;
+        fetch('https://api.furry.by/api/map-data', { cache: 'no-store' })
+            .then(function (response) { if (!response.ok) throw new Error('api'); return response.json(); })
+            .then(function (data) {
+                var exists = (data.profiles || []).some(function (profile) { return Number(profile.form_id) === profileId; });
+                if (exists) return;
+                document.title = 'Анкета удалена | Furry.by';
+                var robots = document.querySelector('meta[name="robots"]');
+                if (robots) robots.setAttribute('content', 'noindex, nofollow');
+                document.body.innerHTML = '<main style="max-width:720px;margin:12vh auto;padding:24px;font:18px system-ui;color:#fff;background:#202020;border-radius:16px"><h1>Анкета удалена</h1><p>Эта анкета больше не доступна.</p><a style="color:#ff9a1f" href="/">Вернуться на карту</a></main>';
+            })
+            .catch(function () {});
+    })();
+    </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/107028234" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 
     <script>window.yaContextCb = window.yaContextCb || [];</script>

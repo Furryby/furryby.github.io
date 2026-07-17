@@ -119,7 +119,7 @@
         <div class="tags">#М #Лис #Курск #Дружба #IT #Спорт #Творчество</div>
         <div class="photo-wrap"><img class="profile-photo" src="/photos/photo_5306@23-05-2025_06-02-52.jpg" alt="tonyfuntony, 21 лет, Курск" loading="lazy" onerror="this.onerror=null;this.parentElement.style.display=&#39;none&#39;"></div>
         <div class="stats">
-            <div class="stat"><span>❤️</span><span>3 лайков</span></div>
+            <div class="stat"><span>❤️</span><span>4 лайков</span></div>
             <div class="stat"><span>📍</span><span>Курск</span></div>
         </div>
         <div class="about">funtonyfox, 21. Я обычный лис, с лёгкой лисьей хитринкой ;) Люблю пошутить и поговорить на разные темы. Занимаюсь программированием и основам ИБ (учусь на это направление), немного разбираюсь в монтаже и дизайне, а также недавно начал пробовать себя в спорте (пока новичок, но стараюсь :3). Бываю на разных фурри мероприятиях (был на Дне Фурри Новичка, AnyFurryFest, МОФест). Кого ищу: Ищу друзей (а может, кого-то и большего) от 18 до 25 лет. Хочу общаться с открытыми и интересными людьми. Можем общаться онлайн или увидеться вживую (на это больший упор) в Курске или в Москве (бываю там иногда, в следующем году планирую переезжать). Ценю тех, кто разделяет мои увлечения и просто любит поболтать. Очень ценю настоящую дружбу и ищу тех, кто готов строить долгие отношения, а не на один день.</div>
@@ -161,6 +161,23 @@ function showToast(m){var t=document.getElementById("fb-toast");if(!t){t=documen
 function copyText(t){if(navigator.clipboard&&typeof navigator.clipboard.writeText==="function")return navigator.clipboard.writeText(t);var e=document.createElement("input");e.value=t;e.setAttribute("readonly","readonly");e.style.position="fixed";e.style.left="-9999px";document.body.appendChild(e);e.select();document.execCommand("copy");e.remove()}
 function copyFBL(e){if(e){e.preventDefault();e.stopPropagation()}copyText("https://t.me/furbaza");showToast("Telegram скопирован. Вставьте в браузере, откроется в Telegram");return false}
 </script>
+    <script>
+    (function () {
+        var profileId = 183;
+        if (!profileId) return;
+        fetch('https://api.furry.by/api/map-data', { cache: 'no-store' })
+            .then(function (response) { if (!response.ok) throw new Error('api'); return response.json(); })
+            .then(function (data) {
+                var exists = (data.profiles || []).some(function (profile) { return Number(profile.form_id) === profileId; });
+                if (exists) return;
+                document.title = 'Анкета удалена | Furry.by';
+                var robots = document.querySelector('meta[name="robots"]');
+                if (robots) robots.setAttribute('content', 'noindex, nofollow');
+                document.body.innerHTML = '<main style="max-width:720px;margin:12vh auto;padding:24px;font:18px system-ui;color:#fff;background:#202020;border-radius:16px"><h1>Анкета удалена</h1><p>Эта анкета больше не доступна.</p><a style="color:#ff9a1f" href="/">Вернуться на карту</a></main>';
+            })
+            .catch(function () {});
+    })();
+    </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/107028234" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 
     <script>window.yaContextCb = window.yaContextCb || [];</script>

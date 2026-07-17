@@ -119,7 +119,7 @@
         <div class="tags">#Ж #Волгоград #Отношения #Амбиверт</div>
         <div class="photo-wrap"><img class="profile-photo" src="/photos/VuWqfUu1JvIKD34f.jpg" alt="Катя, 20 лет, Волгоград" loading="lazy" onerror="this.onerror=null;this.parentElement.style.display=&#39;none&#39;"></div>
         <div class="stats">
-            <div class="stat"><span>❤️</span><span>27 лайков</span></div>
+            <div class="stat"><span>❤️</span><span>28 лайков</span></div>
             <div class="stat"><span>📍</span><span>Волгоград</span></div>
         </div>
         <div class="about">Привет! Мне 20 лет, я из Волгограда. Я та, кто может весь вечер слушать музыку в наушниках, пить чай с жасмином и смотреть на закат из окна. Очень тянет к живому общению — к близости душ, а не просто переписке. Хочу познакомиться с девушкой 18–28 лет, желательно с рыжими волосами — всегда мечтала узнать поближе такую солнечную и яркую. Мне важна душевность, нежность, открытость. Люблю, когда рядом человек, с которым можно молчать и всё равно понимать друг друга. Мне близки прикосновения, лёгкие объятия, поцелуи в шею и живот — я очень чувствительная и теплая. Но прежде всего — за взаимность и искренность, без фальши. Если ты тоже ищешь не просто встречу, а именно момент тепла между двумя людьми — пиши. Фотографию и всё остальное покажу в личке, если найдём общий язык 🌙</div>
@@ -161,6 +161,23 @@ function showToast(m){var t=document.getElementById("fb-toast");if(!t){t=documen
 function copyText(t){if(navigator.clipboard&&typeof navigator.clipboard.writeText==="function")return navigator.clipboard.writeText(t);var e=document.createElement("input");e.value=t;e.setAttribute("readonly","readonly");e.style.position="fixed";e.style.left="-9999px";document.body.appendChild(e);e.select();document.execCommand("copy");e.remove()}
 function copyFBL(e){if(e){e.preventDefault();e.stopPropagation()}copyText("https://t.me/furbaza");showToast("Telegram скопирован. Вставьте в браузере, откроется в Telegram");return false}
 </script>
+    <script>
+    (function () {
+        var profileId = 5110;
+        if (!profileId) return;
+        fetch('https://api.furry.by/api/map-data', { cache: 'no-store' })
+            .then(function (response) { if (!response.ok) throw new Error('api'); return response.json(); })
+            .then(function (data) {
+                var exists = (data.profiles || []).some(function (profile) { return Number(profile.form_id) === profileId; });
+                if (exists) return;
+                document.title = 'Анкета удалена | Furry.by';
+                var robots = document.querySelector('meta[name="robots"]');
+                if (robots) robots.setAttribute('content', 'noindex, nofollow');
+                document.body.innerHTML = '<main style="max-width:720px;margin:12vh auto;padding:24px;font:18px system-ui;color:#fff;background:#202020;border-radius:16px"><h1>Анкета удалена</h1><p>Эта анкета больше не доступна.</p><a style="color:#ff9a1f" href="/">Вернуться на карту</a></main>';
+            })
+            .catch(function () {});
+    })();
+    </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/107028234" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 
     <script>window.yaContextCb = window.yaContextCb || [];</script>

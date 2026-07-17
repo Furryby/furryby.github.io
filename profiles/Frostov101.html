@@ -119,7 +119,7 @@
         <div class="tags">#М #Брест #Дружба #Интроверт</div>
         <div class="photo-wrap"><img class="profile-photo" src="/photos/photo_6746@07-10-2025_16-04-20.jpg" alt="Frostov101, 18 лет, Брест" loading="lazy" onerror="this.onerror=null;this.parentElement.style.display=&#39;none&#39;"></div>
         <div class="stats">
-            <div class="stat"><span>❤️</span><span>7 лайков</span></div>
+            <div class="stat"><span>❤️</span><span>8 лайков</span></div>
             <div class="stat"><span>📍</span><span>Брест</span></div>
         </div>
         <div class="about">Кас, 18. Обо мне: Я по натуре не из тех,кто легко сходится с людьми. Ценю не количество, а глубину и искренность. Поэтому вначале могу показаться сдержанным и серьезным — мне важно почувствовать, что мы на одной волне. Но если это случится, я окажусь тем самым преданным человеком, готовым поддержать в любой ситуации и говорить на любые темы часами. Кого ищу: Того,кто так же устал от пустой болтовни «на пять минут» и ищет по-настоящему крепкую связь. Кому важно исключительное внимание и понимание с полуслова. Кто верит, что главное — это не широкий круг общения, а один по-настоящему свой человек. P.S. Подходим друг другу и поймем? Тогда откроется полный доступ: верность, как у пса, и поддержка 24/7 ;)</div>
@@ -161,6 +161,23 @@ function showToast(m){var t=document.getElementById("fb-toast");if(!t){t=documen
 function copyText(t){if(navigator.clipboard&&typeof navigator.clipboard.writeText==="function")return navigator.clipboard.writeText(t);var e=document.createElement("input");e.value=t;e.setAttribute("readonly","readonly");e.style.position="fixed";e.style.left="-9999px";document.body.appendChild(e);e.select();document.execCommand("copy");e.remove()}
 function copyFBL(e){if(e){e.preventDefault();e.stopPropagation()}copyText("https://t.me/furbaza");showToast("Telegram скопирован. Вставьте в браузере, откроется в Telegram");return false}
 </script>
+    <script>
+    (function () {
+        var profileId = 2744;
+        if (!profileId) return;
+        fetch('https://api.furry.by/api/map-data', { cache: 'no-store' })
+            .then(function (response) { if (!response.ok) throw new Error('api'); return response.json(); })
+            .then(function (data) {
+                var exists = (data.profiles || []).some(function (profile) { return Number(profile.form_id) === profileId; });
+                if (exists) return;
+                document.title = 'Анкета удалена | Furry.by';
+                var robots = document.querySelector('meta[name="robots"]');
+                if (robots) robots.setAttribute('content', 'noindex, nofollow');
+                document.body.innerHTML = '<main style="max-width:720px;margin:12vh auto;padding:24px;font:18px system-ui;color:#fff;background:#202020;border-radius:16px"><h1>Анкета удалена</h1><p>Эта анкета больше не доступна.</p><a style="color:#ff9a1f" href="/">Вернуться на карту</a></main>';
+            })
+            .catch(function () {});
+    })();
+    </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/107028234" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 
     <script>window.yaContextCb = window.yaContextCb || [];</script>

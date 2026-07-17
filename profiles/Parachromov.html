@@ -119,7 +119,7 @@
         <div class="tags">#М #Минск #Дружба #Музыка #рисование #лингвистика #история #Интроверт</div>
         <div class="photo-wrap"><img class="profile-photo" src="/photos/photo_7957@28-01-2026_02-05-21.jpg" alt="Parachromov, 17 лет, Минск" loading="lazy" onerror="this.onerror=null;this.parentElement.style.display=&#39;none&#39;"></div>
         <div class="stats">
-            <div class="stat"><span>❤️</span><span>28 лайков</span></div>
+            <div class="stat"><span>❤️</span><span>29 лайков</span></div>
             <div class="stat"><span>📍</span><span>Минск</span></div>
         </div>
         <div class="about">Parachromov, 17. Так, ну что написать могу, из игр я играю сейчас только в рояль, могу в принципе майн, террарию, аох 2,3, ну и всë, да и редко Музыка наверное самое главное для меня сейчас, обычно слушаю метал, я надеюсь если кто напишет, то будет таких же вкусов, ну или похожих, чтоб музыка со смыслом нравилась, во Хотелось бы друга с патриотическими взглядами из РБ, Литвы, Украины и Республик России типа Татарстана, Башкортостана, Карелии (ну и тех которых не признали как многочисленный народ по типу мишар, самодийцев, вепсов), ну чтоб там с культурой познакомиться, всë такое А по поводу истории нравится изучение всякого про Беларусь, Украину и Литву, короче культуры с разными атмосферами Ну и про лингвистику такая же фигня, балты, славяне, короче вот Могу адаптироваться под характер человека что-ль Спасибо за внимание</div>
@@ -161,6 +161,23 @@ function showToast(m){var t=document.getElementById("fb-toast");if(!t){t=documen
 function copyText(t){if(navigator.clipboard&&typeof navigator.clipboard.writeText==="function")return navigator.clipboard.writeText(t);var e=document.createElement("input");e.value=t;e.setAttribute("readonly","readonly");e.style.position="fixed";e.style.left="-9999px";document.body.appendChild(e);e.select();document.execCommand("copy");e.remove()}
 function copyFBL(e){if(e){e.preventDefault();e.stopPropagation()}copyText("https://t.me/furbaza");showToast("Telegram скопирован. Вставьте в браузере, откроется в Telegram");return false}
 </script>
+    <script>
+    (function () {
+        var profileId = 2558;
+        if (!profileId) return;
+        fetch('https://api.furry.by/api/map-data', { cache: 'no-store' })
+            .then(function (response) { if (!response.ok) throw new Error('api'); return response.json(); })
+            .then(function (data) {
+                var exists = (data.profiles || []).some(function (profile) { return Number(profile.form_id) === profileId; });
+                if (exists) return;
+                document.title = 'Анкета удалена | Furry.by';
+                var robots = document.querySelector('meta[name="robots"]');
+                if (robots) robots.setAttribute('content', 'noindex, nofollow');
+                document.body.innerHTML = '<main style="max-width:720px;margin:12vh auto;padding:24px;font:18px system-ui;color:#fff;background:#202020;border-radius:16px"><h1>Анкета удалена</h1><p>Эта анкета больше не доступна.</p><a style="color:#ff9a1f" href="/">Вернуться на карту</a></main>';
+            })
+            .catch(function () {});
+    })();
+    </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/107028234" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 
     <script>window.yaContextCb = window.yaContextCb || [];</script>

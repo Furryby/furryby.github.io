@@ -119,7 +119,7 @@
         <div class="tags">#Ж #РостовнаДону #Дружба #Отношения</div>
         <div class="photo-wrap"><img class="profile-photo" src="https://telegra.ph/file/b923936ab6bb1ce94d62c.jpg" alt="Лин, 22 лет, Ростов-на-Дону" loading="lazy" onerror="this.onerror=null;this.parentElement.style.display=&#39;none&#39;"></div>
         <div class="stats">
-            <div class="stat"><span>❤️</span><span>113 лайков</span></div>
+            <div class="stat"><span>❤️</span><span>114 лайков</span></div>
             <div class="stat"><span>📍</span><span>Ростов-на-Дону</span></div>
         </div>
         <div class="about">⋆ ˚｡⋆˚ &lt;i&gt;Январский козерог, который не верит в гороскопы, но отчаянно ищет себя в колонке успеха и уникальности, перекидывая эту вредную, а возможно, упертую привычку на реалии своей жизни.&lt;/i&gt; 🪷 &lt;i&gt;&lt;b&gt;Что же могло привести меня сюда?&lt;/b&gt; Такой простой вопрос, но так сложно на него ответить. Я, как и многие другие, начинала свои поиски от недостатка тепла и внимания, что во многих случаях приводило меня к не совсем нужным людям. Сейчас же у меня есть чёткое понимание того, какого человека я хочу видеть рядом с собой. И не важно, будут это простые дружеские взаимоотношения или нечто серьёзное. 🫧 &lt;/i&gt;&lt;i&gt;&lt;b&gt;Кратко о себе:&lt;/b&gt; студентка первого курса магистратуры, читающая всё, что ей будет попадаться на глаза, (от классики до манхв) и обожающая смотреть лакорны, параллельно ворча от слишком идеальной и наивной картинки. Заинтересована в психологии и философии, что приводит в ужас моего внутреннего демона, когда я пытаюсь порассуждать с ним. На этом остановлюсь, детальнее обсудим при приватной беседе. &lt;/i&gt;🪷 &lt;i&gt;&lt;b&gt;В Вас же я хотела бы найти&lt;/b&gt; честного, умеющего доверять и сострадать другим (в особенности, что касается животных, это будет одним из самых сильных показателей для меня), думающего и терпимого, способного рационально мыслить и никогда не впадать в приступы неконтролируемой агрессии человека. Думаю, что этого вполне достаточно. 🫧 Для меня не будет иметь значения из какого Вы города, но единственная, маленькая просьба - не писать людям, которым нет 19. Простите, но любви &lt;/i&gt;&lt;i&gt;&lt;b&gt;НЕ&lt;/b&gt; все возрасты покорны&lt;/i&gt;. &lt;b&gt;&lt;i&gt;Всем удачи в поисках &lt;/i&gt;&lt;/b&gt;˚⋆｡˚ ⋆</div>
@@ -161,6 +161,23 @@ function showToast(m){var t=document.getElementById("fb-toast");if(!t){t=documen
 function copyText(t){if(navigator.clipboard&&typeof navigator.clipboard.writeText==="function")return navigator.clipboard.writeText(t);var e=document.createElement("input");e.value=t;e.setAttribute("readonly","readonly");e.style.position="fixed";e.style.left="-9999px";document.body.appendChild(e);e.select();document.execCommand("copy");e.remove()}
 function copyFBL(e){if(e){e.preventDefault();e.stopPropagation()}copyText("https://t.me/furbaza");showToast("Telegram скопирован. Вставьте в браузере, откроется в Telegram");return false}
 </script>
+    <script>
+    (function () {
+        var profileId = 3093;
+        if (!profileId) return;
+        fetch('https://api.furry.by/api/map-data', { cache: 'no-store' })
+            .then(function (response) { if (!response.ok) throw new Error('api'); return response.json(); })
+            .then(function (data) {
+                var exists = (data.profiles || []).some(function (profile) { return Number(profile.form_id) === profileId; });
+                if (exists) return;
+                document.title = 'Анкета удалена | Furry.by';
+                var robots = document.querySelector('meta[name="robots"]');
+                if (robots) robots.setAttribute('content', 'noindex, nofollow');
+                document.body.innerHTML = '<main style="max-width:720px;margin:12vh auto;padding:24px;font:18px system-ui;color:#fff;background:#202020;border-radius:16px"><h1>Анкета удалена</h1><p>Эта анкета больше не доступна.</p><a style="color:#ff9a1f" href="/">Вернуться на карту</a></main>';
+            })
+            .catch(function () {});
+    })();
+    </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/107028234" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 
     <script>window.yaContextCb = window.yaContextCb || [];</script>

@@ -119,7 +119,7 @@
         <div class="tags">#М #Летучая_мышь #Рольдан #Дружба #Рисование #Рок_музыка #Конланги</div>
         <div class="photo-wrap"><img class="profile-photo" src="/photos/photo_2069@23-05-2024_09-01-55.jpg" alt="hi_i_am_greg, 18 лет, Красноярск" loading="lazy" onerror="this.onerror=null;this.parentElement.style.display=&#39;none&#39;"></div>
         <div class="stats">
-            <div class="stat"><span>❤️</span><span>5 лайков</span></div>
+            <div class="stat"><span>❤️</span><span>6 лайков</span></div>
             <div class="stat"><span>📍</span><span>Красноярск</span></div>
         </div>
         <div class="about">Оз, 18. Доброго всем времени суток! Я человек с довольно необычной судьбой, ибо родился и вырос в городе Красноярск (это в Сибири, ес чо), а с недавних пор живу в Испании (почти год) Я б********ал, поэтому не возражаю отношений, как с парнями, так и с девушками (так шо пацаны и пацанессы, я весь во внимании) Довольно недавно решил стать фурри и активно продумываю свою фурсону. Однако уже выбрал себе псевдоним (вы видите его вверху), определился с животным (летучая мышь) и цветовой гаммой (чёрный/фиолетовый) Зашёл сюда абсолютно случайно, хотел бы найти просто хорошего собеседника, с которым я мог бы даже допилить свой образ, и потом приятно пообщаться (а дальше посмотрим) В общем, пишите, не стесняйтесь, буду рад любому слову, любому отклику :) или тык.</div>
@@ -161,6 +161,23 @@ function showToast(m){var t=document.getElementById("fb-toast");if(!t){t=documen
 function copyText(t){if(navigator.clipboard&&typeof navigator.clipboard.writeText==="function")return navigator.clipboard.writeText(t);var e=document.createElement("input");e.value=t;e.setAttribute("readonly","readonly");e.style.position="fixed";e.style.left="-9999px";document.body.appendChild(e);e.select();document.execCommand("copy");e.remove()}
 function copyFBL(e){if(e){e.preventDefault();e.stopPropagation()}copyText("https://t.me/furbaza");showToast("Telegram скопирован. Вставьте в браузере, откроется в Telegram");return false}
 </script>
+    <script>
+    (function () {
+        var profileId = 10528;
+        if (!profileId) return;
+        fetch('https://api.furry.by/api/map-data', { cache: 'no-store' })
+            .then(function (response) { if (!response.ok) throw new Error('api'); return response.json(); })
+            .then(function (data) {
+                var exists = (data.profiles || []).some(function (profile) { return Number(profile.form_id) === profileId; });
+                if (exists) return;
+                document.title = 'Анкета удалена | Furry.by';
+                var robots = document.querySelector('meta[name="robots"]');
+                if (robots) robots.setAttribute('content', 'noindex, nofollow');
+                document.body.innerHTML = '<main style="max-width:720px;margin:12vh auto;padding:24px;font:18px system-ui;color:#fff;background:#202020;border-radius:16px"><h1>Анкета удалена</h1><p>Эта анкета больше не доступна.</p><a style="color:#ff9a1f" href="/">Вернуться на карту</a></main>';
+            })
+            .catch(function () {});
+    })();
+    </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/107028234" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 
     <script>window.yaContextCb = window.yaContextCb || [];</script>

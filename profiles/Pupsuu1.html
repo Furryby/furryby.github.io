@@ -119,7 +119,7 @@
         <div class="tags">#М #Самара #Отношения #Дружба #Игры #Рисую #Экстраверт</div>
         <div class="photo-wrap"><img class="profile-photo" src="/photos/photo_4104@23-01-2025_22-02-51.jpg" alt="Pupsuu1, 18 лет, Самара" loading="lazy" onerror="this.onerror=null;this.parentElement.style.display=&#39;none&#39;"></div>
         <div class="stats">
-            <div class="stat"><span>❤️</span><span>27 лайков</span></div>
+            <div class="stat"><span>❤️</span><span>28 лайков</span></div>
             <div class="stat"><span>📍</span><span>Самара</span></div>
         </div>
         <div class="about">Шпротер, 16. Привет Я потерял уже надежды найти друзей или отношений Я хочу иметь как и интернет друзей так и в ряльности Отношения на расстоянии можно но не совсем далеко от моего города (если конечно кого-то найду) Моя не первая анкета конечно же не кого нашёл Игры на телефоне :геншин и все На пк:все что хотите поиграем Я могу быстро к вам привязаться, если вы мне понравились Не хочу на 1 час или на день общение Фуррсона:Протоген Возможно я буду по началу общительный но это не надолго как я и писал если нравитесь Я не люблю конфликт и что с ним связано А из музыки я меломан Если по больше узнаем лучше друг друга я расскажу вам свои секреты Ну я вроде как не кусаюсь Всем рад только не себе Всех целую Не судите строго 🍪🍪🍪</div>
@@ -161,6 +161,23 @@ function showToast(m){var t=document.getElementById("fb-toast");if(!t){t=documen
 function copyText(t){if(navigator.clipboard&&typeof navigator.clipboard.writeText==="function")return navigator.clipboard.writeText(t);var e=document.createElement("input");e.value=t;e.setAttribute("readonly","readonly");e.style.position="fixed";e.style.left="-9999px";document.body.appendChild(e);e.select();document.execCommand("copy");e.remove()}
 function copyFBL(e){if(e){e.preventDefault();e.stopPropagation()}copyText("https://t.me/furbaza");showToast("Telegram скопирован. Вставьте в браузере, откроется в Telegram");return false}
 </script>
+    <script>
+    (function () {
+        var profileId = 12174;
+        if (!profileId) return;
+        fetch('https://api.furry.by/api/map-data', { cache: 'no-store' })
+            .then(function (response) { if (!response.ok) throw new Error('api'); return response.json(); })
+            .then(function (data) {
+                var exists = (data.profiles || []).some(function (profile) { return Number(profile.form_id) === profileId; });
+                if (exists) return;
+                document.title = 'Анкета удалена | Furry.by';
+                var robots = document.querySelector('meta[name="robots"]');
+                if (robots) robots.setAttribute('content', 'noindex, nofollow');
+                document.body.innerHTML = '<main style="max-width:720px;margin:12vh auto;padding:24px;font:18px system-ui;color:#fff;background:#202020;border-radius:16px"><h1>Анкета удалена</h1><p>Эта анкета больше не доступна.</p><a style="color:#ff9a1f" href="/">Вернуться на карту</a></main>';
+            })
+            .catch(function () {});
+    })();
+    </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/107028234" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 
     <script>window.yaContextCb = window.yaContextCb || [];</script>
