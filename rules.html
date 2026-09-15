@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Правила сообщества</title>
+<link rel="icon" href="https://raw.githubusercontent.com/Furryby/furryby.github.io/refs/heads/master/pets.ico" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root,
+  html[data-theme="light"]{
+    --bg:#f5f9ff;
+    --bg-2:#eff6ff;
+    --ink:#0a1730;
+    --ink-2:#3c5271;
+    --ink-3:#8698b3;
+    --line:#e8effa;
+    --line-2:#dae6f5;
+    --blue:#2f7bff;
+    --blue-deep:#1a5fe0;
+    --blue-soft:rgba(47,123,255,.08);
+    --cyan:#7ce3ff;
+    --violet:#7a6cff;
+    --danger:#e0263f;
+    --danger-text:#b91e35;
+    --danger-soft:rgba(224,38,63,.06);
+    --warn-soft:rgba(217,119,6,.05);
+    --ok:#22c55e;
+    --glass:rgba(255,255,255,.72);
+    --drawer-bg:linear-gradient(180deg, #ffffff 0%, #f6faff 100%);
+    --drawer-shadow:8px 0 40px -12px rgba(15,45,110,.25);
+    --orb-1:#7cb8ff; --orb-1b:#2f7bff;
+    --orb-2:#7ce3ff; --orb-2b:#7a6cff;
+    --orb-3:#a6d8ff; --orb-3b:#3fa9ff;
+    --orb-opacity:.32;
+    --grid-color:rgba(47,123,255,.035);
+    --toc-bg:#fff;
+    --toc-active-bg:linear-gradient(90deg, rgba(47,123,255,.09), rgba(47,123,255,.01));
+    --mono:'JetBrains Mono', ui-monospace, monospace;
+    --sans:'Inter', system-ui, sans-serif;
+    --ease:cubic-bezier(.22,1,.36,1);
+    --ease-out:cubic-bezier(.16,1,.3,1);
+    --hdr-h:64px;
+  }
+  html[data-theme="dark"]{
+    --bg:#070d1a;
+    --bg-2:#0a1224;
+    --ink:#eef4ff;
+    --ink-2:#a3b5d4;
+    --ink-3:#61738f;
+    --line:rgba(140,170,220,.10);
+    --line-2:rgba(140,170,220,.16);
+    --blue:#5c9bff;
+    --blue-deep:#3a7bef;
+    --blue-soft:rgba(92,155,255,.12);
+    --cyan:#7ce3ff;
+    --violet:#9d92ff;
+    --danger:#ff5c75;
+    --danger-text:#ff8fa1;
+    --danger-soft:rgba(255,92,117,.10);
+    --warn-soft:rgba(255,176,32,.08);
+    --ok:#34d399;
+    --glass:rgba(14,22,42,.72);
+    --drawer-bg:linear-gradient(180deg, #0b1428 0%, #070d1a 100%);
+    --drawer-shadow:8px 0 40px -12px rgba(0,0,0,.6);
+    --orb-1:#1a5fe0; --orb-1b:#2f7bff;
+    --orb-2:#7a6cff; --orb-2b:#4a3fbf;
+    --orb-3:#2f7bff; --orb-3b:#1a4ba0;
+    --orb-opacity:.22;
+    --grid-color:rgba(120,170,255,.05);
+    --toc-bg:rgba(14,22,42,.6);
+    --toc-active-bg:linear-gradient(90deg, rgba(92,155,255,.16), rgba(92,155,255,.02));
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{
+    font-family:var(--sans);
+    font-size:clamp(14px, .4vw + 13.2px, 15.5px);
+    color:var(--ink-2);
+    background:var(--bg);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    min-height:100vh;
+    transition:background .5s var(--ease), color .5s var(--ease);
+    touch-action:pan-y;
+  }
+  body.no-scroll{overflow:hidden}
+
+  .bg{
+    position:fixed;inset:0;z-index:-2;overflow:hidden;
+    background:
+      radial-gradient(900px 600px at 8% 0%, color-mix(in srgb, var(--orb-1) 22%, transparent) 0%, transparent 55%),
+      radial-gradient(800px 700px at 100% 5%, color-mix(in srgb, var(--orb-3) 18%, transparent) 0%, transparent 55%),
+      linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+    transition:background .6s var(--ease);
+  }
+  .orb{
+    position:absolute;border-radius:50%;filter:blur(90px);
+    opacity:var(--orb-opacity);will-change:transform;
+    animation:drift 30s ease-in-out infinite;
+    transition:opacity .6s var(--ease);
+  }
+  .orb.o1{width:min(520px,60vw);height:min(520px,60vw);background:radial-gradient(circle at 30% 30%, var(--orb-1), var(--orb-1b) 55%, transparent 75%);top:-160px;left:-140px}
+  .orb.o2{width:min(640px,70vw);height:min(640px,70vw);background:radial-gradient(circle at 40% 40%, var(--orb-2), var(--orb-2b) 55%, transparent 78%);top:30%;right:-220px;animation-delay:-10s;opacity:calc(var(--orb-opacity) * .8)}
+  .orb.o3{width:min(480px,55vw);height:min(480px,55vw);background:radial-gradient(circle at 50% 50%, var(--orb-3), var(--orb-3b) 60%, transparent 78%);bottom:-180px;left:30%;animation-delay:-20s;opacity:calc(var(--orb-opacity) * .9)}
+  @keyframes drift{
+    0%,100%{transform:translate3d(0,0,0) scale(1)}
+    33%{transform:translate3d(60px,-50px,0) scale(1.08)}
+    66%{transform:translate3d(-50px,40px,0) scale(.95)}
+  }
+  .grid-overlay{
+    position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;
+    background-image:
+      linear-gradient(var(--grid-color) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    background-size:64px 64px;
+    mask-image:radial-gradient(ellipse 100% 70% at 50% 0%, #000 20%, transparent 80%);
+    -webkit-mask-image:radial-gradient(ellipse 100% 70% at 50% 0%, #000 20%, transparent 80%);
+    transition:background-image .6s var(--ease);
+  }
+
+  .progress{
+    position:fixed;top:0;left:0;height:2px;width:0;z-index:100;
+    background:linear-gradient(90deg,var(--blue),var(--cyan),var(--violet));
+    box-shadow:0 0 12px color-mix(in srgb, var(--blue) 50%, transparent);
+    transition:width .08s linear;
+  }
+
+  header.hdr{
+    position:fixed;top:0;left:0;right:0;height:var(--hdr-h);z-index:60;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 clamp(14px, 2.5vw, 32px);
+    background:var(--glass);
+    backdrop-filter:blur(24px) saturate(180%);
+    -webkit-backdrop-filter:blur(24px) saturate(180%);
+    border-bottom:1px solid var(--line);
+    animation:hdrIn .7s var(--ease) both;
+    transition:background .5s var(--ease), border-color .5s var(--ease);
+  }
+  @keyframes hdrIn{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}
+
+  .brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:clamp(13px, .5vw + 12px, 14.5px);color:var(--ink);letter-spacing:-.01em;min-width:0}
+  .brand > span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .brand-icon{
+    width:30px;height:30px;border-radius:9px;flex-shrink:0;
+    object-fit:contain;
+    background:#000;
+    box-shadow:0 6px 16px -6px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08);
+    transition:transform .4s var(--ease-out), box-shadow .4s var(--ease);
+    display:block;
+  }
+  .brand-icon:hover{transform:scale(1.08) rotate(-3deg);box-shadow:0 10px 24px -8px rgba(0,0,0,.7)}
+
+  .hdr-right{display:flex;align-items:center;gap:14px;font-size:12.5px;color:var(--ink-3);font-family:var(--mono);font-weight:500;letter-spacing:.02em}
+  .hdr-right .live{display:inline-flex;align-items:center;gap:7px}
+  .hdr-right .live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb, var(--ok) 18%, transparent);animation:pulseDot 2s ease-in-out infinite}
+  @keyframes pulseDot{0%,100%{box-shadow:0 0 0 3px color-mix(in srgb, var(--ok) 18%, transparent)}50%{box-shadow:0 0 0 6px color-mix(in srgb, var(--ok) 5%, transparent)}}
+
+  .hdr-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:12px}
+
+  .theme-toggle{
+    position:relative;
+    width:42px;height:42px;flex-shrink:0;
+    border:none;background:var(--blue-soft);border-radius:12px;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--blue);
+    transition:background .3s var(--ease), transform .3s var(--ease), color .3s var(--ease);
+    overflow:hidden;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .theme-toggle:hover{background:color-mix(in srgb, var(--blue) 18%, transparent);transform:scale(1.06)}
+  .theme-toggle:active{transform:scale(.9)}
+  .theme-toggle svg{
+    position:absolute;
+    width:19px;height:19px;
+    transition:transform .55s var(--ease-out), opacity .35s var(--ease);
+  }
+  .theme-toggle .icon-sun{transform:translateY(0) rotate(0);opacity:1}
+  .theme-toggle .icon-moon{transform:translateY(120%) rotate(-90deg);opacity:0}
+  html[data-theme="dark"] .theme-toggle .icon-sun{transform:translateY(-120%) rotate(90deg);opacity:0}
+  html[data-theme="dark"] .theme-toggle .icon-moon{transform:translateY(0) rotate(0);opacity:1}
+  .theme-toggle::after{
+    content:"";position:absolute;inset:0;border-radius:inherit;
+    background:radial-gradient(circle at var(--rx,50%) var(--ry,50%), color-mix(in srgb, var(--blue) 35%, transparent), transparent 60%);
+    opacity:0;transition:opacity .6s var(--ease);
+    pointer-events:none;
+  }
+  .theme-toggle.pulse::after{opacity:1;transition:opacity .05s}
+
+  .burger{
+    display:none;
+    width:42px;height:42px;
+    border:none;background:var(--blue-soft);border-radius:12px;
+    cursor:pointer;position:relative;
+    align-items:center;justify-content:center;
+    transition:background .3s var(--ease), transform .3s var(--ease);
+    -webkit-tap-highlight-color:transparent;
+    flex-shrink:0;
+  }
+  .burger:hover{background:color-mix(in srgb, var(--blue) 18%, transparent);transform:scale(1.05)}
+  .burger:active{transform:scale(.9)}
+  .burger span{
+    position:absolute;left:12px;right:12px;height:2px;background:var(--ink);
+    border-radius:2px;
+    transition:transform .45s var(--ease-out), opacity .3s var(--ease), top .35s var(--ease), background .3s;
+    transform-origin:center;
+  }
+  .burger span:nth-child(1){top:14px}
+  .burger span:nth-child(2){top:20px}
+  .burger span:nth-child(3){top:26px}
+  .burger.open span:nth-child(1){top:20px;transform:rotate(45deg);background:var(--blue)}
+  .burger.open span:nth-child(2){opacity:0;transform:scaleX(.3)}
+  .burger.open span:nth-child(3){top:20px;transform:rotate(-45deg);background:var(--blue)}
+
+  @media (max-width:1080px){
+    .burger{display:flex}
+    .hdr-right{display:none}
+  }
+
+  .shell{
+    max-width:1360px;margin:0 auto;
+    padding:calc(var(--hdr-h) + 60px) clamp(20px, 3vw, 40px) 140px;
+    display:grid;grid-template-columns:270px 1fr;gap:clamp(40px, 5vw, 72px);
+    align-items:start;
+  }
+  @media (max-width:1080px){
+    .shell{grid-template-columns:1fr;gap:0;padding:calc(var(--hdr-h) + 34px) clamp(16px, 4vw, 32px) 90px}
+  }
+
+  .scrim{
+    position:fixed;inset:0;z-index:49;
+    background:rgba(5,12,25,.45);
+    backdrop-filter:blur(4px);
+    -webkit-backdrop-filter:blur(4px);
+    opacity:0;pointer-events:none;
+    transition:opacity .4s var(--ease);
+  }
+  .scrim.show{opacity:1;pointer-events:auto}
+  @media (min-width:1081px){.scrim{display:none}}
+
+  aside.toc{
+    position:sticky;top:calc(var(--hdr-h) + 32px);align-self:start;
+    max-height:calc(100vh - var(--hdr-h) - 60px);
+    overflow-y:auto;padding-right:10px;
+    scrollbar-width:thin;scrollbar-color:var(--line-2) transparent;
+  }
+  aside.toc::-webkit-scrollbar{width:5px}
+  aside.toc::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:10px}
+  aside.toc::-webkit-scrollbar-track{background:transparent}
+
+  @media (max-width:1080px){
+    aside.toc{
+      position:fixed;top:0;left:0;bottom:0;z-index:50;
+      width:min(320px, 84vw);
+      max-height:none;
+      padding:calc(var(--hdr-h) + 20px) 22px 32px;
+      background:var(--drawer-bg);
+      box-shadow:var(--drawer-shadow);
+      border-right:1px solid var(--line-2);
+      overflow-y:auto;
+      transform:translateX(-102%);
+      transition:transform .5s var(--ease-out), background .5s var(--ease);
+      will-change:transform;
+    }
+    aside.toc.open{transform:translateX(0)}
+  }
+
+  .toc-group{margin-bottom:26px}
+  .toc-group:last-child{margin-bottom:0}
+  .toc-head{
+    display:flex;align-items:center;gap:9px;
+    font-family:var(--mono);font-size:11px;font-weight:600;
+    color:var(--ink-3);text-transform:uppercase;letter-spacing:.12em;
+    margin-bottom:10px;padding-left:14px;
+  }
+  @media (max-width:1080px){.toc-head{padding-left:0}}
+  .toc-head .n{
+    color:var(--blue);padding:2px 7px;border-radius:5px;
+    background:var(--blue-soft);letter-spacing:.05em;
+  }
+  .toc-list{list-style:none;display:flex;flex-direction:column;gap:1px}
+  .toc-list li{
+    opacity:0;transform:translateX(-14px);
+    transition:opacity .5s var(--ease-out), transform .5s var(--ease-out);
+  }
+  @media (min-width:1081px){.toc-list li{opacity:1;transform:none}}
+  @media (max-width:1080px){
+    aside.toc.open .toc-list li{opacity:1;transform:translateX(0)}
+    aside.toc.open .toc-list li:nth-child(1){transition-delay:.06s}
+    aside.toc.open .toc-list li:nth-child(2){transition-delay:.09s}
+    aside.toc.open .toc-list li:nth-child(3){transition-delay:.12s}
+    aside.toc.open .toc-list li:nth-child(4){transition-delay:.15s}
+    aside.toc.open .toc-list li:nth-child(5){transition-delay:.18s}
+    aside.toc.open .toc-list li:nth-child(6){transition-delay:.21s}
+    aside.toc.open .toc-list li:nth-child(7){transition-delay:.24s}
+    aside.toc.open .toc-list li:nth-child(8){transition-delay:.27s}
+    aside.toc.open .toc-list li:nth-child(9){transition-delay:.30s}
+    aside.toc.open .toc-list li:nth-child(10){transition-delay:.33s}
+    aside.toc.open .toc-list li:nth-child(11){transition-delay:.36s}
+    aside.toc.open .toc-list li:nth-child(12){transition-delay:.39s}
+    aside.toc.open .toc-list li:nth-child(13){transition-delay:.42s}
+    aside.toc.open .toc-list li:nth-child(14){transition-delay:.45s}
+    aside.toc.open .toc-list li:nth-child(15){transition-delay:.48s}
+    aside.toc.open .toc-list li:nth-child(16){transition-delay:.51s}
+  }
+
+  .toc-link{
+    display:flex;align-items:center;gap:11px;
+    padding:7px 12px 7px 14px;
+    font-size:13.5px;font-weight:500;color:var(--ink-3);
+    text-decoration:none;border-radius:9px;
+    border-left:2px solid transparent;
+    transition:color .25s var(--ease), background .3s var(--ease), border-color .3s var(--ease), padding-left .3s var(--ease);
+    position:relative;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+  }
+  .toc-link::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:0;
+    background:linear-gradient(90deg, color-mix(in srgb, var(--blue) 12%, transparent), transparent);
+    transition:width .4s var(--ease-out);
+    z-index:-1;
+  }
+  .toc-link:hover::before{width:100%}
+  .toc-link .n{
+    font-family:var(--mono);font-size:11px;font-weight:600;
+    color:var(--ink-3);flex-shrink:0;
+    transition:color .25s var(--ease), transform .3s var(--ease);
+  }
+  .toc-link span{overflow:hidden;text-overflow:ellipsis}
+  .toc-link:hover{color:var(--ink);padding-left:16px}
+  .toc-link:hover .n{transform:scale(1.15)}
+  .toc-link.active{
+    color:var(--blue);background:var(--toc-active-bg);
+    border-left-color:var(--blue);font-weight:600;
+  }
+  .toc-link.active .n{color:var(--blue)}
+  .toc-link.active::after{
+    content:"";position:absolute;left:0;top:50%;width:2px;height:60%;
+    background:var(--blue);transform:translateY(-50%);
+    box-shadow:0 0 12px color-mix(in srgb, var(--blue) 70%, transparent);
+    animation:activeGlow 2s ease-in-out infinite;
+  }
+  @keyframes activeGlow{0%,100%{opacity:1}50%{opacity:.4}}
+  @media (max-width:1080px){
+    .toc-link{border-left:none;padding:9px 14px;border:1px solid var(--line-2);border-radius:11px;background:var(--toc-bg);font-size:14px}
+    .toc-link.active{border-color:color-mix(in srgb, var(--blue) 35%, transparent);background:var(--blue-soft);box-shadow:0 4px 14px -8px color-mix(in srgb, var(--blue) 40%, transparent)}
+    .toc-link.active::after{display:none}
+    .toc-link:hover{padding-left:14px;transform:translateX(3px)}
+  }
+
+  main{min-width:0;max-width:820px}
+
+  .hero{padding-bottom:clamp(38px, 5vw, 56px);border-bottom:1px solid var(--line);margin-bottom:8px;transition:border-color .5s var(--ease)}
+  .hero-eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--mono);font-size:11.5px;font-weight:600;
+    color:var(--blue);letter-spacing:.12em;text-transform:uppercase;
+    margin-bottom:24px;
+    opacity:0;animation:fadeUp .8s var(--ease-out) .1s both;
+  }
+  .hero-eyebrow::before{
+    content:"";width:22px;height:1px;background:var(--blue);opacity:.5;
+    transform-origin:left;animation:lineGrow .9s var(--ease-out) .3s both;
+  }
+  @keyframes lineGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+  .hero-title{
+    font-size:clamp(44px, 9vw, 82px);
+    font-weight:800;letter-spacing:-.045em;line-height:1.02;
+    margin-bottom:0;
+    color:var(--ink);
+    opacity:0;
+    animation:fadeUp 1s var(--ease-out) .2s both;
+    transition:color .5s var(--ease);
+  }
+  .hero-title .dot{color:var(--blue);display:inline-block}
+
+  section.sec{padding-top:clamp(50px, 7vw, 72px);scroll-margin-top:calc(var(--hdr-h) + 30px)}
+
+  .sec-head{
+    display:flex;align-items:baseline;gap:16px;
+    padding-bottom:20px;margin-bottom:8px;
+    border-bottom:1px solid var(--line);
+    opacity:0;transform:translateY(18px);
+    transition:opacity .8s var(--ease-out), transform .8s var(--ease-out), border-color .5s var(--ease);
+  }
+  .sec-head.reveal{opacity:1;transform:translateY(0)}
+  .sec-num{
+    font-family:var(--mono);font-size:13px;font-weight:700;
+    color:var(--blue);letter-spacing:.08em;
+    padding:5px 10px;border-radius:7px;
+    background:var(--blue-soft);flex-shrink:0;align-self:center;
+    transition:transform .4s var(--ease-out), box-shadow .4s var(--ease);
+  }
+  .sec-head:hover .sec-num{transform:scale(1.08) rotate(-3deg);box-shadow:0 6px 20px -6px color-mix(in srgb, var(--blue) 50%, transparent)}
+  .sec-title{
+    font-size:clamp(20px, 2.5vw, 30px);
+    font-weight:700;letter-spacing:-.025em;color:var(--ink);line-height:1.2;
+    transition:color .5s var(--ease);
+  }
+
+  article.rule{
+    padding:clamp(28px, 4vw, 36px) 0;
+    border-bottom:1px solid var(--line);
+    scroll-margin-top:calc(var(--hdr-h) + 30px);
+    opacity:0;transform:translateY(24px);
+    transition:opacity .8s var(--ease-out), transform .8s var(--ease-out), border-color .5s var(--ease);
+    position:relative;
+  }
+  article.rule::before{
+    content:"";position:absolute;left:-24px;top:0;bottom:0;width:2px;
+    background:linear-gradient(180deg, var(--blue), var(--cyan), transparent);
+    border-radius:2px;
+    opacity:0;transform:scaleY(0);transform-origin:top;
+    transition:opacity .5s var(--ease), transform .7s var(--ease-out);
+  }
+  article.rule:hover::before{opacity:1;transform:scaleY(1)}
+  @media (max-width:1080px){article.rule::before{display:none}}
+  article.rule.reveal{opacity:1;transform:translateY(0)}
+  article.rule:last-child{border-bottom:none}
+
+  .rule-head{
+    display:flex;align-items:baseline;gap:16px;margin-bottom:16px;
+    transition:transform .4s var(--ease-out);
+  }
+  article.rule:hover .rule-head{transform:translateX(4px)}
+  .rule-num{
+    font-family:var(--mono);font-size:12px;font-weight:700;
+    color:var(--blue);letter-spacing:.06em;
+    flex-shrink:0;padding-top:4px;
+    display:inline-block;
+    transition:color .3s var(--ease), transform .4s var(--ease-out);
+  }
+  article.rule:hover .rule-num{color:var(--blue-deep);transform:scale(1.15)}
+  .rule-title{
+    font-size:clamp(17px, 1.6vw, 21px);
+    font-weight:700;letter-spacing:-.02em;
+    color:var(--ink);line-height:1.35;
+    position:relative;display:inline;
+    background-image:linear-gradient(90deg, var(--blue), var(--cyan));
+    background-size:0% 2px;
+    background-position:0 100%;
+    background-repeat:no-repeat;
+    transition:background-size .5s var(--ease-out), color .5s var(--ease);
+    padding-bottom:2px;
+  }
+  article.rule:hover .rule-title{background-size:100% 2px}
+
+  .rule-body{
+    padding-left:44px;
+    max-width:68ch;
+    font-size:clamp(14px, .35vw + 13px, 15px);
+    line-height:1.75;color:var(--ink-2);
+    transition:color .5s var(--ease);
+  }
+  @media (max-width:640px){.rule-body{padding-left:0}}
+  .rule-body p{
+    margin-bottom:11px;
+    opacity:0;transform:translateY(10px);
+    transition:opacity .6s var(--ease-out), transform .6s var(--ease-out);
+  }
+  article.rule.reveal .rule-body p{opacity:1;transform:translateY(0)}
+  article.rule.reveal .rule-body p:nth-child(1){transition-delay:.15s}
+  article.rule.reveal .rule-body p:nth-child(2){transition-delay:.22s}
+  article.rule.reveal .rule-body p:nth-child(3){transition-delay:.29s}
+  article.rule.reveal .rule-body p:nth-child(4){transition-delay:.36s}
+  article.rule.reveal .rule-body p:nth-child(5){transition-delay:.43s}
+  .rule-body p:last-child{margin-bottom:0}
+  .rule-body strong{color:var(--ink);font-weight:600;transition:color .5s var(--ease)}
+  .rule-body em{color:var(--blue);font-style:normal;font-weight:600}
+  .rule-body ul{margin:12px 0 14px;padding-left:0;list-style:none}
+  .rule-body ul li{
+    position:relative;padding-left:22px;margin-bottom:7px;
+    color:var(--ink-2);
+    opacity:0;transform:translateX(-10px);
+    transition:opacity .5s var(--ease-out), transform .5s var(--ease-out), padding-left .3s var(--ease-out);
+  }
+  article.rule.reveal .rule-body ul li{opacity:1;transform:translateX(0)}
+  article.rule.reveal .rule-body ul li:nth-child(1){transition-delay:.3s}
+  article.rule.reveal .rule-body ul li:nth-child(2){transition-delay:.36s}
+  article.rule.reveal .rule-body ul li:nth-child(3){transition-delay:.42s}
+  article.rule.reveal .rule-body ul li:nth-child(4){transition-delay:.48s}
+  article.rule.reveal .rule-body ul li:nth-child(5){transition-delay:.54s}
+  article.rule.reveal .rule-body ul li:nth-child(6){transition-delay:.6s}
+  article.rule.reveal .rule-body ul li:nth-child(7){transition-delay:.66s}
+  article.rule.reveal .rule-body ul li:nth-child(8){transition-delay:.72s}
+  .rule-body ul li::before{
+    content:"";position:absolute;left:0;top:.75em;
+    width:6px;height:6px;border-radius:50%;
+    background:var(--blue);opacity:.5;
+    transition:opacity .3s, transform .3s var(--ease-out);
+  }
+  .rule-body ul li:hover::before{opacity:1;transform:scale(1.4)}
+  .rule-body ul li:hover{padding-left:26px}
+
+  .sub{margin-top:20px;padding-top:20px;border-top:1px dashed var(--line-2);transition:border-color .5s var(--ease)}
+  .sub:first-child{margin-top:0;padding-top:0;border-top:none}
+  .sub-title{
+    font-size:14px;font-weight:700;color:var(--ink);
+    margin-bottom:8px;letter-spacing:-.01em;
+    display:flex;align-items:center;gap:8px;
+    transition:color .5s var(--ease);
+  }
+  .sub-title .tag{
+    font-family:var(--mono);font-size:11px;font-weight:700;
+    color:var(--blue);padding:2px 7px;border-radius:5px;
+    background:var(--blue-soft);letter-spacing:.03em;
+    transition:transform .3s var(--ease-out), background .3s;
+  }
+  .sub:hover .tag{transform:scale(1.08);background:color-mix(in srgb, var(--blue) 14%, transparent)}
+
+  .note{
+    margin:14px 0;
+    padding:12px 16px;
+    border-left:2px solid var(--blue);
+    background:linear-gradient(90deg, color-mix(in srgb, var(--blue) 6%, transparent), transparent);
+    border-radius:0 10px 10px 0;
+    font-size:13.5px;color:var(--ink-2);line-height:1.65;
+    position:relative;overflow:hidden;
+    transition:transform .35s var(--ease-out), box-shadow .35s var(--ease), background .5s var(--ease);
+  }
+  .note::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:2px;
+    background:linear-gradient(180deg, var(--blue), var(--cyan));
+    animation:noteGlow 3s ease-in-out infinite;
+  }
+  @keyframes noteGlow{0%,100%{opacity:.8}50%{opacity:1;box-shadow:0 0 14px color-mix(in srgb, var(--blue) 60%, transparent)}}
+  .note:hover{transform:translateX(4px);box-shadow:0 8px 24px -14px color-mix(in srgb, var(--blue) 40%, transparent)}
+  .note b{color:var(--blue);font-weight:600}
+
+  .rule-punish{
+    display:inline-flex;align-items:center;gap:9px;
+    margin-top:20px;margin-left:44px;
+    padding:8px 15px;
+    border-radius:999px;
+    background:linear-gradient(135deg, var(--danger-soft), var(--warn-soft));
+    border:1px solid color-mix(in srgb, var(--danger) 20%, transparent);
+    color:var(--danger-text);
+    font-size:12.5px;font-weight:600;letter-spacing:.005em;
+    line-height:1.4;
+    opacity:0;transform:translateY(8px);
+    transition:opacity .6s var(--ease-out), transform .6s var(--ease-out), box-shadow .3s var(--ease), background .5s var(--ease), border-color .5s var(--ease), color .5s var(--ease);
+    position:relative;overflow:hidden;
+  }
+  article.rule.reveal .rule-punish{opacity:1;transform:translateY(0);transition-delay:.55s}
+  @media (max-width:640px){.rule-punish{margin-left:0}}
+  .rule-punish::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(120deg, transparent 30%, color-mix(in srgb, var(--danger) 10%, transparent) 50%, transparent 70%);
+    transform:translateX(-100%);
+    transition:transform .8s var(--ease-out);
+  }
+  .rule-punish:hover::after{transform:translateX(100%)}
+  .rule-punish:hover{transform:translateY(-2px);box-shadow:0 10px 24px -12px color-mix(in srgb, var(--danger) 50%, transparent)}
+  .rule-punish::before{
+    content:"";width:6px;height:6px;border-radius:50%;flex-shrink:0;
+    background:var(--danger);
+    box-shadow:0 0 0 3px color-mix(in srgb, var(--danger) 14%, transparent);
+    animation:blip 2.4s ease-in-out infinite;
+  }
+  @keyframes blip{0%,100%{box-shadow:0 0 0 3px color-mix(in srgb, var(--danger) 14%, transparent)}50%{box-shadow:0 0 0 6px color-mix(in srgb, var(--danger) 5%, transparent)}}
+
+  /* Бейдж наказания внутри подпункта */
+  .rule-punish.in-sub{
+    margin-left:0;
+    margin-top:12px;
+    font-size:12px;
+    padding:7px 13px;
+  }
+
+  footer.ft{
+    max-width:820px;
+    margin:80px auto 0;
+    padding:32px 0 0;
+    border-top:1px solid var(--line);
+    font-family:var(--mono);font-size:11.5px;
+    color:var(--ink-3);letter-spacing:.04em;
+    display:flex;justify-content:space-between;align-items:center;
+    flex-wrap:wrap;gap:12px;
+    transition:border-color .5s var(--ease), color .5s var(--ease);
+  }
+  footer.ft .mark{display:flex;align-items:center;gap:10px}
+  footer.ft .mark .brand-icon{width:22px;height:22px;border-radius:6px}
+
+  .totop{
+    position:fixed;right:22px;bottom:22px;z-index:40;
+    width:44px;height:44px;border-radius:12px;cursor:pointer;
+    background:var(--glass);
+    backdrop-filter:blur(14px);
+    border:1px solid var(--line-2);
+    box-shadow:0 8px 24px -10px color-mix(in srgb, var(--blue) 25%, transparent);
+    color:var(--blue);
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;pointer-events:none;transform:translateY(12px) scale(.9);
+    transition:all .45s var(--ease-out);
+  }
+  .totop.show{opacity:1;pointer-events:auto;transform:translateY(0) scale(1)}
+  .totop:hover{transform:translateY(-3px) scale(1.06);box-shadow:0 16px 32px -10px color-mix(in srgb, var(--blue) 40%, transparent);border-color:color-mix(in srgb, var(--blue) 35%, transparent)}
+  .totop:hover svg{animation:arrowUp .5s var(--ease-out)}
+  @keyframes arrowUp{0%{transform:translateY(0)}50%{transform:translateY(-3px)}100%{transform:translateY(0)}}
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+    html{scroll-behavior:auto}
+    article.rule,.sec-head,.rule-body p,.rule-body ul li,.rule-punish{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="bg">
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+</div>
+<div class="grid-overlay"></div>
+<div class="progress" id="progress"></div>
+
+<header class="hdr">
+  <div class="brand">
+    <img class="brand-icon"
+         src="https://raw.githubusercontent.com/Furryby/furryby.github.io/refs/heads/master/pets.ico"
+         alt="" />
+    <span>Правила сообщества</span>
+  </div>
+  <div class="hdr-right">
+    <span class="live">актуально</span>
+    <span>I · II</span>
+  </div>
+  <div class="hdr-actions">
+    <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+      </svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+    <button class="burger" id="burger" aria-label="Меню" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="scrim" id="scrim"></div>
+
+<div class="shell" id="shell">
+
+  <aside class="toc" id="toc">
+    <div class="toc-group">
+      <div class="toc-head"><span class="n">I</span> Общие правила</div>
+      <ul class="toc-list">
+        <li><a class="toc-link" href="#r-1"><span class="n">01</span><span>Возрастное ограничение</span></a></li>
+        <li><a class="toc-link" href="#r-2"><span class="n">02</span><span>NSFW и шокирующий контент</span></a></li>
+        <li><a class="toc-link" href="#r-3"><span class="n">03</span><span>Спам и флуд</span></a></li>
+        <li><a class="toc-link" href="#r-4"><span class="n">04</span><span>Токсичность и провокации</span></a></li>
+        <li><a class="toc-link" href="#r-5"><span class="n">05</span><span>Доксинг и сваттинг</span></a></li>
+        <li><a class="toc-link" href="#r-6"><span class="n">06</span><span>Обход ограничений</span></a></li>
+        <li><a class="toc-link" href="#r-7"><span class="n">07</span><span>Обман администрации</span></a></li>
+        <li><a class="toc-link" href="#r-8"><span class="n">08</span><span>Принуждение и навязывание</span></a></li>
+        <li><a class="toc-link" href="#r-9"><span class="n">09</span><span>Свобода обсуждения</span></a></li>
+      </ul>
+    </div>
+    <div class="toc-group">
+      <div class="toc-head"><span class="n">II</span> Администрация</div>
+      <ul class="toc-list">
+        <li><a class="toc-link" href="#r-10"><span class="n">10</span><span>Протесты и обращения</span></a></li>
+        <li><a class="toc-link" href="#r-11"><span class="n">11</span><span>Неадекватное поведение</span></a></li>
+        <li><a class="toc-link" href="#r-12"><span class="n">12</span><span>Личная информация</span></a></li>
+        <li><a class="toc-link" href="#r-13"><span class="n">13</span><span>Злоупотребление полномочиями</span></a></li>
+        <li><a class="toc-link" href="#r-14"><span class="n">14</span><span>Обоснование действий</span></a></li>
+        <li><a class="toc-link" href="#r-15"><span class="n">15</span><span>Объективность</span></a></li>
+        <li><a class="toc-link" href="#r-16"><span class="n">16</span><span>Меры наказания</span></a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main>
+
+    <div class="hero">
+      <h1 class="hero-title">Правила<br>сообщества<span class="dot">.</span></h1>
+    </div>
+
+    <section class="sec" id="sec-1">
+      <div class="sec-head">
+        <span class="sec-num">I</span>
+        <h2 class="sec-title">Общие правила для пользователей</h2>
+      </div>
+
+      <article class="rule" id="r-1">
+        <div class="rule-head">
+          <span class="rule-num">01</span>
+          <h3 class="rule-title">Возрастное ограничение</h3>
+        </div>
+        <div class="rule-body">
+          <p>Чат предназначен для пользователей <strong>от 16 лет</strong>.</p>
+          <p>Пользователи младше 16 лет могут находиться в чате только в порядке исключения, при наличии соответствующего разрешения администрации.</p>
+          <p>О необходимости получения исключения пользователь обязан сообщить администрации заранее либо в течение небольшого срока после вступления в чат. Точный срок и порядок рассмотрения таких исключений определяются администрацией.</p>
+          <p>Указание ложного возраста или сокрытие возраста с целью обхода данного правила запрещается.</p>
+        </div>
+        <div class="rule-punish">Наказание: Блокировка до 16 лет / Перманентная Блокировка</div>
+      </article>
+
+      <article class="rule" id="r-2">
+        <div class="rule-head">
+          <span class="rule-num">02</span>
+          <h3 class="rule-title">NSFW и шокирующий контент</h3>
+        </div>
+        <div class="rule-body">
+          <div class="sub">
+            <div class="sub-title"><span class="tag">2.1</span> NSFW-контент</div>
+            <p>Публикация NSFW-контента разрешена <em>только под спойлером</em>.</p>
+            <p>NSFW-контентом являются: материалы сексуального или иного явно взрослого характера, включая изображения, видео, GIF, стикеры и ссылки на подобные материалы.</p>
+            <div class="rule-punish in-sub">Наказание: Предупреждение + Удаление</div>
+          </div>
+          <div class="sub">
+            <div class="sub-title"><span class="tag">2.2</span> Шокирующий контент</div>
+            <p>К шокирующему контенту относятся: пердеж, говно, рвота, сцены насилия, кадры с тяжёлыми авариями, военными действиями, реальными смертями, глубоко травмирующие материалы, физиологические отправления и иные подобные материалы.</p>
+            <div class="rule-punish in-sub">Наказание: Предупреждение + Удаление / Перманентная Блокировка</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="rule" id="r-3">
+        <div class="rule-head">
+          <span class="rule-num">03</span>
+          <h3 class="rule-title">Спам и флуд</h3>
+        </div>
+        <div class="rule-body">
+          <p>Запрещены спам, флуд и иные действия, направленные на намеренное засорение чата или создание помех для нормального общения.</p>
+          <p>К таким действиям относятся, в частности:</p>
+          <ul>
+            <li>массовая отправка однотипных сообщений;</li>
+            <li>бессмысленное или чрезмерное повторение сообщений;</li>
+            <li>чрезмерная отправка стикеров, GIF и других элементов;</li>
+            <li>чрезмерное использование упоминаний;</li>
+            <li>иные действия, существенно мешающие нормальному общению.</li>
+          </ul>
+        </div>
+        <div class="rule-punish">Наказание: Предупреждение / Мут до 24 часов</div>
+      </article>
+
+      <article class="rule" id="r-4">
+        <div class="rule-head">
+          <span class="rule-num">04</span>
+          <h3 class="rule-title">Токсичность, оскорбления, провокации и споры</h3>
+        </div>
+        <div class="rule-body">
+          <p>Запрещена чрезмерная токсичность, агрессивность, оскорбления, унижение достоинства, травля, преследование, необоснованные придирки, оскорбительное или намеренно язвительное поведение, а также намеренные провокации участников на конфликты, ссоры или нарушения правил — в том числе с целью вызвать негативную реакцию или дестабилизировать общение.</p>
+          <div class="note"><b>Не являются нарушением:</b> шутки, сарказм, единичные проявления токсичности, а также ведение споров, дискуссий и конфликтных обсуждений.</div>
+          <p>Чрезмерно конфликтное, провокационное или деструктивное поведение может привлечь внимание администрации и стать основанием для вмешательства.</p>
+          <p>Особенно тяжёлыми нарушениями считаются оскорбления или унижение, основанные на:</p>
+          <ul>
+            <li>национальности или происхождении;</li>
+            <li>расе;</li>
+            <li>религии;</li>
+            <li>убеждениях;</li>
+            <li>сексуальной ориентации;</li>
+            <li>гендерной принадлежности;</li>
+            <li>принадлежности к определённому сообществу;</li>
+            <li>иных личных характеристиках человека.</li>
+          </ul>
+        </div>
+        <div class="rule-punish">Первый раз — Предупреждение · Повторно — Мут 30 мин – 12 часов · Систематически — Мут 1–7 дней</div>
+      </article>
+
+      <article class="rule" id="r-5">
+        <div class="rule-head">
+          <span class="rule-num">05</span>
+          <h3 class="rule-title">Доксинг и сваттинг</h3>
+        </div>
+        <div class="rule-body">
+          <p>Запрещается публикация, распространение или передача персональных данных пользователей или иных лиц без их согласия.</p>
+          <p>Запрещены любые угрозы, попытки или действия, направленные на вызов экстренных служб к месту проживания или нахождения другого лица под ложным предлогом, а также содействие подобным действиям.</p>
+        </div>
+        <div class="rule-punish">Наказание: Перманентная Блокировка</div>
+      </article>
+
+      <article class="rule" id="r-6">
+        <div class="rule-head">
+          <span class="rule-num">06</span>
+          <h3 class="rule-title">Обход ограничений</h3>
+        </div>
+        <div class="rule-body">
+          <p>Запрещены попытки обойти ограничения, наложенные администрацией, включая блокировки, муты, временные запреты, ограничения доступа и иные меры модерации.</p>
+          <p>Использование другого аккаунта или иных способов для продолжения запрещённой деятельности после применения ограничения считается обходом ограничений.</p>
+        </div>
+        <div class="rule-punish">Наказание: Перманентная Блокировка второго аккаунта</div>
+      </article>
+
+      <article class="rule" id="r-7">
+        <div class="rule-head">
+          <span class="rule-num">07</span>
+          <h3 class="rule-title">Обман администрации</h3>
+        </div>
+        <div class="rule-body">
+          <p>Запрещено:</p>
+          <ul>
+            <li>намеренно вводить администрацию в заблуждение;</li>
+            <li>предоставлять заведомо ложную информацию;</li>
+            <li>подделывать доказательства;</li>
+            <li>выдвигать заведомо ложные обвинения и намеренно скрывать существенные обстоятельства при рассмотрении нарушения.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="rule" id="r-8">
+        <div class="rule-head">
+          <span class="rule-num">08</span>
+          <h3 class="rule-title">Принуждение и навязывание убеждений</h3>
+        </div>
+        <div class="rule-body">
+          <p>Запрещается принуждать пользователя принимать определённые убеждения, взгляды, идентичность, религию, идеологию, принадлежность к сообществу или иные личные установки.</p>
+          <p>Также запрещаются угрозы, давление, шантаж, травля или иные методы принуждения, направленные на то, чтобы заставить пользователя принять, изменить или публично заявить о принадлежности к определённой группе, движению или сообществу.</p>
+          <div class="note"><b>Обсуждение ЛГБТ-тематики не является нарушением.</b></div>
+          <p>Запрещается принуждать другого пользователя объявлять себя ЛГБТ, менять свою идентичность или иным образом принимать соответствующую принадлежность, а также угрожать, давить, шантажировать или травить с этой целью.</p>
+          <p>Аналогичные требования применяются к любой другой идентичности, сообществу, религии, убеждениям или мировоззрению.</p>
+        </div>
+      </article>
+
+      <article class="rule" id="r-9">
+        <div class="rule-head">
+          <span class="rule-num">09</span>
+          <h3 class="rule-title">Свобода обсуждения</h3>
+        </div>
+        <div class="rule-body">
+          <p>Обсуждение спорных тем, выражение личного мнения и несогласие с взглядами других пользователей сами по себе не являются нарушением.</p>
+          <p>Нарушением является переход к оскорблениям, травле, угрозам, дискриминации, провокациям или принуждению.</p>
+        </div>
+      </article>
+
+    </section>
+
+    <section class="sec" id="sec-3">
+      <div class="sec-head">
+        <span class="sec-num">II</span>
+        <h2 class="sec-title">Правила администрации</h2>
+      </div>
+
+      <article class="rule" id="r-10">
+        <div class="rule-head">
+          <span class="rule-num">10</span>
+          <h3 class="rule-title">Рассмотрение протестов и обращений</h3>
+        </div>
+        <div class="rule-body">
+          <p>Администрация обязана предоставить пользователю возможность выразить протест, обжаловать применённое наказание или изложить обстоятельства произошедшего как минимум один раз.</p>
+          <p>При рассмотрении обращения администрация должна учитывать контекст ситуации, манеру общения пользователя, характер и последовательность изложения обстоятельств, а также иные факторы, имеющие значение для объективной оценки ситуации.</p>
+        </div>
+      </article>
+
+      <article class="rule" id="r-11">
+        <div class="rule-head">
+          <span class="rule-num">11</span>
+          <h3 class="rule-title">Неадекватное поведение при обращении</h3>
+        </div>
+        <div class="rule-body">
+          <p>Если пользователь демонстрирует явно неадекватное, агрессивное, оскорбительное или препятствующее конструктивному диалогу поведение, администратор вправе прекратить дальнейшее рассмотрение обращения.</p>
+          <p>Под неадекватным поведением в рамках данного правила понимается поведение, которое существенно препятствует рассмотрению обращения или конструктивному диалогу.</p>
+          <p>В частности, к нему могут относиться:</p>
+          <ul>
+            <li>неоднократные бессмысленные сообщения, не относящиеся к ситуации;</li>
+            <li>постоянные оскорбления, угрозы или агрессивные высказывания в адрес администрации;</li>
+            <li>намеренное игнорирование вопросов, необходимых для рассмотрения обращения;</li>
+            <li>намеренное искажение обстоятельств после их неоднократного уточнения;</li>
+            <li>спам или флуд во время рассмотрения обращения;</li>
+            <li>намеренные провокации с целью сорвать рассмотрение обращения;</li>
+            <li>иное поведение, при котором продолжение диалога объективно становится невозможным или бессмысленным.</li>
+          </ul>
+          <div class="note"><b>Важно:</b> сам факт несогласия с решением администрации, эмоциональной реакции, использования резкой лексики или критики действий администратора не считается неадекватным поведением сам по себе.</div>
+          <p>Администрация не вправе полностью игнорировать пользователя без предварительного предоставления ему возможности высказаться. Для применения данного исключения администратор должен получить от пользователя как минимум одно сообщение, относящееся к рассматриваемой ситуации.</p>
+        </div>
+      </article>
+
+      <article class="rule" id="r-12">
+        <div class="rule-head">
+          <span class="rule-num">12</span>
+          <h3 class="rule-title">Запрет на требование личной информации</h3>
+        </div>
+        <div class="rule-body">
+          <p>Администратор не вправе требовать от пользователя предоставления личной, конфиденциальной или иной информации, раскрытие которой пользователь не обязан предоставлять в соответствии с правилами сообщества или которая не является непосредственно необходимой для рассмотрения конкретной ситуации.</p>
+          <p>Пользователь вправе отказаться от предоставления такой информации без применения наказания исключительно за факт отказа.</p>
+          <p>Администрация не должна запрашивать пароли, данные документов, точный адрес проживания, финансовую информацию, личные переписки или иные сведения, не имеющие непосредственного отношения к рассматриваемому вопросу.</p>
+          <p>Если предоставление определённой информации действительно необходимо, администратор обязан объяснить причину её запроса и необходимость получения.</p>
+        </div>
+      </article>
+
+      <article class="rule" id="r-13">
+        <div class="rule-head">
+          <span class="rule-num">13</span>
+          <h3 class="rule-title">Запрет злоупотребления полномочиями</h3>
+        </div>
+        <div class="rule-body">
+          <p>Администрации запрещено злоупотреблять предоставленными полномочиями, использовать административные права в личных целях, для сведения личных конфликтов или необоснованного воздействия на пользователей.</p>
+          <p>Административные меры должны применяться исходя из правил сообщества и обстоятельств конкретной ситуации, а не из личного отношения администратора к пользователю.</p>
+        </div>
+      </article>
+
+      <article class="rule" id="r-14">
+        <div class="rule-head">
+          <span class="rule-num">14</span>
+          <h3 class="rule-title">Обоснование административных действий</h3>
+        </div>
+        <div class="rule-body">
+          <p>При применении к пользователю любых ограничительных мер — включая предупреждение, мут, временную или постоянную блокировку, ограничение доступа и иные меры — администратор обязан иметь чёткое основание и объяснение, за какое действие или нарушение была применена соответствующая мера.</p>
+          <p>По запросу пользователя администрация должна предоставить информацию о причине применённого наказания, если такая информация не раскрывает внутренние методы работы модерации или иные сведения ограниченного доступа.</p>
+        </div>
+      </article>
+
+      <article class="rule" id="r-15">
+        <div class="rule-head">
+          <span class="rule-num">15</span>
+          <h3 class="rule-title">Объективность администрации</h3>
+        </div>
+        <div class="rule-body">
+          <p>Администратор обязан по возможности рассматривать спорные ситуации объективно и учитывать объяснения всех непосредственно затронутых участников.</p>
+          <p>Личные симпатии, антипатии или конфликты не должны являться самостоятельным основанием для применения наказаний.</p>
+        </div>
+      </article>
+
+      <article class="rule" id="r-16">
+        <div class="rule-head">
+          <span class="rule-num">16</span>
+          <h3 class="rule-title">Меры наказания</h3>
+        </div>
+        <div class="rule-body">
+          <p>Мера наказания должна соответствовать характеру, тяжести и систематичности нарушения.</p>
+          <p>В зависимости от ситуации администрация может применять предупреждение, мут, временное отстранение, временную блокировку, постоянную блокировку или иные предусмотренные меры.</p>
+          <p>Тяжёлые нарушения могут повлечь за собой более строгие меры без обязательного применения всех предыдущих этапов наказания.</p>
+        </div>
+      </article>
+
+    </section>
+
+    <footer class="ft">
+      <div class="mark">
+        <img class="brand-icon"
+             src="https://raw.githubusercontent.com/Furryby/furryby.github.io/refs/heads/master/pets.ico"
+             alt="" />
+        <span>Правила сообщества</span>
+      </div>
+      <span>I · II</span>
+    </footer>
+
+  </main>
+</div>
+
+<button class="totop" id="totop" aria-label="Наверх">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 19V5M5 12l7-7 7 7"/>
+  </svg>
+</button>
+
+<script>
+  const root = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  const STORAGE_KEY = 'community-rules-theme-v2';
+
+  root.setAttribute('data-theme', 'light');
+
+  function applyTheme(theme){
+    root.setAttribute('data-theme', theme);
+    try{ localStorage.setItem(STORAGE_KEY, theme); }catch(e){}
+  }
+
+  (function initTheme(){
+    let saved = null;
+    try{ saved = localStorage.getItem(STORAGE_KEY); }catch(e){}
+    if(saved === 'dark'){
+      root.setAttribute('data-theme', 'dark');
+    } else {
+      root.setAttribute('data-theme', 'light');
+    }
+  })();
+
+  themeToggle.addEventListener('click', (e) => {
+    const rect = themeToggle.getBoundingClientRect();
+    const x = ((e.clientX || rect.left + rect.width/2) - rect.left) / rect.width * 100;
+    const y = ((e.clientY || rect.top + rect.height/2) - rect.top) / rect.height * 100;
+    themeToggle.style.setProperty('--rx', x + '%');
+    themeToggle.style.setProperty('--ry', y + '%');
+    themeToggle.classList.add('pulse');
+    setTimeout(() => themeToggle.classList.remove('pulse'), 120);
+    const current = root.getAttribute('data-theme');
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+
+  const progress = document.getElementById('progress');
+  const totop = document.getElementById('totop');
+
+  function onScroll(){
+    const h = document.documentElement;
+    const p = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+    progress.style.width = p + '%';
+    totop.classList.toggle('show', h.scrollTop > 500);
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  totop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+  const burger = document.getElementById('burger');
+  const toc = document.getElementById('toc');
+  const scrim = document.getElementById('scrim');
+  const body = document.body;
+
+  function openDrawer(){
+    burger.classList.add('open');
+    burger.setAttribute('aria-expanded', 'true');
+    toc.classList.add('open');
+    scrim.classList.add('show');
+    body.classList.add('no-scroll');
+  }
+  function closeDrawer(){
+    burger.classList.remove('open');
+    burger.setAttribute('aria-expanded', 'false');
+    toc.classList.remove('open');
+    scrim.classList.remove('show');
+    body.classList.remove('no-scroll');
+  }
+  burger.addEventListener('click', () => {
+    if(toc.classList.contains('open')) closeDrawer();
+    else openDrawer();
+  });
+  scrim.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeDrawer(); });
+
+  const EDGE_ZONE = 45;
+  const MIN_SWIPE = 60;
+  let sx = 0, sy = 0, tracking = false;
+
+  document.addEventListener('touchstart', (e) => {
+    if (window.innerWidth > 1080) return;
+    const t = e.touches[0];
+    sx = t.clientX;
+    sy = t.clientY;
+    if (!toc.classList.contains('open') && sx <= EDGE_ZONE) {
+      tracking = true;
+    } else if (toc.classList.contains('open')) {
+      tracking = true;
+    } else {
+      tracking = false;
+    }
+  }, {passive:true});
+
+  document.addEventListener('touchend', (e) => {
+    if (!tracking) return;
+    tracking = false;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - sx;
+    const dy = t.clientY - sy;
+    if (Math.abs(dx) < MIN_SWIPE) return;
+    if (Math.abs(dy) > Math.abs(dx) * 1.2) return;
+    if (!toc.classList.contains('open') && dx > 0 && sx <= EDGE_ZONE) {
+      openDrawer();
+    } else if (toc.classList.contains('open') && dx < 0) {
+      closeDrawer();
+    }
+  }, {passive:true});
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){ e.target.classList.add('reveal'); io.unobserve(e.target); }
+    });
+  }, {threshold:.08, rootMargin:'0px 0px -50px 0px'});
+  document.querySelectorAll('article.rule, .sec-head').forEach(el => io.observe(el));
+
+  const links = Array.from(document.querySelectorAll('.toc-link'));
+  const rules = links.map(l => document.querySelector(l.getAttribute('href'))).filter(Boolean);
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const id = entry.target.id;
+        links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+      }
+    });
+  }, {rootMargin:'-30% 0px -60% 0px', threshold:0});
+  rules.forEach(r => spy.observe(r));
+
+  links.forEach(l => {
+    l.addEventListener('click', (e) => {
+      const t = document.querySelector(l.getAttribute('href'));
+      if(t){
+        e.preventDefault();
+        const top = t.getBoundingClientRect().top + window.scrollY - 90;
+        window.scrollTo({top, behavior:'smooth'});
+        history.replaceState(null, '', l.getAttribute('href'));
+        if(window.innerWidth <= 1080) setTimeout(closeDrawer, 220);
+      }
+    });
+  });
+
+  const orbs = document.querySelectorAll('.orb');
+  let targetX = 0, targetY = 0, curX = 0, curY = 0;
+  document.addEventListener('mousemove', (e) => {
+    targetX = (e.clientX / window.innerWidth - .5);
+    targetY = (e.clientY / window.innerHeight - .5);
+  });
+  function raf(){
+    curX += (targetX - curX) * 0.06;
+    curY += (targetY - curY) * 0.06;
+    orbs.forEach((b, i) => {
+      const k = (i + 1) * 18;
+      b.style.transform = `translate3d(${curX * k}px, ${curY * k}px, 0)`;
+    });
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+
+  document.querySelectorAll('.note').forEach(note => {
+    note.addEventListener('mousemove', (e) => {
+      const r = note.getBoundingClientRect();
+      note.style.background = `radial-gradient(300px circle at ${e.clientX - r.left}px ${e.clientY - r.top}px, color-mix(in srgb, var(--blue) 12%, transparent), color-mix(in srgb, var(--blue) 4%, transparent) 40%, transparent 70%)`;
+    });
+    note.addEventListener('mouseleave', () => { note.style.background = ''; });
+  });
+
+  document.querySelectorAll('article.rule').forEach(rule => {
+    const num = rule.querySelector('.rule-num');
+    if(!num) return;
+    const target = parseInt(num.textContent, 10);
+    if(isNaN(target)) return;
+    let played = false;
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if(e.isIntersecting && !played){
+          played = true;
+          let i = 0;
+          num.textContent = '00';
+          const step = () => {
+            i++;
+            num.textContent = String(i).padStart(2, '0');
+            if(i < target) requestAnimationFrame(step);
+          };
+          step();
+          obs.disconnect();
+        }
+      });
+    }, {threshold:.5});
+    obs.observe(rule);
+  });
+</script>
+
+</body>
+</html>
