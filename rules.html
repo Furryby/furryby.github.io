@@ -83,12 +83,10 @@
     background:var(--bg);
     line-height:1.6;
     -webkit-font-smoothing:antialiased;
-    /* FIX: overflow-x:clip не создаёт scroll-контейнер */
     overflow-x:clip;
     min-height:100vh;
     transition:background .5s var(--ease), color .5s var(--ease);
   }
-  /* FIX: правильный лок body через position:fixed + сохранение скролла */
   body.no-scroll{
     position:fixed;
     left:0;
@@ -261,7 +259,6 @@
   aside.toc::-webkit-scrollbar-track{background:transparent}
 
   @media (max-width:1080px){
-    /* FIX: явная высота через 100dvh, надёжный скролл на iOS */
     aside.toc{
       position:fixed;
       top:0;
@@ -628,6 +625,66 @@
     html{scroll-behavior:auto}
     article.rule,.sec-head,.rule-body p,.rule-body ul li,.rule-punish{opacity:1;transform:none}
   }
+
+  /* ============================================================
+     РЕЖИМ НИЗКОЙ ПРОИЗВОДИТЕЛЬНОСТИ (включается автоматически)
+     ============================================================ */
+  html.perf-low .orb{
+    animation:none !important;
+    filter:blur(40px);
+    opacity:calc(var(--orb-opacity) * .5);
+    will-change:auto;
+  }
+  html.perf-low .grid-overlay{display:none !important}
+  html.perf-low .bg{transition:none}
+  html.perf-low header.hdr{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    background:var(--bg);
+  }
+  html.perf-low .scrim{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+  html.perf-low .totop{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    background:var(--bg);
+  }
+  html.perf-low .note::before,
+  html.perf-low .rule-punish::before,
+  html.perf-low .hdr-right .live::before,
+  html.perf-low .toc-link.active::after{animation:none !important}
+  html.perf-low .rule-body p,
+  html.perf-low .rule-body ul li,
+  html.perf-low .rule-punish,
+  html.perf-low article.rule,
+  html.perf-low .sec-head{
+    opacity:1 !important;
+    transform:none !important;
+    transition:none !important;
+  }
+  html.perf-low .progress{transition:none}
+  html.perf-low .theme-toggle svg,
+  html.perf-low .burger span{transition:opacity .15s, transform .15s}
+  html.perf-low .toc-link,
+  html.perf-low .brand-icon,
+  html.perf-low .sec-num,
+  html.perf-low .rule-num,
+  html.perf-low .rule-title{transition:none !important}
+  html.perf-low .note{transition:none}
+  html.perf-low .note:hover{transform:none;box-shadow:none}
+  html.perf-low article.rule:hover .rule-head{transform:none}
+  html.perf-low article.rule:hover .rule-num{transform:none}
+  html.perf-low .rule-body ul li:hover{padding-left:22px}
+  html.perf-low .rule-body ul li:hover::before{transform:none}
+  html.perf-low .toc-link:hover{padding-left:14px;transform:none}
+  html.perf-low .brand-icon:hover{transform:none}
+  html.perf-low .rule-punish:hover{transform:none;box-shadow:none}
+  html.perf-low .rule-punish::after{display:none}
+  html.perf-low .totop:hover{transform:none}
+  html.perf-low .hero-title,
+  html.perf-low .hero-eyebrow{animation:none;opacity:1;transform:none}
 </style>
 </head>
 <body>
@@ -979,8 +1036,64 @@
   const root = document.documentElement;
   const themeToggle = document.getElementById('themeToggle');
   const STORAGE_KEY = 'community-rules-theme-v2';
+  const PERF_KEY = 'community-rules-perf-v1';
 
   root.setAttribute('data-theme', 'light');
+
+  /* ============================================================
+     АВТОДЕТЕКТ ПРОИЗВОДИТЕЛЬНОСТИ
+     ============================================================ */
+  let perfLow = false;
+  try { perfLow = localStorage.getItem(PERF_KEY) === 'low'; } catch(e){}
+
+  // Явные признаки слабого устройства
+  const cores = navigator.hardwareConcurrency || 4;
+  const mem = navigator.deviceMemory || 4;
+  if (cores <= 2 || mem <= 2) perfLow = true;
+
+  // Пользователь просил уменьшить анимации
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) perfLow = true;
+
+  // Сразу включаем класс, чтобы не мигало
+  if (perfLow) root.classList.add('perf-low');
+
+  function enablePerfLow(){
+    if (perfLow) return;
+    perfLow = true;
+    root.classList.add('perf-low');
+    try { localStorage.setItem(PERF_KEY, 'low'); } catch(e){}
+    if (typeof stopOrbLoop === 'function') stopOrbLoop();
+  }
+
+  // FPS-метр: если 2 секунды подряд FPS < 40 — включаем облегчённый режим
+  let fpsFrames = 0;
+  let fpsStart = performance.now();
+  let lowStrikes = 0;
+  let fpsMeasuring = !perfLow;
+
+  function measureFPS(now){
+    if (!fpsMeasuring) return;
+    fpsFrames++;
+    const elapsed = now - fpsStart;
+    if (elapsed >= 1000) {
+      const fps = (fpsFrames * 1000) / elapsed;
+      if (fps < 40) {
+        lowStrikes++;
+        if (lowStrikes >= 2) {
+          enablePerfLow();
+          fpsMeasuring = false;
+          return;
+        }
+      } else {
+        lowStrikes = 0;
+      }
+      fpsFrames = 0;
+      fpsStart = now;
+    }
+    requestAnimationFrame(measureFPS);
+  }
+  if (fpsMeasuring) requestAnimationFrame(measureFPS);
+  /* ============================================================ */
 
   function applyTheme(theme){
     root.setAttribute('data-theme', theme);
@@ -1003,8 +1116,10 @@
     const y = ((e.clientY || rect.top + rect.height/2) - rect.top) / rect.height * 100;
     themeToggle.style.setProperty('--rx', x + '%');
     themeToggle.style.setProperty('--ry', y + '%');
-    themeToggle.classList.add('pulse');
-    setTimeout(() => themeToggle.classList.remove('pulse'), 120);
+    if (!perfLow) {
+      themeToggle.classList.add('pulse');
+      setTimeout(() => themeToggle.classList.remove('pulse'), 120);
+    }
     const current = root.getAttribute('data-theme');
     applyTheme(current === 'dark' ? 'light' : 'dark');
   });
@@ -1012,24 +1127,28 @@
   const progress = document.getElementById('progress');
   const totop = document.getElementById('totop');
 
+  let scrollRaf = 0;
   function onScroll(){
-    const h = document.documentElement;
-    const p = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
-    progress.style.width = p + '%';
-    if(window.innerWidth > 1080){
-      totop.classList.toggle('show', h.scrollTop > 500);
-    }
+    if (scrollRaf) return;
+    scrollRaf = requestAnimationFrame(() => {
+      scrollRaf = 0;
+      const h = document.documentElement;
+      const p = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
+      progress.style.width = p + '%';
+      if(window.innerWidth > 1080){
+        totop.classList.toggle('show', h.scrollTop > 500);
+      }
+    });
   }
   window.addEventListener('scroll', onScroll, {passive:true});
   onScroll();
-  totop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+  totop.addEventListener('click', () => window.scrollTo({top:0, behavior: perfLow ? 'auto' : 'smooth'}));
 
   const burger = document.getElementById('burger');
   const toc = document.getElementById('toc');
   const scrim = document.getElementById('scrim');
   const body = document.body;
 
-  /* FIX: сохраняем позицию скролла при блокировке body */
   let savedScrollY = 0;
 
   function openDrawer(){
@@ -1040,7 +1159,6 @@
     burger.setAttribute('aria-expanded', 'true');
     toc.classList.add('open');
     scrim.classList.add('show');
-    /* прокручиваем само меню в начало */
     toc.scrollTop = 0;
   }
   function closeDrawer(){
@@ -1059,7 +1177,6 @@
   scrim.addEventListener('click', closeDrawer);
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeDrawer(); });
 
-  /* FIX: свайп только по краю — не мешает скроллу меню */
   const EDGE_ZONE = 45;
   const MIN_SWIPE = 60;
   let sx = 0, sy = 0, tracking = false;
@@ -1069,7 +1186,6 @@
     const t = e.touches[0];
     sx = t.clientX;
     sy = t.clientY;
-    /* Если тач внутри меню — не перехватываем свайпом */
     if (toc.contains(e.target)) { tracking = false; return; }
     if (!toc.classList.contains('open') && sx <= EDGE_ZONE) {
       tracking = true;
@@ -1095,12 +1211,16 @@
     }
   }, {passive:true});
 
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if(e.isIntersecting){ e.target.classList.add('reveal'); io.unobserve(e.target); }
-    });
-  }, {threshold:.08, rootMargin:'0px 0px -50px 0px'});
-  document.querySelectorAll('article.rule, .sec-head').forEach(el => io.observe(el));
+  if (!perfLow) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if(e.isIntersecting){ e.target.classList.add('reveal'); io.unobserve(e.target); }
+      });
+    }, {threshold:.08, rootMargin:'0px 0px -50px 0px'});
+    document.querySelectorAll('article.rule, .sec-head').forEach(el => io.observe(el));
+  } else {
+    document.querySelectorAll('article.rule, .sec-head').forEach(el => el.classList.add('reveal'));
+  }
 
   const links = Array.from(document.querySelectorAll('.toc-link'));
   const rules = links.map(l => document.querySelector(l.getAttribute('href'))).filter(Boolean);
@@ -1120,70 +1240,99 @@
       if(t){
         e.preventDefault();
         const top = t.getBoundingClientRect().top + window.scrollY - 90;
-        /* FIX: закрываем меню ДО скролла, чтобы не мешало */
+        const behavior = perfLow ? 'auto' : 'smooth';
         if(window.innerWidth <= 1080){
           closeDrawer();
           setTimeout(() => {
-            window.scrollTo({top, behavior:'smooth'});
+            window.scrollTo({top, behavior});
             history.replaceState(null, '', l.getAttribute('href'));
-          }, 260);
+          }, perfLow ? 60 : 260);
         } else {
-          window.scrollTo({top, behavior:'smooth'});
+          window.scrollTo({top, behavior});
           history.replaceState(null, '', l.getAttribute('href'));
         }
       }
     });
   });
 
+  /* ============================================================
+     Параллакс орбов — только если не perfLow
+     ============================================================ */
   const orbs = document.querySelectorAll('.orb');
-  let targetX = 0, targetY = 0, curX = 0, curY = 0;
-  document.addEventListener('mousemove', (e) => {
-    targetX = (e.clientX / window.innerWidth - .5);
-    targetY = (e.clientY / window.innerHeight - .5);
-  });
-  function raf(){
-    curX += (targetX - curX) * 0.06;
-    curY += (targetY - curY) * 0.06;
-    orbs.forEach((b, i) => {
-      const k = (i + 1) * 18;
-      b.style.transform = `translate3d(${curX * k}px, ${curY * k}px, 0)`;
-    });
-    requestAnimationFrame(raf);
+  let orbRafId = 0;
+  let orbsRunning = false;
+
+  function stopOrbLoop(){
+    orbsRunning = false;
+    if (orbRafId) cancelAnimationFrame(orbRafId);
+    orbRafId = 0;
+    orbs.forEach(o => { o.style.transform = ''; });
   }
-  requestAnimationFrame(raf);
+  window.stopOrbLoop = stopOrbLoop;
 
-  document.querySelectorAll('.note').forEach(note => {
-    note.addEventListener('mousemove', (e) => {
-      const r = note.getBoundingClientRect();
-      note.style.background = `radial-gradient(300px circle at ${e.clientX - r.left}px ${e.clientY - r.top}px, color-mix(in srgb, var(--blue) 12%, transparent), color-mix(in srgb, var(--blue) 4%, transparent) 40%, transparent 70%)`;
-    });
-    note.addEventListener('mouseleave', () => { note.style.background = ''; });
-  });
+  if (!perfLow && orbs.length) {
+    let targetX = 0, targetY = 0, curX = 0, curY = 0;
+    document.addEventListener('mousemove', (e) => {
+      targetX = (e.clientX / window.innerWidth - .5);
+      targetY = (e.clientY / window.innerHeight - .5);
+    }, {passive:true});
 
-  document.querySelectorAll('article.rule').forEach(rule => {
-    const num = rule.querySelector('.rule-num');
-    if(!num) return;
-    const target = parseInt(num.textContent, 10);
-    if(isNaN(target)) return;
-    let played = false;
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if(e.isIntersecting && !played){
-          played = true;
-          let i = 0;
-          num.textContent = '00';
-          const step = () => {
-            i++;
-            num.textContent = String(i).padStart(2, '0');
-            if(i < target) requestAnimationFrame(step);
-          };
-          step();
-          obs.disconnect();
-        }
+    orbsRunning = true;
+    function orbRaf(){
+      if (!orbsRunning) return;
+      curX += (targetX - curX) * 0.06;
+      curY += (targetY - curY) * 0.06;
+      orbs.forEach((b, i) => {
+        const k = (i + 1) * 18;
+        b.style.transform = `translate3d(${curX * k}px, ${curY * k}px, 0)`;
       });
-    }, {threshold:.5});
-    obs.observe(rule);
-  });
+      orbRafId = requestAnimationFrame(orbRaf);
+    }
+    orbRafId = requestAnimationFrame(orbRaf);
+  }
+
+  /* ============================================================
+     Подсветка note — только если не perfLow
+     ============================================================ */
+  if (!perfLow) {
+    document.querySelectorAll('.note').forEach(note => {
+      note.addEventListener('mousemove', (e) => {
+        const r = note.getBoundingClientRect();
+        note.style.background = `radial-gradient(300px circle at ${e.clientX - r.left}px ${e.clientY - r.top}px, color-mix(in srgb, var(--blue) 12%, transparent), color-mix(in srgb, var(--blue) 4%, transparent) 40%, transparent 70%)`;
+      });
+      note.addEventListener('mouseleave', () => { note.style.background = ''; });
+    });
+  }
+
+  /* ============================================================
+     Счётчик номеров — только если не perfLow
+     ============================================================ */
+  if (!perfLow) {
+    document.querySelectorAll('article.rule').forEach(rule => {
+      const num = rule.querySelector('.rule-num');
+      if(!num) return;
+      const target = parseInt(num.textContent, 10);
+      if(isNaN(target)) return;
+      let played = false;
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if(e.isIntersecting && !played){
+            played = true;
+            let i = 0;
+            num.textContent = '00';
+            const step = () => {
+              i++;
+              num.textContent = String(i).padStart(2, '0');
+              if(i < target) requestAnimationFrame(step);
+            };
+            step();
+            obs.disconnect();
+          }
+        });
+      }, {threshold:.5});
+      obs.observe(rule);
+    });
+  }
 </script>
 
 </body>
