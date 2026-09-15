@@ -83,12 +83,19 @@
     background:var(--bg);
     line-height:1.6;
     -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
+    /* FIX: overflow-x:clip не создаёт scroll-контейнер */
+    overflow-x:clip;
     min-height:100vh;
     transition:background .5s var(--ease), color .5s var(--ease);
-    touch-action:pan-y;
   }
-  body.no-scroll{overflow:hidden}
+  /* FIX: правильный лок body через position:fixed + сохранение скролла */
+  body.no-scroll{
+    position:fixed;
+    left:0;
+    right:0;
+    width:100%;
+    overflow:hidden;
+  }
 
   .bg{
     position:fixed;inset:0;z-index:-2;overflow:hidden;
@@ -254,18 +261,27 @@
   aside.toc::-webkit-scrollbar-track{background:transparent}
 
   @media (max-width:1080px){
+    /* FIX: явная высота через 100dvh, надёжный скролл на iOS */
     aside.toc{
-      position:fixed;top:0;left:0;bottom:0;z-index:50;
+      position:fixed;
+      top:0;
+      left:0;
       width:min(320px, 84vw);
-      max-height:none;
-      padding:calc(var(--hdr-h) + 20px) 22px 32px;
+      height:100vh;
+      height:100dvh;
+      max-height:100dvh;
+      padding:calc(var(--hdr-h) + 20px) 22px calc(40px + env(safe-area-inset-bottom, 0px));
       background:var(--drawer-bg);
       box-shadow:var(--drawer-shadow);
       border-right:1px solid var(--line-2);
       overflow-y:auto;
+      overflow-x:hidden;
+      -webkit-overflow-scrolling:touch;
+      overscroll-behavior:contain;
       transform:translateX(-102%);
       transition:transform .5s var(--ease-out), background .5s var(--ease);
-      will-change:transform;
+      z-index:50;
+      box-sizing:border-box;
     }
     aside.toc.open{transform:translateX(0)}
   }
@@ -565,7 +581,6 @@
   }
   @keyframes blip{0%,100%{box-shadow:0 0 0 3px color-mix(in srgb, var(--danger) 14%, transparent)}50%{box-shadow:0 0 0 6px color-mix(in srgb, var(--danger) 5%, transparent)}}
 
-  /* Бейдж наказания внутри подпункта */
   .rule-punish.in-sub{
     margin-left:0;
     margin-top:12px;
@@ -603,6 +618,10 @@
   .totop:hover{transform:translateY(-3px) scale(1.06);box-shadow:0 16px 32px -10px color-mix(in srgb, var(--blue) 40%, transparent);border-color:color-mix(in srgb, var(--blue) 35%, transparent)}
   .totop:hover svg{animation:arrowUp .5s var(--ease-out)}
   @keyframes arrowUp{0%{transform:translateY(0)}50%{transform:translateY(-3px)}100%{transform:translateY(0)}}
+
+  @media (max-width:1080px){
+    .totop{display:none !important}
+  }
 
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
@@ -997,7 +1016,9 @@
     const h = document.documentElement;
     const p = h.scrollTop / (h.scrollHeight - h.clientHeight) * 100;
     progress.style.width = p + '%';
-    totop.classList.toggle('show', h.scrollTop > 500);
+    if(window.innerWidth > 1080){
+      totop.classList.toggle('show', h.scrollTop > 500);
+    }
   }
   window.addEventListener('scroll', onScroll, {passive:true});
   onScroll();
@@ -1008,12 +1029,19 @@
   const scrim = document.getElementById('scrim');
   const body = document.body;
 
+  /* FIX: сохраняем позицию скролла при блокировке body */
+  let savedScrollY = 0;
+
   function openDrawer(){
+    savedScrollY = window.scrollY || window.pageYOffset || 0;
+    body.style.top = '-' + savedScrollY + 'px';
+    body.classList.add('no-scroll');
     burger.classList.add('open');
     burger.setAttribute('aria-expanded', 'true');
     toc.classList.add('open');
     scrim.classList.add('show');
-    body.classList.add('no-scroll');
+    /* прокручиваем само меню в начало */
+    toc.scrollTop = 0;
   }
   function closeDrawer(){
     burger.classList.remove('open');
@@ -1021,6 +1049,8 @@
     toc.classList.remove('open');
     scrim.classList.remove('show');
     body.classList.remove('no-scroll');
+    body.style.top = '';
+    window.scrollTo(0, savedScrollY);
   }
   burger.addEventListener('click', () => {
     if(toc.classList.contains('open')) closeDrawer();
@@ -1029,6 +1059,7 @@
   scrim.addEventListener('click', closeDrawer);
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeDrawer(); });
 
+  /* FIX: свайп только по краю — не мешает скроллу меню */
   const EDGE_ZONE = 45;
   const MIN_SWIPE = 60;
   let sx = 0, sy = 0, tracking = false;
@@ -1038,6 +1069,8 @@
     const t = e.touches[0];
     sx = t.clientX;
     sy = t.clientY;
+    /* Если тач внутри меню — не перехватываем свайпом */
+    if (toc.contains(e.target)) { tracking = false; return; }
     if (!toc.classList.contains('open') && sx <= EDGE_ZONE) {
       tracking = true;
     } else if (toc.classList.contains('open')) {
@@ -1087,9 +1120,17 @@
       if(t){
         e.preventDefault();
         const top = t.getBoundingClientRect().top + window.scrollY - 90;
-        window.scrollTo({top, behavior:'smooth'});
-        history.replaceState(null, '', l.getAttribute('href'));
-        if(window.innerWidth <= 1080) setTimeout(closeDrawer, 220);
+        /* FIX: закрываем меню ДО скролла, чтобы не мешало */
+        if(window.innerWidth <= 1080){
+          closeDrawer();
+          setTimeout(() => {
+            window.scrollTo({top, behavior:'smooth'});
+            history.replaceState(null, '', l.getAttribute('href'));
+          }, 260);
+        } else {
+          window.scrollTo({top, behavior:'smooth'});
+          history.replaceState(null, '', l.getAttribute('href'));
+        }
       }
     });
   });
