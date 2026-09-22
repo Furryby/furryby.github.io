@@ -4386,6 +4386,61 @@ async function loadFormsData() {
             }
         });
 
+        var turnstileLoadPromise = null;
+        var TURNSTILE_SITE_KEY = '0x4AAAAAAE_q3a17BR29aYi6';
+
+        function loadTurnstile() {
+            if (window.turnstile) return Promise.resolve(window.turnstile);
+            if (turnstileLoadPromise) return turnstileLoadPromise;
+            turnstileLoadPromise = new Promise(function(resolve, reject) {
+                var script = document.createElement('script');
+                script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+                script.async = true;
+                script.defer = true;
+                script.onload = function() { resolve(window.turnstile); };
+                script.onerror = function() { reject(new Error('turnstile_load_failed')); };
+                document.head.appendChild(script);
+            });
+            return turnstileLoadPromise;
+        }
+
+        async function getTurnstileToken() {
+            var turnstile = await loadTurnstile();
+            return new Promise(function(resolve, reject) {
+                var container = document.createElement('div');
+                container.style.display = 'none';
+                document.body.appendChild(container);
+                var settled = false;
+                var cleanup = function() {
+                    if (container.parentNode) container.parentNode.removeChild(container);
+                };
+                var widgetId = turnstile.render(container, {
+                    sitekey: TURNSTILE_SITE_KEY,
+                    size: 'invisible',
+                    execution: 'execute',
+                    callback: function(token) {
+                        if (settled) return;
+                        settled = true;
+                        cleanup();
+                        resolve(token);
+                    },
+                    'error-callback': function() {
+                        if (settled) return;
+                        settled = true;
+                        cleanup();
+                        reject(new Error('turnstile_failed'));
+                    }
+                });
+                turnstile.execute(widgetId);
+                setTimeout(function() {
+                    if (settled) return;
+                    settled = true;
+                    cleanup();
+                    reject(new Error('turnstile_timeout'));
+                }, 15000);
+            });
+        }
+
         async function submitAddProfileForm() {
             var statusEl = document.getElementById('pf-status');
             if (!statusEl) return;
@@ -4407,6 +4462,9 @@ async function loadFormsData() {
             if (pickedLat === null || pickedLon === null) { statusEl.textContent = 'Укажи место на карте'; return; }
 
             try {
+                statusEl.textContent = 'Проверяем защиту...';
+                var turnstileToken = await getTurnstileToken();
+                statusEl.textContent = 'Отправляем...';
                 var response = await fetch(API_BASE_URL + '/api/forms', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -4419,7 +4477,8 @@ async function loadFormsData() {
                         about: about,
                         lat: pickedLat,
                         lon: pickedLon,
-                        photoData: selectedPhotoData || ''
+                        photoData: selectedPhotoData || '',
+                        turnstileToken: turnstileToken
                     })
                 });
                 var data = await response.json();
