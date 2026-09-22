@@ -34,15 +34,18 @@ window.__startFurryApp = function() {
         let baseThemeApplyQueued = false;
         let baseThemeRetryTimer = 0;
         let ipCenterApplied = false;
+        const CARTO_API_KEY = 'cb1_3t81_1_7c4994f26ab9f380ff7ff23a';
         const OSM_RASTER_TILES = [
-            'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png'
+            'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=' + CARTO_API_KEY,
+            'https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=' + CARTO_API_KEY,
+            'https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=' + CARTO_API_KEY,
+            'https://d.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=' + CARTO_API_KEY
         ];
         const CARTO_DARK_NO_LABEL_TILES = [
-            'https://a.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png',
-            'https://b.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png',
-            'https://c.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png'
+            'https://a.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png?key=' + CARTO_API_KEY,
+            'https://b.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png?key=' + CARTO_API_KEY,
+            'https://c.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png?key=' + CARTO_API_KEY,
+            'https://d.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png?key=' + CARTO_API_KEY
         ];
         const RUSSIAN_LABEL_FIELD = ['coalesce', ['get', 'name:ru'], ['get', 'name'], ['get', 'name_en']];
         const BUILDING_GROUND_MIN_ZOOM = MAP_IS_LOW_POWER ? 10.4 : 9.8;
@@ -84,7 +87,7 @@ window.__startFurryApp = function() {
                         type: 'raster',
                         tiles: theme === 'sunset' ? OSM_RASTER_TILES : CARTO_DARK_NO_LABEL_TILES,
                         tileSize: 256,
-                        attribution: '© OpenStreetMap'
+                        attribution: '© OpenStreetMap, © CARTO'
                     },
                     ...(theme !== 'sunset' ? {
                         openfreemap: {
